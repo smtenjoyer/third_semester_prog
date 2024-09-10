@@ -59,7 +59,15 @@ endif()
 
 install(TARGETS helloworld_cli RUNTIME DESTINATION bin)
 
-set(CPACK_GENERATOR ZIP)
+# Установка пакета DEB для Linux 
+if (CMAKE_SYSTEM_NAME STREQUAL "Linux") 
+    set(CPACK_GENERATOR DEB) # Настраивает CPack для создания пакетов DEB (Linux). 
+endif() 
+ 
+# Установка пакета ZIP для macOS 
+if (CMAKE_SYSTEM_NAME STREQUAL "Darwin") 
+    set(CPACK_GENERATOR ZIP) # Настройка CPack для создания пакетов ZIP (macOS) 
+endif()
 
 set(CPACK_PACKAGE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")
 set(CPACK_PACKAGE_VERSION_MINOR "${PROJECT_VERSION_MINOR}")
