@@ -1,3 +1,60 @@
+# name: 'C++ CI'
+
+# on:
+#   push:
+#     branches:
+#       - laba1
+#       - feature/github_actions
+
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+#     permissions: write-all
+#     steps:
+#       - uses: actions/checkout@v3
+#         with:
+#           submodules: true
+
+#       - name: Install Dependencies
+#         run: sudo apt-get update && sudo apt-get install libboost-test-dev -y
+
+#       - name: Configure CMake
+#         run: cmake . -DPATCH_VERSION=${{ github.run_number }} 
+
+#       - name: Build
+#         run: cmake --build . 
+
+#       - name: Run Tests
+#         run: cmake --build . --target test
+
+#       - name: Create Package
+#         run: cmake --build . --target package
+
+#       - name: Create Release
+#         id: create_release
+#         uses: actions/create-release@v1
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#         with:
+#           tag_name: ${{ github.run_number }}
+#           release_name: Release ${{ github.run_number }}
+#           draft: false
+#           prerelease: false
+
+#       - name: Upload Release Asset
+#         id: upload-release-asset
+#         uses: actions/upload-release-asset@v1
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#         with:
+#           upload_url: ${{ steps.create_release.outputs.upload_url }}
+#           asset_path: ./helloworld-0.0.${{ github.run_number }}-Linux.deb
+#           asset_name: helloworld-0.0.${{ github.run_number }}-Linux.deb
+#           asset_content_type: application/vnd.debian.binary-package
+
+# for linux
+
+
 name: 'C++ CI'
 
 on:
@@ -8,36 +65,17 @@ on:
 
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, macos-14]  # Определение множества операционных систем
+    runs-on: macos-14
     permissions: write-all
     steps:
       - uses: actions/checkout@v3
         with:
           submodules: true
-
-      - name: Install Dependencies
-        run: |
-          if [[ "${{ matrix.os }}" == "ubuntu-latest" ]]; then
-            sudo apt-get update && sudo apt-get install libboost-test-dev -y
-          else
-            brew install boost
-          fi
-
-      - name: Configure CMake
-        run: cmake . -DPATCH_VERSION=${{ github.run_number }}
-
-      - name: Build
-        run: cmake --build .
-
-      - name: Run Tests
-        run: cmake --build . --target test
-
-      - name: Create Package
-        run: cmake --build . --target package
-
+      - run: brew install boost
+      - run: cmake . -DPATCH_VERSION=${{ github.run_number }}
+      - run: cmake --build .
+      - run: cmake --build . --target test
+      - run: cmake --build . --target package
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -48,7 +86,6 @@ jobs:
           release_name: Release ${{ github.run_number }}
           draft: false
           prerelease: false
-
       - name: Upload Release Asset
         id: upload-release-asset
         uses: actions/upload-release-asset@v1
@@ -56,21 +93,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: |
-            if [[ "${{ matrix.os }}" == "ubuntu-latest" ]]; then
-              ./helloworld-0.0.${{ github.run_number }}-Linux.deb
-            else
-              ./helloworld-0.0.${{ github.run_number }}-Darwin.zip
-            fi
-          asset_name: |
-            if [[ "${{ matrix.os }}" == "ubuntu-latest" ]]; then
-              helloworld-0.0.${{ github.run_number }}-Linux.deb
-            else
-              helloworld-0.0.${{ github.run_number }}-Darwin.zip
-            fi
-          asset_content_type: |
-            if [[ "${{ matrix.os }}" == "ubuntu-latest" ]]; then
-              application/vnd.debian.binary-package
-            else
-              application/zip
-            fi
+          asset_path: ./helloworld-0.0.${{ github.run_number }}-Darwin.zip
+          asset_name: helloworld-0.0.${{ github.run_number }}-Darwin.zip
+          asset_content_type: application/zip
+
+# for apple
