@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 
 set(PATCH_VERSION "1" CACHE INTERNAL "Patch version")
-set(PROJECT_VERSION 0.0.${PATCH_VERSION})
+set(PROJECT_VESRION 0.0.${PATCH_VERSION})
 
 project(helloworld VERSION ${PROJECT_VESRION})
 
@@ -25,8 +25,7 @@ set_target_properties(test_version PROPERTIES
     INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIR}
 )
 
-target_link_libraries(test_version 
-    ${Boost_LIBRARIES} 
+target_link_libraries(helloworld_cli PRIVATE
     helloworld
 )
 target_link_libraries(test_version
