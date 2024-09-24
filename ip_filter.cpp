@@ -7,6 +7,8 @@
 #include <fstream> 
 #include <tuple>
 
+#include "lib.h"
+
 // ("",  '.') -> [""]
 // ("11", '.') -> ["11"]
 // ("..", '.') -> ["", "", ""]
