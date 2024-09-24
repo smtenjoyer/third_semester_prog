@@ -5,7 +5,7 @@ set(PROJECT_VESRION 0.0.${PATCH_VERSION})
 
 project(ip_check VERSION ${PROJECT_VESRION})
 
-find_package(Boost COMPONENTS unit_test_framework REQUIRED)
+find_package(Boost REQUIRED COMPONENTS test)
 
 configure_file(version.h.in version.h)
 

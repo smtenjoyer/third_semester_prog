@@ -291,6 +291,9 @@ CPACK_SOURCE_ZIP:BOOL=ON
 //The directory containing a CMake configuration file for boost_headers.
 boost_headers_DIR:PATH=C:/msys64/mingw64/lib/cmake/boost_headers-1.84.0
 
+//The directory containing a CMake configuration file for boost_test.
+boost_test_DIR:PATH=boost_test_DIR-NOTFOUND
+
 //The directory containing a CMake configuration file for boost_unit_test_framework.
 boost_unit_test_framework_DIR:PATH=C:/msys64/mingw64/lib/cmake/boost_unit_test_framework-1.84.0
 
