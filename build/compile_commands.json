@@ -1,20 +1,44 @@
 [
 {
   "directory": "C:/Users/user/Desktop/02 (1)/02/build",
-  "command": "C:\\msys64\\mingw64\\bin\\c++.exe -g -std=gnu++14 -Wall -Wextra -pedantic -Werror -o CMakeFiles\\ip_filter_cli.dir\\ip_filter.cpp.obj -c \"C:\\Users\\user\\Desktop\\02 (1)\\02\\ip_filter.cpp\"",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe -g -o CMakeFiles\\ip_check.dir\\ip_filter.cpp.obj -c \"C:\\Users\\user\\Desktop\\02 (1)\\02\\ip_filter.cpp\"",
   "file": "C:\\Users\\user\\Desktop\\02 (1)\\02\\ip_filter.cpp",
-  "output": "CMakeFiles\\ip_filter_cli.dir\\ip_filter.cpp.obj"
+  "output": "CMakeFiles\\ip_check.dir\\ip_filter.cpp.obj"
 },
 {
   "directory": "C:/Users/user/Desktop/02 (1)/02/build",
-  "command": "C:\\msys64\\mingw64\\bin\\c++.exe -I\"C:/Users/user/Desktop/02 (1)/02/build\" -g -std=gnu++14 -Wall -Wextra -pedantic -Werror -o CMakeFiles\\ip_check.dir\\lib.cpp.obj -c \"C:\\Users\\user\\Desktop\\02 (1)\\02\\lib.cpp\"",
-  "file": "C:\\Users\\user\\Desktop\\02 (1)\\02\\lib.cpp",
-  "output": "CMakeFiles\\ip_check.dir\\lib.cpp.obj"
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe -I\"C:/Users/user/Desktop/02 (1)/02\" -isystem \"C:/Users/user/Desktop/02 (1)/02/build/_deps/googletest-src/googletest/include\" -isystem \"C:/Users/user/Desktop/02 (1)/02/build/_deps/googletest-src/googletest\" -g -std=gnu++17 -o gtests\\CMakeFiles\\tests.dir\\tests.cpp.obj -c \"C:\\Users\\user\\Desktop\\02 (1)\\02\\gtests\\tests.cpp\"",
+  "file": "C:\\Users\\user\\Desktop\\02 (1)\\02\\gtests\\tests.cpp",
+  "output": "gtests\\CMakeFiles\\tests.dir\\tests.cpp.obj"
 },
 {
   "directory": "C:/Users/user/Desktop/02 (1)/02/build",
-  "command": "C:\\msys64\\mingw64\\bin\\c++.exe -DBOOST_TEST_DYN_LINK -DBOOST_UNIT_TEST_FRAMEWORK_DYN_LINK -DBOOST_UNIT_TEST_FRAMEWORK_NO_LIB -g -std=gnu++14 -Wall -Wextra -pedantic -Werror -o CMakeFiles\\test_version.dir\\test_version.cpp.obj -c \"C:\\Users\\user\\Desktop\\02 (1)\\02\\test_version.cpp\"",
-  "file": "C:\\Users\\user\\Desktop\\02 (1)\\02\\test_version.cpp",
-  "output": "CMakeFiles\\test_version.dir\\test_version.cpp.obj"
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe -I\"C:/Users/user/Desktop/02 (1)/02\" -isystem \"C:/Users/user/Desktop/02 (1)/02/build/_deps/googletest-src/googletest/include\" -isystem \"C:/Users/user/Desktop/02 (1)/02/build/_deps/googletest-src/googletest\" -g -std=gnu++17 -o gtests\\CMakeFiles\\tests.dir\\__\\ip_filter.cpp.obj -c \"C:\\Users\\user\\Desktop\\02 (1)\\02\\ip_filter.cpp\"",
+  "file": "C:\\Users\\user\\Desktop\\02 (1)\\02\\ip_filter.cpp",
+  "output": "gtests\\CMakeFiles\\tests.dir\\__\\ip_filter.cpp.obj"
+},
+{
+  "directory": "C:/Users/user/Desktop/02 (1)/02/build",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe -I\"C:/Users/user/Desktop/02 (1)/02/build/_deps/googletest-src/googlemock/include\" -I\"C:/Users/user/Desktop/02 (1)/02/build/_deps/googletest-src/googlemock\" -isystem \"C:/Users/user/Desktop/02 (1)/02/build/_deps/googletest-src/googletest/include\" -isystem \"C:/Users/user/Desktop/02 (1)/02/build/_deps/googletest-src/googletest\" -g -std=c++17 -Wall -Wshadow -Werror -Wno-error=dangling-else -DGTEST_HAS_PTHREAD=0 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -o _deps\\googletest-build\\googlemock\\CMakeFiles\\gmock.dir\\src\\gmock-all.cc.obj -c \"C:\\Users\\user\\Desktop\\02 (1)\\02\\build\\_deps\\googletest-src\\googlemock\\src\\gmock-all.cc\"",
+  "file": "C:\\Users\\user\\Desktop\\02 (1)\\02\\build\\_deps\\googletest-src\\googlemock\\src\\gmock-all.cc",
+  "output": "_deps\\googletest-build\\googlemock\\CMakeFiles\\gmock.dir\\src\\gmock-all.cc.obj"
+},
+{
+  "directory": "C:/Users/user/Desktop/02 (1)/02/build",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe -isystem \"C:/Users/user/Desktop/02 (1)/02/build/_deps/googletest-src/googlemock/include\" -isystem \"C:/Users/user/Desktop/02 (1)/02/build/_deps/googletest-src/googlemock\" -isystem \"C:/Users/user/Desktop/02 (1)/02/build/_deps/googletest-src/googletest/include\" -isystem \"C:/Users/user/Desktop/02 (1)/02/build/_deps/googletest-src/googletest\" -g -std=c++17 -Wall -Wshadow -Werror -Wno-error=dangling-else -DGTEST_HAS_PTHREAD=0 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -o _deps\\googletest-build\\googlemock\\CMakeFiles\\gmock_main.dir\\src\\gmock_main.cc.obj -c \"C:\\Users\\user\\Desktop\\02 (1)\\02\\build\\_deps\\googletest-src\\googlemock\\src\\gmock_main.cc\"",
+  "file": "C:\\Users\\user\\Desktop\\02 (1)\\02\\build\\_deps\\googletest-src\\googlemock\\src\\gmock_main.cc",
+  "output": "_deps\\googletest-build\\googlemock\\CMakeFiles\\gmock_main.dir\\src\\gmock_main.cc.obj"
+},
+{
+  "directory": "C:/Users/user/Desktop/02 (1)/02/build",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe -I\"C:/Users/user/Desktop/02 (1)/02/build/_deps/googletest-src/googletest/include\" -I\"C:/Users/user/Desktop/02 (1)/02/build/_deps/googletest-src/googletest\" -g -std=c++17 -Wall -Wshadow -Werror -Wno-error=dangling-else -DGTEST_HAS_PTHREAD=0 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -o _deps\\googletest-build\\googletest\\CMakeFiles\\gtest.dir\\src\\gtest-all.cc.obj -c \"C:\\Users\\user\\Desktop\\02 (1)\\02\\build\\_deps\\googletest-src\\googletest\\src\\gtest-all.cc\"",
+  "file": "C:\\Users\\user\\Desktop\\02 (1)\\02\\build\\_deps\\googletest-src\\googletest\\src\\gtest-all.cc",
+  "output": "_deps\\googletest-build\\googletest\\CMakeFiles\\gtest.dir\\src\\gtest-all.cc.obj"
+},
+{
+  "directory": "C:/Users/user/Desktop/02 (1)/02/build",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe -isystem \"C:/Users/user/Desktop/02 (1)/02/build/_deps/googletest-src/googletest/include\" -isystem \"C:/Users/user/Desktop/02 (1)/02/build/_deps/googletest-src/googletest\" -g -std=c++17 -Wall -Wshadow -Werror -Wno-error=dangling-else -DGTEST_HAS_PTHREAD=0 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -o _deps\\googletest-build\\googletest\\CMakeFiles\\gtest_main.dir\\src\\gtest_main.cc.obj -c \"C:\\Users\\user\\Desktop\\02 (1)\\02\\build\\_deps\\googletest-src\\googletest\\src\\gtest_main.cc\"",
+  "file": "C:\\Users\\user\\Desktop\\02 (1)\\02\\build\\_deps\\googletest-src\\googletest\\src\\gtest_main.cc",
+  "output": "_deps\\googletest-build\\googletest\\CMakeFiles\\gtest_main.dir\\src\\gtest_main.cc.obj"
 }
 ]

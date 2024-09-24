@@ -1,72 +1,29 @@
-cmake_minimum_required(VERSION 3.10)
-
+cmake_minimum_required(VERSION 3.6) # Устанавливает минимальную версию CMake, необходимую для этого проекта.
 set(PATCH_VERSION "1" CACHE INTERNAL "Patch version")
 set(PROJECT_VESRION 0.0.${PATCH_VERSION})
+# Создает переменные PATCH_VERSION и PROJECT_VESRION для управления версиями проекта.
 
-project(ip_check VERSION ${PROJECT_VESRION})
+project(ip_check VERSION ${PROJECT_VESRION}) # Определяет имя проекта ip_check и использует переменную PROJECT_VESRION для указания версии проекта.
+add_executable(ip_check ip_filter.cpp ip_filter.h)
 
-find_package(Boost REQUIRED COMPONENTS test)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/ip_filter.tsv
+    ${CMAKE_CURRENT_BINARY_DIR} COPYONLY)
 
-configure_file(version.h.in version.h)
 
-add_executable(ip_filter_cli ip_filter.cpp)
-add_library(ip_check lib.cpp)
-add_executable(test_version test_version.cpp)
+set(CMAKE_CXX_STANDARD 17)
+set(CXX_STANDARD_REQUIRED ON)
 
-set_target_properties(ip_filter_cli ip_check test_version PROPERTIES
-    CXX_STANDARD 14
-    CXX_STANDARD_REQUIRED ON
-)
-target_include_directories(ip_check
-    PRIVATE "${CMAKE_BINARY_DIR}"
-)
-set_target_properties(test_version PROPERTIES
-    COMPILE_DEFINITIONS BOOST_TEST_DYN_LINK
-    INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIR}
-)
+set(CPACK_PROJECT_NAME ip_check)
 
-target_link_libraries(ip_filter_cli PRIVATE
-    ip_check
-)
-target_link_libraries(test_version
-    ${Boost_LIBRARIES}
-    ip_check
-)
-
-if (MSVC)
-    target_compile_options(ip_filter_cli PRIVATE
-        /W4
-    )
-    target_compile_options(ip_check PRIVATE
-        /W4
-    )
-    target_compile_options(test_version PRIVATE
-        /W4
-    )
-else ()
-    target_compile_options(ip_filter_cli PRIVATE
-        -Wall -Wextra -pedantic -Werror
-    )
-    target_compile_options(ip_check PRIVATE
-        -Wall -Wextra -pedantic -Werror
-    )
-    target_compile_options(test_version PRIVATE
-        -Wall -Wextra -pedantic -Werror
-    )
+# Установка пакета DEB для Linux
+if (CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    set(CPACK_GENERATOR DEB) # Настраивает CPack для создания пакетов DEB (Linux).
+    # Укажите зависимости пакета
+    set(CPACK_DEBIAN_PACKAGE_DEPENDS "libgtk-3-dev libstdc++6-dev")
 endif()
-
-
-
-install(TARGETS ip_filter_cli RUNTIME DESTINATION bin)
-
-# Установка пакета DEB для Linux 
-if (CMAKE_SYSTEM_NAME STREQUAL "Linux") 
-    set(CPACK_GENERATOR DEB) # Настраивает CPack для создания пакетов DEB (Linux). 
-endif() 
- 
-# Установка пакета ZIP для macOS 
-if (CMAKE_SYSTEM_NAME STREQUAL "Darwin") 
-    set(CPACK_GENERATOR ZIP) # Настройка CPack для создания пакетов ZIP (macOS) 
+# Установка пакета ZIP для macOS
+if (CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+    set(CPACK_GENERATOR ZIP) # Настройка CPack для создания пакетов ZIP (macOS)
 endif()
 
 set(CPACK_PACKAGE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")
@@ -77,6 +34,8 @@ set(CPACK_PACKAGE_CONTACT example@example.com)
 
 include(CPack)
 
-enable_testing()
+enable_testing() # Включает тестирование
 
-add_test(test_version test_version)
+add_subdirectory(gtests)
+set(CPACK_PROJECT_NAME ${PROJECT_NAME})
+set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})

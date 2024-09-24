@@ -7,7 +7,6 @@
 #include <fstream> 
 #include <tuple>
 
-#include "lib.h"
 
 // ("",  '.') -> [""]
 // ("11", '.') -> ["11"]
@@ -35,6 +34,8 @@ std::vector<std::string> split(const std::string &str, char d)
 }
 
 typedef std::tuple<int, int, int, int> ip_tuple;
+
+
 void print_ip_tuple(const ip_tuple& i)
 {
     std::cout 
@@ -77,8 +78,8 @@ void sort_lex_2(std::vector<ip_tuple>& ip_pool) {
 // int main(int argc, char const *argv[])
 int main()
 {
-    try
-    {
+    // try
+    // {
         std::vector<std::vector<std::string> > ip_pool;
         std::vector<ip_tuple> ip_pool_int;
         std::vector<ip_tuple> ip_pool_int_2;
@@ -106,16 +107,17 @@ int main()
         ip_pool_int_2 = ip_pool_int;
 
         
-        sort_lex(ip_pool_int);
-        for (std::vector<ip_tuple>::size_type i = 0; i < ip_pool_int.size(); i++)
-        {
-            print_ip_tuple(ip_pool_int[i]);
-        }
+        // sort_lex(ip_pool_int);
+        // for (std::vector<ip_tuple>::size_type i = 0; i < ip_pool_int.size(); i++)
+        // {
+        //     print_ip_tuple(ip_pool_int[i]);
+        // }
 
         sort_lex_2(ip_pool_int_2);
+
         for (std::vector<ip_tuple>::size_type i = 0; i < ip_pool_int.size(); i++)
         {
-            print_ip_tuple(ip_pool_int[i]);
+            print_ip_tuple(ip_pool_int_2[i]);
         }
 
         // 222.173.235.246
@@ -180,11 +182,11 @@ int main()
         // 46.49.43.85
         // 39.46.86.85
         // 5.189.203.46
-    }
-    catch(const std::exception &e)
-    {
-        std::cerr << "e.what()" << std::endl;
-    }
+    // }
+    // catch(const std::exception &e)
+    // {
+    //     std::cerr << "e.what()" << std::endl;
+    // }
 
     return 0;
 }

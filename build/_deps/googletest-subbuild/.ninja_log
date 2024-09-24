@@ -1,0 +1,23 @@
+# ninja log v5
+73	6045	7488666940987547	googletest-populate-prefix/src/609281088cfefc76f9d0ce82e1ff6c30cc3591e5.zip	137c1bae63d150b4
+6115	6191	7488666942401051	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-patch	3532098def57cb50
+73	6045	7488666940987547	C:/Users/user/Desktop/02 (1)/02/build/_deps/googletest-subbuild/googletest-populate-prefix/src/609281088cfefc76f9d0ce82e1ff6c30cc3591e5.zip	137c1bae63d150b4
+2	73	7488666881270305	C:/Users/user/Desktop/02 (1)/02/build/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-mkdir	2c56dce6cbad02af
+6261	6328	7488666943778490	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-build	472a3e166ca661d9
+6399	6468	7488666945233817	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-test	8afffd87e0cf5140
+6468	6560	7488666946139683	C:/Users/user/Desktop/02 (1)/02/build/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-done	29ec8950bdee21d4
+6045	6115	7488666941652365	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-update	91adc392e71bbebb
+6045	6115	7488666941652365	C:/Users/user/Desktop/02 (1)/02/build/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-update	91adc392e71bbebb
+6468	6560	7488666946139683	C:/Users/user/Desktop/02 (1)/02/build/_deps/googletest-subbuild/CMakeFiles/googletest-populate-complete	29ec8950bdee21d4
+73	6045	7488666940987547	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-download	137c1bae63d150b4
+6468	6560	7488666946139683	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-done	29ec8950bdee21d4
+6468	6560	7488666946139683	CMakeFiles/googletest-populate-complete	29ec8950bdee21d4
+6328	6399	7488666944504445	C:/Users/user/Desktop/02 (1)/02/build/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-install	cc288420f7ecc387
+6261	6328	7488666943778490	C:/Users/user/Desktop/02 (1)/02/build/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-build	472a3e166ca661d9
+6191	6260	7488666943137311	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-configure	9c39ef6735b8ad6b
+2	73	7488666881270305	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-mkdir	2c56dce6cbad02af
+6399	6468	7488666945233817	C:/Users/user/Desktop/02 (1)/02/build/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-test	8afffd87e0cf5140
+6191	6260	7488666943137311	C:/Users/user/Desktop/02 (1)/02/build/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-configure	9c39ef6735b8ad6b
+6328	6399	7488666944504445	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-install	cc288420f7ecc387
+6115	6191	7488666942401051	C:/Users/user/Desktop/02 (1)/02/build/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-patch	3532098def57cb50
+73	6045	7488666940987547	C:/Users/user/Desktop/02 (1)/02/build/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-download	137c1bae63d150b4
