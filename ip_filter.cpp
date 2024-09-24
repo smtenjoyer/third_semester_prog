@@ -75,8 +75,8 @@ void sort_lex_2(std::vector<ip_tuple>& ip_pool) {
 // int main(int argc, char const *argv[])
 int main()
 {
-    // try
-    // {
+    try
+    {
         std::vector<std::vector<std::string> > ip_pool;
         std::vector<ip_tuple> ip_pool_int;
         std::vector<ip_tuple> ip_pool_int_2;
@@ -178,11 +178,11 @@ int main()
         // 46.49.43.85
         // 39.46.86.85
         // 5.189.203.46
-    // }
-    // catch(const std::exception &e)
-    // {
-    //     std::cerr << "e.what()" << std::endl;
-    // }
+    }
+    catch(const std::exception &e)
+    {
+        std::cerr << "e.what()" << std::endl;
+    }
 
     return 0;
 }
