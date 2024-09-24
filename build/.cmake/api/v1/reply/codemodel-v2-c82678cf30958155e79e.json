@@ -17,11 +17,7 @@
 						"string" : "3.6"
 					},
 					"projectIndex" : 0,
-					"source" : ".",
-					"targetIndexes" : 
-					[
-						4
-					]
+					"source" : "."
 				},
 				{
 					"build" : "gtests",
@@ -40,7 +36,7 @@
 					"source" : "gtests",
 					"targetIndexes" : 
 					[
-						5
+						4
 					]
 				},
 				{
@@ -110,11 +106,7 @@
 					[
 						0
 					],
-					"name" : "ip_check",
-					"targetIndexes" : 
-					[
-						4
-					]
+					"name" : "ip_check"
 				},
 				{
 					"childIndexes" : 
@@ -129,7 +121,7 @@
 					"parentIndex" : 0,
 					"targetIndexes" : 
 					[
-						5
+						4
 					]
 				},
 				{
@@ -187,7 +179,7 @@
 				{
 					"directoryIndex" : 3,
 					"id" : "gmock_main::@0f7bb11d64f3678238c7",
-					"jsonFile" : "target-gmock_main-Debug-cf12142f86026178edcb.json",
+					"jsonFile" : "target-gmock_main-Debug-43d406d880dc3efc97f2.json",
 					"name" : "gmock_main",
 					"projectIndex" : 3
 				},
@@ -206,16 +198,9 @@
 					"projectIndex" : 4
 				},
 				{
-					"directoryIndex" : 0,
-					"id" : "ip_check::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-ip_check-Debug-b82958112a1eed522a52.json",
-					"name" : "ip_check",
-					"projectIndex" : 0
-				},
-				{
 					"directoryIndex" : 1,
 					"id" : "tests::@ed8f849d7d6434676105",
-					"jsonFile" : "target-tests-Debug-46c8f814d8cc126e72a7.json",
+					"jsonFile" : "target-tests-Debug-a98351da5c5f494f0e41.json",
 					"name" : "tests",
 					"projectIndex" : 1
 				}

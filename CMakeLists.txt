@@ -4,7 +4,7 @@ set(PROJECT_VESRION 0.0.${PATCH_VERSION})
 # Создает переменные PATCH_VERSION и PROJECT_VESRION для управления версиями проекта.
 
 project(ip_check VERSION ${PROJECT_VESRION}) # Определяет имя проекта ip_check и использует переменную PROJECT_VESRION для указания версии проекта.
-add_executable(ip_check ip_filter.cpp ip_filter.h)
+# add_executable(ip_check ip_filter.cpp ip_filter.h)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/ip_filter.tsv
     ${CMAKE_CURRENT_BINARY_DIR} COPYONLY)
