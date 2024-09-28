@@ -18,10 +18,7 @@ jobs:
           submodules: true
       - name: Создание каталога сборки
         run: mkdir -p build && cd build
-      - name: Конфигурация CMake
-        run: |
-          cd build
-          cmake .. -DPATCH_VERSION=${{ github.run_number }} 
+      
       - name: Сборка проекта
         run: |
           cd build
