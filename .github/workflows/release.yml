@@ -17,8 +17,7 @@ jobs:
         with:
           submodules: true
       - name: Создание каталога сборки
-        rm -rf build  # Удаление существующей папки build
-        mkdir build  # Создание новой папки build
+        run: mkdir build
       - name: Конфигурация CMake
         run: |
           cd build
