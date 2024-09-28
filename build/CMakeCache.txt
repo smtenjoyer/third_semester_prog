@@ -210,16 +210,16 @@ CMAKE_PROJECT_HOMEPAGE_URL:STATIC=
 CMAKE_PROJECT_NAME:STATIC=ip_check
 
 //Value Computed by CMake
-CMAKE_PROJECT_VERSION:STATIC=0.1.0
+CMAKE_PROJECT_VERSION:STATIC=0.0.1
 
 //Value Computed by CMake
 CMAKE_PROJECT_VERSION_MAJOR:STATIC=0
 
 //Value Computed by CMake
-CMAKE_PROJECT_VERSION_MINOR:STATIC=1
+CMAKE_PROJECT_VERSION_MINOR:STATIC=0
 
 //Value Computed by CMake
-CMAKE_PROJECT_VERSION_PATCH:STATIC=0
+CMAKE_PROJECT_VERSION_PATCH:STATIC=1
 
 //Value Computed by CMake
 CMAKE_PROJECT_VERSION_TWEAK:STATIC=
@@ -361,11 +361,18 @@ FETCHCONTENT_FULLY_DISCONNECTED:BOOL=OFF
 FETCHCONTENT_QUIET:BOOL=ON
 
 //When not empty, overrides where to find pre-populated content
+// for googletest
+FETCHCONTENT_SOURCE_DIR_GOOGLETEST:PATH=
+
+//When not empty, overrides where to find pre-populated content
 // for gtest
 FETCHCONTENT_SOURCE_DIR_GTEST:PATH=
 
 //Enables UPDATE_DISCONNECTED behavior for all content population
 FETCHCONTENT_UPDATES_DISCONNECTED:BOOL=OFF
+
+//Enables UPDATE_DISCONNECTED behavior just for population of googletest
+FETCHCONTENT_UPDATES_DISCONNECTED_GOOGLETEST:BOOL=OFF
 
 //Enables UPDATE_DISCONNECTED behavior just for population of gtest
 FETCHCONTENT_UPDATES_DISCONNECTED_GTEST:BOOL=OFF
@@ -375,6 +382,15 @@ GITCOMMAND:FILEPATH=C:/Program Files/Git/cmd/git.exe
 
 //Git command line client
 GIT_EXECUTABLE:FILEPATH=C:/Program Files/Git/cmd/git.exe
+
+//Value Computed by CMake
+GTests_BINARY_DIR:STATIC=C:/Users/user/Desktop/2laba/build/gtests
+
+//Value Computed by CMake
+GTests_IS_TOP_LEVEL:STATIC=OFF
+
+//Value Computed by CMake
+GTests_SOURCE_DIR:STATIC=C:/Users/user/Desktop/2laba/gtests
 
 //Enable installation of googletest. (Projects embedding googletest
 // may want to turn this OFF.)
@@ -393,7 +409,7 @@ MEMORYCHECK_SUPPRESSIONS_FILE:FILEPATH=
 SITE:STRING=LAPTOP-L19F8AP6
 
 //Value Computed by CMake
-gmock_BINARY_DIR:STATIC=C:/Users/user/Desktop/2laba/build/_deps/gtest-build/googlemock
+gmock_BINARY_DIR:STATIC=C:/Users/user/Desktop/2laba/build/_deps/googletest-build/googlemock
 
 //Value Computed by CMake
 gmock_IS_TOP_LEVEL:STATIC=OFF
@@ -402,7 +418,7 @@ gmock_IS_TOP_LEVEL:STATIC=OFF
 gmock_LIB_DEPENDS:STATIC=general;gtest;
 
 //Value Computed by CMake
-gmock_SOURCE_DIR:STATIC=C:/Users/user/Desktop/2laba/build/_deps/gtest-src/googlemock
+gmock_SOURCE_DIR:STATIC=C:/Users/user/Desktop/2laba/build/_deps/googletest-src/googlemock
 
 //Build all of Google Mock's own tests.
 gmock_build_tests:BOOL=OFF
@@ -411,22 +427,22 @@ gmock_build_tests:BOOL=OFF
 gmock_main_LIB_DEPENDS:STATIC=general;gmock;
 
 //Value Computed by CMake
-googletest-distribution_BINARY_DIR:STATIC=C:/Users/user/Desktop/2laba/build/_deps/gtest-build
+googletest-distribution_BINARY_DIR:STATIC=C:/Users/user/Desktop/2laba/build/_deps/googletest-build
 
 //Value Computed by CMake
 googletest-distribution_IS_TOP_LEVEL:STATIC=OFF
 
 //Value Computed by CMake
-googletest-distribution_SOURCE_DIR:STATIC=C:/Users/user/Desktop/2laba/build/_deps/gtest-src
+googletest-distribution_SOURCE_DIR:STATIC=C:/Users/user/Desktop/2laba/build/_deps/googletest-src
 
 //Value Computed by CMake
-gtest_BINARY_DIR:STATIC=C:/Users/user/Desktop/2laba/build/_deps/gtest-build/googletest
+gtest_BINARY_DIR:STATIC=C:/Users/user/Desktop/2laba/build/_deps/googletest-build/googletest
 
 //Value Computed by CMake
 gtest_IS_TOP_LEVEL:STATIC=OFF
 
 //Value Computed by CMake
-gtest_SOURCE_DIR:STATIC=C:/Users/user/Desktop/2laba/build/_deps/gtest-src/googletest
+gtest_SOURCE_DIR:STATIC=C:/Users/user/Desktop/2laba/build/_deps/googletest-src/googletest
 
 //Build gtest's sample programs.
 gtest_build_samples:BOOL=OFF
@@ -439,7 +455,7 @@ gtest_disable_pthreads:BOOL=OFF
 
 //Use shared (DLL) run-time lib even when Google Test is built
 // as static lib.
-gtest_force_shared_crt:BOOL=OFF
+gtest_force_shared_crt:BOOL=ON
 
 //Build gtest with internal symbols hidden in shared libraries.
 gtest_hide_internal_symbols:BOOL=OFF
@@ -486,8 +502,6 @@ CMAKE_CACHE_PATCH_VERSION:INTERNAL=1
 CMAKE_COMMAND:INTERNAL=C:/msys64/mingw64/bin/cmake.exe
 //Path to cpack program executable.
 CMAKE_CPACK_COMMAND:INTERNAL=C:/msys64/mingw64/bin/cpack.exe
-//ADVANCED property for variable: CMAKE_CTEST_COMMAND
-CMAKE_CTEST_COMMAND-ADVANCED:INTERNAL=1
 //Path to ctest program executable.
 CMAKE_CTEST_COMMAND:INTERNAL=C:/msys64/mingw64/bin/ctest.exe
 //ADVANCED property for variable: CMAKE_CXX_COMPILER
@@ -698,6 +712,8 @@ MAKECOMMAND-ADVANCED:INTERNAL=1
 MEMORYCHECK_COMMAND-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: MEMORYCHECK_SUPPRESSIONS_FILE
 MEMORYCHECK_SUPPRESSIONS_FILE-ADVANCED:INTERNAL=1
+//Patch version
+PATCH_VERSION:INTERNAL=1
 //ADVANCED property for variable: SITE
 SITE-ADVANCED:INTERNAL=1
 //linker supports push/pop state
@@ -716,7 +732,7 @@ _Python_INTERPRETER_SIGNATURE:INTERNAL=30a55096f7c74accc3929a684bc03016
 //NumPy reason failure
 _Python_NumPy_REASON_FAILURE:INTERNAL=
 cmake_package_name:INTERNAL=GTest
-generated_dir:INTERNAL=C:/Users/user/Desktop/2laba/build/_deps/gtest-build/googletest/generated
+generated_dir:INTERNAL=C:/Users/user/Desktop/2laba/build/_deps/googletest-build/googletest/generated
 //ADVANCED property for variable: gmock_build_tests
 gmock_build_tests-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: gtest_build_samples
