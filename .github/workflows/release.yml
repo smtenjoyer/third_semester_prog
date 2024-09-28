@@ -19,10 +19,6 @@ jobs:
       - name: Создание каталога сборки
         run: mkdir -p build && cd build
       
-      - name: Сборка проекта
-        run: |
-          cd build
-          cmake --build .
       - name: Запуск тестов
         run: |
           cd build
