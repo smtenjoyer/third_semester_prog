@@ -158,9 +158,16 @@ build cmake_object_order_depends_target_tests: phony || cmake_object_order_depen
 build gtests/CMakeFiles/tests.dir/tests.cpp.obj: CXX_COMPILER__tests_unscanned_Debug C$:/Users/user/Desktop/2laba/gtests/tests.cpp || cmake_object_order_depends_target_tests
   DEP_FILE = gtests\CMakeFiles\tests.dir\tests.cpp.obj.d
   FLAGS = -g -std=gnu++17
-  INCLUDES = -IC:/Users/user/Desktop/2laba -IC:/Users/user/Desktop/2laba/gtests -isystem C:/Users/user/Desktop/2laba/build/_deps/googletest-src/googletest/include -isystem C:/Users/user/Desktop/2laba/build/_deps/googletest-src/googletest
+  INCLUDES = -IC:/Users/user/Desktop/2laba -isystem C:/Users/user/Desktop/2laba/build/_deps/googletest-src/googletest/include -isystem C:/Users/user/Desktop/2laba/build/_deps/googletest-src/googletest
   OBJECT_DIR = gtests\CMakeFiles\tests.dir
   OBJECT_FILE_DIR = gtests\CMakeFiles\tests.dir
+
+build gtests/CMakeFiles/tests.dir/__/ipfilter.cpp.obj: CXX_COMPILER__tests_unscanned_Debug C$:/Users/user/Desktop/2laba/ipfilter.cpp || cmake_object_order_depends_target_tests
+  DEP_FILE = gtests\CMakeFiles\tests.dir\__\ipfilter.cpp.obj.d
+  FLAGS = -g -std=gnu++17
+  INCLUDES = -IC:/Users/user/Desktop/2laba -isystem C:/Users/user/Desktop/2laba/build/_deps/googletest-src/googletest/include -isystem C:/Users/user/Desktop/2laba/build/_deps/googletest-src/googletest
+  OBJECT_DIR = gtests\CMakeFiles\tests.dir
+  OBJECT_FILE_DIR = gtests\CMakeFiles\tests.dir\__
 
 
 # =============================================================================
@@ -170,7 +177,7 @@ build gtests/CMakeFiles/tests.dir/tests.cpp.obj: CXX_COMPILER__tests_unscanned_D
 #############################################
 # Link the executable gtests\tests.exe
 
-build gtests/tests.exe gtests/tests[1]_tests.cmake | ${cmake_ninja_workdir}gtests/tests[1]_tests.cmake: CXX_EXECUTABLE_LINKER__tests_Debug gtests/CMakeFiles/tests.dir/tests.cpp.obj | lib/libgtestd.a lib/libgtest_maind.a lib/libgtestd.a || lib/libgtest_maind.a lib/libgtestd.a
+build gtests/tests.exe gtests/tests[1]_tests.cmake | ${cmake_ninja_workdir}gtests/tests[1]_tests.cmake: CXX_EXECUTABLE_LINKER__tests_Debug gtests/CMakeFiles/tests.dir/tests.cpp.obj gtests/CMakeFiles/tests.dir/__/ipfilter.cpp.obj | lib/libgtestd.a lib/libgtest_maind.a lib/libgtestd.a || lib/libgtest_maind.a lib/libgtestd.a
   FLAGS = -g
   LINK_LIBRARIES = lib/libgtestd.a  lib/libgtest_maind.a  lib/libgtestd.a  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = gtests\CMakeFiles\tests.dir

@@ -16,6 +16,8 @@ jobs:
       - uses: actions/checkout@v3
         with:
           submodules: true
+      - name: Создание каталога сборки
+        run: mkdir build
       - name: Конфигурация CMake
         run: |
           cd build
@@ -48,7 +50,6 @@ jobs:
           asset_path: ./lab02-0.0.${{ github.run_number }}-Linux.zip
           asset_name: lab02-0.0.${{ github.run_number }}-Linux.zip
           asset_content_type: application/x-zip-compressed
-
 
   build_macos:
     # Запускаем job на macos-latest
