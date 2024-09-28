@@ -49,10 +49,10 @@ TEST(SortLex2Test, SortsCorrectlyWithCustomRules) {
 
     std::vector<ip_tuple> expected = {
         ip_tuple(1, 1, 1, 1),
-        ip_tuple(46, 70, 1, 1),
         ip_tuple(46, 70, 2, 2),
-        ip_tuple(46, 46, 1, 1),
+        ip_tuple(46, 70, 1, 1),
         ip_tuple(46, 46, 46, 46),
+        ip_tuple(46, 46, 1, 1),
         ip_tuple(2, 2, 2, 2),
     };
 
