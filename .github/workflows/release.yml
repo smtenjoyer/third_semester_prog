@@ -21,7 +21,7 @@ jobs:
       - name: Конфигурация CMake
         run: |
           cd build
-          cmake .. -DPATCH_VERSION=${{ github.run_number }}
+          cmake .. -DPATCH_VERSION=${{ github.run_number }} 
       - name: Сборка проекта
         run: |
           cd build
@@ -51,8 +51,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release_ubuntu.outputs.upload_url }}
-          asset_path: ./ip_check-0.0.${{ github.run_number }}-Linux.zip
-          asset_name: ip_check-0.0.${{ github.run_number }}-Linux.zip
+          asset_path: ./lab02-0.0.${{ github.run_number }}-Linux.zip
+          asset_name: lab02-0.0.${{ github.run_number }}-Linux.zip
           asset_content_type: application/x-zip-compressed
 
   build_macos:
