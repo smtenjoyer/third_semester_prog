@@ -28,7 +28,7 @@ jobs:
       # Запускаем тесты
       - name: Run Tests
         run: |
-          ctest --output-on-failure  exit 1  # Проверяем наличие тестов и их успешное выполнение
+          ctest --output-on-failure || exit 1  # Проверяем наличие тестов и их успешное выполнение
       # Создаем пакет
       - run: cmake --build . --target package
       # Создаем релиз для Ubuntu
@@ -57,7 +57,6 @@ jobs:
           asset_name: ip_check-0.0.${{ github.run_number }}-Linux.deb
           asset_content_type: application/vnd.debian.binary-package
           allowUpdates: true # Разрешаем обновление уже загруженного ассета
-
 
   build_macos:
     # Запускаем job на macos-latest
