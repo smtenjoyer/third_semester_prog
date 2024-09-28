@@ -9,7 +9,7 @@ on:
       - feature/github_actions
 
 jobs:
-  build_ubuntu:
+  build_and_test:
     runs-on: ubuntu-latest
     permissions: write-all
     steps:
@@ -21,39 +21,36 @@ jobs:
       - name: Конфигурация CMake
         run: |
           cd build
-          cmake . -DPATCH_VERSION=${{ github.run_number }} 
-      - run: cmake --build .
-      - name: Run Tests
+          cmake .. -DPATCH_VERSION=${{ github.run_number }} 
+      - name: Сборка проекта
+        run: cmake --build .
+      - name: Запуск тестов
         run: |
-          ctest --output-on-failure || exit 1  # Проверяем наличие тестов и их успешное выполнение
-      # Создаем пакет
-      - run: cmake --build . --target package
-      # Создаем релиз для Ubuntu
-      - name: Create Release (Ubuntu)
-        id: create_release_ubuntu
-        # Используем action для создания релиза
+          cd build
+          ctest --output-on-failure || exit 1  
+      - name: Упаковка проекта
+        run: cmake --build . --target package # Убедитесь, что target package определен в CMakeLists.txt
+      - name: Создать релиз
+        id: create_release
         uses: actions/create-release@v1
-        # Используем GITHUB_TOKEN для аутентификации
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        # Устанавливаем tag_name, release_name и другие параметры
         with:
-          tag_name: v${{ github.run_number }} # Используем номер запуска для тега
+          tag_name: v${{ github.run_number }}
           release_name: Release ${{ github.run_number }} (Ubuntu)
-          draft: false # Не публикуем релиз в черновике
-          prerelease: false # Не публикуем как предварительную версию
-      # Загружаем релизный ассет для Ubuntu
-      - name: Upload Release Asset (Ubuntu)
-        id: upload-release-asset-ubuntu
+          draft: false
+          prerelease: false
+      - name: Загрузить релизный ассет
+        id: upload_release_asset
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release_ubuntu.outputs.upload_url }}
-          asset_path: ./coollab2-0.0.${{ github.run_number }}-Linux.deb
-          asset_name: coollab2-0.0.${{ github.run_number }}-Linux.deb
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./ip_check-0.0.${{ github.run_number }}-Linux.deb # Укажите правильный путь к .deb-файлу
+          asset_name: ip_check-0.0.${{ github.run_number }}-Linux.deb
           asset_content_type: application/vnd.debian.binary-package
-          allowUpdates: true # Разрешаем обновление уже загруженного ассета
+          allowUpdates: true
 
   build_macos:
     # Запускаем job на macos-latest
