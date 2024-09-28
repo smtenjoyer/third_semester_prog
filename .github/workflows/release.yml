@@ -17,19 +17,16 @@ jobs:
         with:
           submodules: true
       - name: Создание каталога сборки
-        run: mkdir build
+        run: mkdir -p build # Используем -p для избежания ошибок
       - name: Конфигурация CMake
         run: |
           cd build
           cmake .. -DPATCH_VERSION=${{ github.run_number }} 
       - name: Сборка проекта
-        run: cmake --build .
+        run: cd build && cmake --build .
       - name: Запуск тестов
-        run: |
-          cd build
-          ctest --output-on-failure || exit 1  # Проверяем наличие тестов и их успешное выполнение
-      - run: cmake --build . --target package
-      - run: cmake --build . --target package
+        run: cd build && ctest --output-on-failure || exit 1  # Проверяем наличие тестов и их успешное выполнение
+      - run: cd build && cmake --build . --target package
       - name: Create Release (ubuntu)
         id: create_release_ubuntu
         uses: actions/create-release@v1
