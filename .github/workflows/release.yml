@@ -16,11 +16,19 @@ jobs:
       - uses: actions/checkout@v3
         with:
           submodules: true
-      - run: cmake . -DPATCH_VERSION=${{ github.run_number }}
-      - run: cmake --build .
-      - name: Run Tests
+      - name: Создание каталога сборки
+        run: mkdir build
+      - name: Конфигурация CMake
         run: |
+          cd build
+          cmake .. -DPATCH_VERSION=${{ github.run_number }} 
+      - name: Сборка проекта
+        run: cmake --build .
+      - name: Запуск тестов
+        run: |
+          cd build
           ctest --output-on-failure || exit 1  # Проверяем наличие тестов и их успешное выполнение
+      - run: cmake --build . --target package
       - run: cmake --build . --target package
       - name: Create Release (ubuntu)
         id: create_release_ubuntu
