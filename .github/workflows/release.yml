@@ -1,88 +1,9 @@
 
-# name: 'C++ CI'
-
-# # Запускаем workflow при пуше в ветки lab1 или feature/github_actions
-# on: 
-#   # событие запускаем
-#   push:
-#     branches:
-#       - laba2
-#       - feature/github_actions
-
-# jobs:
-#   build-ubuntu:
-#     runs-on: ubuntu-latest
-#     permissions: write-all
-#     steps:
-#       - uses: actions/checkout@v3
-#         with:
-#           submodules: true
-#       - run: cmake . -DPATCH_VERSION=${{ github.run_number }}
-#       - run: cmake --build .
-#       - name: Run Tests
-#         run: |
-#           ctest --output-on-failure || exit 1  # Проверяем наличие тестов и их успешное выполнение
-#       - run: cmake --build . --target package
-#       - name: Create Release (ubuntu)
-#         id: create_release_ubuntu
-#         uses: actions/create-release@v1
-#         env:
-#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#         with:
-#           tag_name: ubuntu${{ github.run_number }} 
-#           release_name: Release ${{ github.run_number }} (ubuntu)
-#           draft: false
-#           prerelease: false
-#       - name: Upload Release Asset (ubuntu)
-#         id: upload-release-asset
-#         uses: actions/upload-release-asset@v1
-#         env:
-#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#         with:
-#           upload_url: ${{ steps.create_release_ubuntu.outputs.upload_url }}
-#           asset_path: ./ip_check-0.0.${{ github.run_number }}-Linux.zip
-#           asset_name: ip_check-0.0.${{ github.run_number }}-Linux.zip
-#           asset_content_type: application/zip
-
-#   build-macos:
-#     runs-on: macos-latest
-#     permissions: write-all
-#     steps:
-#       - uses: actions/checkout@v3
-#         with:
-#           submodules: true
-#       - run: cmake . -DPATCH_VERSION=${{ github.run_number }}
-#       - run: cmake --build .
-#       - name: Run Tests
-#         run: |
-#           ctest --output-on-failure || exit 1  # Проверяем наличие тестов и их успешное выполнение
-#       - run: cmake --build . --target package
-#       - name: Create Release (macos)
-#         id: create_release_macos
-#         uses: actions/create-release@v1
-#         env:
-#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#         with:
-#           tag_name: macos${{ github.run_number }} 
-#           release_name: Release ${{ github.run_number }} (macos)
-#           draft: false
-#           prerelease: false
-#       - name: Upload Release Asset (macos)
-#         id: upload-release-asset
-#         uses: actions/upload-release-asset@v1
-#         env:
-#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#         with:
-#           upload_url: ${{ steps.create_release_macos.outputs.upload_url }}
-#           asset_path: ./ip_check-0.0.${{ github.run_number }}-Darwin.zip
-#           asset_name: ip_check-0.0.${{ github.run_number }}-Darwin.zip
-#           asset_content_type: application/zip
-
-
-yaml
 name: 'C++ CI'
 
+# Запускаем workflow при пуше в ветки lab1 или feature/github_actions
 on: 
+  # событие запускаем
   push:
     branches:
       - laba2
@@ -130,12 +51,12 @@ jobs:
       - uses: actions/checkout@v3
         with:
           submodules: true
-      - name: Setup build directory
-        run: mkdir build && cd build && cmake .. -DPATCH_VERSION=${{ github.run_number }}
-      - run: cd build && cmake --build .
+      - run: cmake . -DPATCH_VERSION=${{ github.run_number }}
+      - run: cmake --build .
       - name: Run Tests
-        run: cd build && ctest --output-on-failure || exit 1
-      - run: cd build && cmake --build . --target package
+        run: |
+          ctest --output-on-failure || exit 1  # Проверяем наличие тестов и их успешное выполнение
+      - run: cmake --build . --target package
       - name: Create Release (macos)
         id: create_release_macos
         uses: actions/create-release@v1
