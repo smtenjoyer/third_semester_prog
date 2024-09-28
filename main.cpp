@@ -17,7 +17,7 @@ int main()
         std::vector<ip_tuple> ip_pool_int;
         std::vector<ip_tuple> ip_pool_int_2;
 	    std::ifstream inFile;
-        inFile.open("ip_filter.tsv");
+        inFile.open("C:/Users/user/Desktop/2laba/ip_filter.tsv");
         std::string line; 
 
         while(std::getline(inFile, line))

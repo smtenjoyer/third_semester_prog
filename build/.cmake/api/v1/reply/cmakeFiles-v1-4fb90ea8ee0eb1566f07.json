@@ -151,9 +151,6 @@
 			"path" : "C:/msys64/mingw64/share/cmake/Modules/CMakeCommonLanguageInclude.cmake"
 		},
 		{
-			"path" : "ip_filter.tsv"
-		},
-		{
 			"isCMake" : true,
 			"isExternal" : true,
 			"path" : "C:/msys64/mingw64/share/cmake/Modules/CPack.cmake"
