@@ -2,46 +2,86 @@
 #include <vector>
 #include "ipfilter.h"
 
-// Тестовый набор для функции sort_lex
-TEST(IPAddressTest, SortLexTest) {
-    std::vector<ip_tuple> ip_pool = {
-        ip_tuple(10, 10, 10, 10),
-        ip_tuple(1, 1, 1, 1),
-        ip_tuple(2, 2, 2, 2),
-        ip_tuple(3, 3, 3, 3),
-    };
-    std::vector<ip_tuple> test_sort_tuple{
-        ip_tuple(10, 10, 10, 10),
-        ip_tuple(3, 3, 3, 3),
-        ip_tuple(2, 2, 2, 2),
-        ip_tuple(1, 1, 1, 1),
-    };
-    sort_lex(ip_pool);
-    EXPECT_EQ(ip_pool, test_sort_tuple);
+TEST(SplitTest, EmptyString) {
+    std::vector<std::string> expected = {""};
+    std::vector<std::string> result = split("", '.');
+    ASSERT_EQ(result, expected);
 }
 
-// Тестовый набор для функции sort_lex_2
-TEST(IPAddressTest, BasicCases) {
+TEST(SplitTest, SingleNumber) {
+    std::vector<std::string> expected = {"11"};
+    std::vector<std::string> result = split("11", '.');
+    ASSERT_EQ(result, expected);
+}
+
+TEST(SplitTest, MultipleDots) {
+    std::vector<std::string> expected = {"", "", ""};
+    std::vector<std::string> result = split("..", '.');
+    ASSERT_EQ(result, expected);
+}
+
+TEST(SplitTest, DotAtEnd) {
+    std::vector<std::string> expected = {"11", ""};
+    std::vector<std::string> result = split("11.", '.');
+    ASSERT_EQ(result, expected);
+}
+
+TEST(SplitTest, DotAtBeginning) {
+    std::vector<std::string> expected = {"", "11"};
+    std::vector<std::string> result = split(".11", '.');
+    ASSERT_EQ(result, expected);
+}
+
+TEST(SplitTest, MultipleNumbers) {
+    std::vector<std::string> expected = {"11", "22"};
+    std::vector<std::string> result = split("11.22", '.');
+    ASSERT_EQ(result, expected);
+}
+
+TEST(SortLexTest, SimpleSort) {
     std::vector<ip_tuple> ip_pool = {
-        ip_tuple(1, 1, 1, 1),
-        ip_tuple(46, 70, 1, 1),
-        ip_tuple(46, 46, 1, 1),
-        ip_tuple(46, 46, 46, 46),
-        ip_tuple(2, 2, 2, 2),
-        ip_tuple(46, 46, 1, 1),
-        ip_tuple(46, 70, 2, 2),
+        {1, 2, 3, 4},
+        {2, 1, 4, 3},
+        {3, 4, 1, 2},
     };
 
-    std::vector<ip_tuple> test_sort_lex_2{
-        ip_tuple(1, 1, 1, 1),
-        ip_tuple(46, 70, 1, 1),
-        ip_tuple(46, 70, 2, 2),
-        ip_tuple(46, 46, 1, 1),
-        ip_tuple(2, 2, 2, 2),
-        ip_tuple(46, 46, 46, 46),
+    std::vector<ip_tuple> expected = {
+        {3, 4, 1, 2},
+        {2, 1, 4, 3},
+        {1, 2, 3, 4},
     };
+
+    sort_lex(ip_pool);
+    ASSERT_EQ(ip_pool, expected);
+}
+
+TEST(SortLexTest, SpecialCase) {
+    std::vector<ip_tuple> ip_pool = {
+        {1, 1, 1, 1},
+        {1, 2, 3, 4},
+        {2, 1, 4, 3},
+        {3, 4, 1, 2},
+        {46, 70, 1, 2},
+        {46, 46, 1, 1},
+        {46, 46, 1, 2},
+        {46, 46, 1, 3},
+        {46, 46, 2, 1},
+    };
+
+    std::vector<ip_tuple> expected = {
+        {46, 70, 1, 2},
+        {46, 46, 1, 1},
+        {46, 46, 1, 2},
+        {46, 46, 1, 3},
+        {46, 46, 2, 1},
+        {3, 4, 1, 2},
+        {2, 1, 4, 3},
+        {1, 2, 3, 4},
+        {1, 1, 1, 1},
+    };
+
     sort_lex_2(ip_pool);
-    EXPECT_EQ(ip_pool, test_sort_lex_2);
+    ASSERT_EQ(ip_pool, expected);
 }
 
 int main(int argc, char **argv) {
