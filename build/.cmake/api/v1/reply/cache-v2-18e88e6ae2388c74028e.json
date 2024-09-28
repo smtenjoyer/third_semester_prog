@@ -1762,6 +1762,18 @@
 			"value" : "1"
 		},
 		{
+			"name" : "PROJECT_VERSION",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "Project version"
+				}
+			],
+			"type" : "INTERNAL",
+			"value" : "0.0.1"
+		},
+		{
 			"name" : "_CMAKE_LINKER_PUSHPOP_STATE_SUPPORTED",
 			"properties" : 
 			[

@@ -606,6 +606,8 @@ CPACK_SOURCE_ZIP-ADVANCED:INTERNAL=1
 FIND_PACKAGE_MESSAGE_DETAILS_Python:INTERNAL=[C:/Users/user/AppData/Local/Programs/Python/Python312/python.exe][cfound components: Interpreter ][v3.12.3()]
 //Patch version
 PATCH_VERSION:INTERNAL=1
+//Project version
+PROJECT_VERSION:INTERNAL=0.0.1
 //linker supports push/pop state
 _CMAKE_LINKER_PUSHPOP_STATE_SUPPORTED:INTERNAL=TRUE
 //CMAKE_INSTALL_PREFIX during last run
