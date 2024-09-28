@@ -2,41 +2,20 @@ cmake_minimum_required(VERSION 3.14)
 project(GTests)
 enable_testing()
 
-# Fetch Google Test
 include(FetchContent)
 FetchContent_Declare(
     googletest
     # URL https://github.com/google/googletest/archive/609281088cfefc76f9d0ce82e1ff6c30cc3591e5.zip
     URL https://github.com/google/googletest/archive/refs/tags/release-1.11.0.zip 
+
 )
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
-
-# Define common sources
 set(COMMON_SRCS
     "../ipfilter.cpp"
 )
-
-# Add the executable for the tests
 add_executable(tests tests.cpp ${COMMON_SRCS})
-
-# Include directories for tests 
 target_include_directories(tests PUBLIC ${CMAKE_SOURCE_DIR})
-
-# Link against Google Test
 target_link_libraries(tests PUBLIC gtest gtest_main)
-
-# Include Google Test module
 include(GoogleTest)
-
-# Discover tests
 gtest_discover_tests(tests)
-
-# Configure for Ubuntu
-if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
-  # Find the specific package on Ubuntu
-  find_package(PkgConfig REQUIRED)
-  pkg_check_modules(QT5 REQUIRED QtCore QtGui) 
-
-  # Any additional Ubuntu-specific configuration...
-endif()
