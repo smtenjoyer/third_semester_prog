@@ -4,8 +4,8 @@ set(PROJECT_VERSION 0.0.${PATCH_VERSION})
 # add_executable(ip_check main.cpp ipfilter.cpp ipfilter.h)
 project(ip_check VERSION ${PROJECT_VERSION})
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/ip_filter.tsv
-    ${CMAKE_CURRENT_BINARY_DIR} COPYONLY)
+# configure_file(${CMAKE_CURRENT_SOURCE_DIR}/ip_filter.tsv
+#     ${CMAKE_CURRENT_BINARY_DIR} COPYONLY)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CXX_STANDARD_REQUIRED ON)

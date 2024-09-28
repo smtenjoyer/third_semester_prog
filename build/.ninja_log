@@ -1,17 +1,17 @@
 # ninja log v5
+5751	5808	7492364515036545	lib/libgmock_maind.a	4903a5ffdee1ebff
+17	5512	7492364511944366	_deps/googletest-build/googletest/CMakeFiles/gtest.dir/src/gtest-all.cc.obj	98420ef546a232a8
+5730	6063	7492364517566183	gtests/tests[1]_tests.cmake	979b0c8b70a0363e
+9	571	7492364148811212	CMakeFiles/ip_check.dir/ipfilter.cpp.obj	2fdef03f3d1614d7
+20	880	7492364465755658	_deps/googletest-build/googletest/CMakeFiles/gtest_main.dir/src/gtest_main.cc.obj	dfa44a40a83102b4
+3	508	7492364148189509	CMakeFiles/ip_check.dir/main.cpp.obj	390bfef92a410128
+7	637	7492364463311498	gtests/CMakeFiles/tests.dir/__/ipfilter.cpp.obj	78578e04863243a7
 14	1117	7492364468124252	_deps/googletest-build/googlemock/CMakeFiles/gmock_main.dir/src/gmock_main.cc.obj	4c8e894e52d1d48c
 5513	5668	7492364513629082	lib/libgtestd.a	23e460d5beed6707
 572	689	7492364149949159	ip_check.exe	f914a3301a91f86b
+3	1061	7492364467552913	gtests/CMakeFiles/tests.dir/tests.cpp.obj	e5c50ac7b431e14e
 10	2119	7492364478113413	_deps/googletest-build/googlemock/CMakeFiles/gmock.dir/src/gmock-all.cc.obj	10cea2a20281fb0f
 5730	6063	7492364517566183	gtests/tests.exe	979b0c8b70a0363e
-3	1061	7492364467552913	gtests/CMakeFiles/tests.dir/tests.cpp.obj	e5c50ac7b431e14e
-7	637	7492364463311498	gtests/CMakeFiles/tests.dir/__/ipfilter.cpp.obj	78578e04863243a7
 5674	5730	7492364514258660	lib/libgtest_maind.a	d352a4e729665cb9
 5730	6063	7492364517566183	C:/Users/user/Desktop/2laba/build/gtests/tests[1]_tests.cmake	979b0c8b70a0363e
 5668	5750	7492364514466962	lib/libgmockd.a	bbffc48d62cd2b12
-5730	6063	7492364517566183	gtests/tests[1]_tests.cmake	979b0c8b70a0363e
-17	5512	7492364511944366	_deps/googletest-build/googletest/CMakeFiles/gtest.dir/src/gtest-all.cc.obj	98420ef546a232a8
-5751	5808	7492364515036545	lib/libgmock_maind.a	4903a5ffdee1ebff
-3	508	7492364148189509	CMakeFiles/ip_check.dir/main.cpp.obj	390bfef92a410128
-20	880	7492364465755658	_deps/googletest-build/googletest/CMakeFiles/gtest_main.dir/src/gtest_main.cc.obj	dfa44a40a83102b4
-9	571	7492364148811212	CMakeFiles/ip_check.dir/ipfilter.cpp.obj	2fdef03f3d1614d7
