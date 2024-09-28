@@ -6,7 +6,7 @@ method=url
 command=C:/msys64/mingw64/bin/cmake.exe;-P;C:/Users/user/Desktop/2laba/build/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/download-googletest-populate.cmake;COMMAND;C:/msys64/mingw64/bin/cmake.exe;-P;C:/Users/user/Desktop/2laba/build/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/verify-googletest-populate.cmake;COMMAND;C:/msys64/mingw64/bin/cmake.exe;-P;C:/Users/user/Desktop/2laba/build/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/extract-googletest-populate.cmake
 source_dir=C:/Users/user/Desktop/2laba/build/_deps/googletest-src
 work_dir=C:/Users/user/Desktop/2laba/build/_deps
-url(s)=https://github.com/google/googletest/archive/refs/tags/release-1.11.0.zip
+url(s)=https://github.com/google/googletest/archive/609281088cfefc76f9d0ce82e1ff6c30cc3591e5.zip
 hash=
 no_extract=
 
