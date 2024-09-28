@@ -9,15 +9,13 @@ on:
       - feature/github_actions
 
 jobs:
-  build_and_test:
+  build-ubuntu:
     runs-on: ubuntu-latest
     permissions: write-all
     steps:
       - uses: actions/checkout@v3
         with:
           submodules: true
-      - name: Создание каталога сборки
-        run: mkdir build
       - name: Конфигурация CMake
         run: |
           cd build
@@ -27,30 +25,30 @@ jobs:
       - name: Запуск тестов
         run: |
           cd build
-          ctest --output-on-failure || exit 1  
-      - name: Упаковка проекта
-        run: cmake --build . --target package
-      - name: Создать релиз
-        id: create_release
+          ctest --output-on-failure || exit 1  # Проверяем наличие тестов и их успешное выполнение
+      - run: cmake --build . --target package
+      - run: cmake --build . --target package
+      - name: Create Release (ubuntu)
+        id: create_release_ubuntu
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: v${{ github.run_number }}
-          release_name: Release ${{ github.run_number }} (Ubuntu)
+          tag_name: ubuntu${{ github.run_number }} 
+          release_name: Release ${{ github.run_number }} (ubuntu)
           draft: false
           prerelease: false
-      - name: Загрузить релизный ассет
-        id: upload_release_asset
+      - name: Upload Release Asset (ubuntu)
+        id: upload-release-asset
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./ip_check-0.0.${{ github.run_number }}-Linux.zip 
-          asset_name: ip_check-0.0.${{ github.run_number }}-Linux.zip
+          upload_url: ${{ steps.create_release_ubuntu.outputs.upload_url }}
+          asset_path: ./lab02-0.0.${{ github.run_number }}-Linux.zip
+          asset_name: lab02-0.0.${{ github.run_number }}-Linux.zip
           asset_content_type: application/x-zip-compressed
-          allowUpdates: true
+
 
   build_macos:
     # Запускаем job на macos-latest
