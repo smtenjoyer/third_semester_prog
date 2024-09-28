@@ -19,7 +19,7 @@ project(googletest-populate NONE)
 
 include(ExternalProject)
 ExternalProject_Add(googletest-populate
-                     "UPDATE_DISCONNECTED" "False" "EXTERNALPROJECT_INTERNAL_ARGUMENT_SEPARATOR" "FetchContent_GetProperties" "(" "googletest" ")"
+                     "UPDATE_DISCONNECTED" "False" "DOWNLOAD_EXTRACT_TIMESTAMP" "TRUE" "EXTERNALPROJECT_INTERNAL_ARGUMENT_SEPARATOR" "URL" "https://github.com/google/googletest/archive/refs/tags/release-1.11.0.zip"
                     SOURCE_DIR          "C:/Users/user/Desktop/2laba/build/_deps/googletest-src"
                     BINARY_DIR          "C:/Users/user/Desktop/2laba/build/_deps/googletest-build"
                     CONFIGURE_COMMAND   ""
