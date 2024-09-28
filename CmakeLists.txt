@@ -1,34 +1,17 @@
-cmake_minimum_required(VERSION 3.6.0) # Устанавливает минимальную версию CMake, необходимую для этого проекта.
-set(PATCH_VERSION "1" CACHE INTERNAL "Patch version")
-set(PROJECT_VESRION 0.0.${PATCH_VERSION})
+cmake_minimum_required(VERSION 3.5.0)
+project(ip_check VERSION 0.1.0 LANGUAGES C CXX)
 
-project(ip_check VERSION ${PROJECT_VESRION}) 
-# add_executable(ip_check main.cpp ipfilter.cpp ipfilter.h)
+# Указываем стандарт C++
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-set(CMAKE_CXX_STANDARD 17)
-set(CXX_STANDARD_REQUIRED ON)
+# Добавляем исполняемый файл для основного приложения
+add_executable(ip_check ipfilter.cpp main.cpp)
 
-set(CPACK_PROJECT_NAME ip_check)
-
-# Установка пакета DEB для Linux
-if (CMAKE_SYSTEM_NAME STREQUAL "Linux")
-    set(CPACK_GENERATOR DEB) 
-    set(CPACK_DEBIAN_PACKAGE_DEPENDS "libgtk-3-dev libstdc++6-dev")
-endif()
-if (CMAKE_SYSTEM_NAME STREQUAL "Darwin")
-    set(CPACK_GENERATOR ZIP) 
-endif()
-
-set(CPACK_PACKAGE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")
-set(CPACK_PACKAGE_VERSION_MINOR "${PROJECT_VERSION_MINOR}")
-set(CPACK_PACKAGE_VERSION_PATCH "${PROJECT_VERSION_PATCH}")
-
-set(CPACK_PACKAGE_CONTACT example@example.com)
-
-include(CPack)
-
-enable_testing() # Включает тестирование
-
+# Добавляем поддиректорию для тестов
 add_subdirectory(gtests)
+
+# Указываем настройки для сборки пакетов
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
+include(CPack)

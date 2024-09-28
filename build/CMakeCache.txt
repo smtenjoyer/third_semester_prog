@@ -17,6 +17,9 @@
 //Builds the googlemock subproject
 BUILD_GMOCK:BOOL=ON
 
+//Build the testing tree.
+BUILD_TESTING:BOOL=ON
+
 //Path to a program.
 CMAKE_ADDR2LINE:FILEPATH=C:/msys64/mingw64/bin/addr2line.exe
 
@@ -26,8 +29,8 @@ CMAKE_AR:FILEPATH=C:/msys64/mingw64/bin/ar.exe
 //No help, variable specified on the command line.
 CMAKE_BUILD_TYPE:STRING=Debug
 
-//No help, variable specified on the command line.
-CMAKE_CXX_COMPILER:FILEPATH=C:/msys64/mingw64/bin/g++.exe
+//CXX compiler
+CMAKE_CXX_COMPILER:FILEPATH=C:/msys64/mingw64/bin/c++.exe
 
 //A wrapper around 'ar' adding the appropriate '--plugin' option
 // for the GCC compiler
@@ -55,8 +58,8 @@ CMAKE_CXX_FLAGS_RELWITHDEBINFO:STRING=-O2 -g -DNDEBUG
 //Libraries linked by default with all C++ applications.
 CMAKE_CXX_STANDARD_LIBRARIES:STRING=-lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
 
-//No help, variable specified on the command line.
-CMAKE_C_COMPILER:FILEPATH=C:/msys64/mingw64/bin/gcc.exe
+//C compiler
+CMAKE_C_COMPILER:FILEPATH=C:/msys64/mingw64/bin/cc.exe
 
 //A wrapper around 'ar' adding the appropriate '--plugin' option
 // for the GCC compiler
@@ -207,16 +210,16 @@ CMAKE_PROJECT_HOMEPAGE_URL:STATIC=
 CMAKE_PROJECT_NAME:STATIC=ip_check
 
 //Value Computed by CMake
-CMAKE_PROJECT_VERSION:STATIC=0.0.1
+CMAKE_PROJECT_VERSION:STATIC=0.1.0
 
 //Value Computed by CMake
 CMAKE_PROJECT_VERSION_MAJOR:STATIC=0
 
 //Value Computed by CMake
-CMAKE_PROJECT_VERSION_MINOR:STATIC=0
+CMAKE_PROJECT_VERSION_MINOR:STATIC=1
 
 //Value Computed by CMake
-CMAKE_PROJECT_VERSION_PATCH:STATIC=1
+CMAKE_PROJECT_VERSION_PATCH:STATIC=0
 
 //Value Computed by CMake
 CMAKE_PROJECT_VERSION_TWEAK:STATIC=
@@ -304,6 +307,13 @@ CMAKE_TAPI:FILEPATH=CMAKE_TAPI-NOTFOUND
 // Studio IDE projects all commands are done without /nologo.
 CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
 
+//Path to the coverage program that CTest uses for performing coverage
+// inspection
+COVERAGE_COMMAND:FILEPATH=C:/msys64/mingw64/bin/gcov.exe
+
+//Extra command line flags to pass to the coverage tool
+COVERAGE_EXTRA_FLAGS:STRING=-l
+
 //Enable to build 7-Zip packages
 CPACK_BINARY_7Z:BOOL=OFF
 
@@ -331,6 +341,15 @@ CPACK_SOURCE_7Z:BOOL=ON
 //Enable to build ZIP source packages
 CPACK_SOURCE_ZIP:BOOL=ON
 
+//How many times to retry timed-out CTest submissions.
+CTEST_SUBMIT_RETRY_COUNT:STRING=3
+
+//How long to wait between timed-out CTest submissions.
+CTEST_SUBMIT_RETRY_DELAY:STRING=5
+
+//Maximum time allowed before CTest will kill the test.
+DART_TESTING_TIMEOUT:STRING=1500
+
 //Directory under which to collect all populated content
 FETCHCONTENT_BASE_DIR:PATH=C:/Users/user/Desktop/2laba/build/_deps
 
@@ -342,30 +361,39 @@ FETCHCONTENT_FULLY_DISCONNECTED:BOOL=OFF
 FETCHCONTENT_QUIET:BOOL=ON
 
 //When not empty, overrides where to find pre-populated content
-// for googletest
-FETCHCONTENT_SOURCE_DIR_GOOGLETEST:PATH=
+// for gtest
+FETCHCONTENT_SOURCE_DIR_GTEST:PATH=
 
 //Enables UPDATE_DISCONNECTED behavior for all content population
 FETCHCONTENT_UPDATES_DISCONNECTED:BOOL=OFF
 
-//Enables UPDATE_DISCONNECTED behavior just for population of googletest
-FETCHCONTENT_UPDATES_DISCONNECTED_GOOGLETEST:BOOL=OFF
+//Enables UPDATE_DISCONNECTED behavior just for population of gtest
+FETCHCONTENT_UPDATES_DISCONNECTED_GTEST:BOOL=OFF
 
-//Value Computed by CMake
-GTests_BINARY_DIR:STATIC=C:/Users/user/Desktop/2laba/build/gtests
+//Path to a program.
+GITCOMMAND:FILEPATH=C:/Program Files/Git/cmd/git.exe
 
-//Value Computed by CMake
-GTests_IS_TOP_LEVEL:STATIC=OFF
-
-//Value Computed by CMake
-GTests_SOURCE_DIR:STATIC=C:/Users/user/Desktop/2laba/gtests
+//Git command line client
+GIT_EXECUTABLE:FILEPATH=C:/Program Files/Git/cmd/git.exe
 
 //Enable installation of googletest. (Projects embedding googletest
 // may want to turn this OFF.)
 INSTALL_GTEST:BOOL=ON
 
+//Command to build the project
+MAKECOMMAND:STRING=C:\msys64\mingw64\bin\cmake.exe --build . --config "${CTEST_CONFIGURATION_TYPE}"
+
+//Path to the memory checking command, used for memory error detection.
+MEMORYCHECK_COMMAND:FILEPATH=MEMORYCHECK_COMMAND-NOTFOUND
+
+//File that contains suppressions for the memory checker
+MEMORYCHECK_SUPPRESSIONS_FILE:FILEPATH=
+
+//Name of the computer/site where compile is being run
+SITE:STRING=LAPTOP-L19F8AP6
+
 //Value Computed by CMake
-gmock_BINARY_DIR:STATIC=C:/Users/user/Desktop/2laba/build/_deps/googletest-build/googlemock
+gmock_BINARY_DIR:STATIC=C:/Users/user/Desktop/2laba/build/_deps/gtest-build/googlemock
 
 //Value Computed by CMake
 gmock_IS_TOP_LEVEL:STATIC=OFF
@@ -374,7 +402,7 @@ gmock_IS_TOP_LEVEL:STATIC=OFF
 gmock_LIB_DEPENDS:STATIC=general;gtest;
 
 //Value Computed by CMake
-gmock_SOURCE_DIR:STATIC=C:/Users/user/Desktop/2laba/build/_deps/googletest-src/googlemock
+gmock_SOURCE_DIR:STATIC=C:/Users/user/Desktop/2laba/build/_deps/gtest-src/googlemock
 
 //Build all of Google Mock's own tests.
 gmock_build_tests:BOOL=OFF
@@ -383,22 +411,22 @@ gmock_build_tests:BOOL=OFF
 gmock_main_LIB_DEPENDS:STATIC=general;gmock;
 
 //Value Computed by CMake
-googletest-distribution_BINARY_DIR:STATIC=C:/Users/user/Desktop/2laba/build/_deps/googletest-build
+googletest-distribution_BINARY_DIR:STATIC=C:/Users/user/Desktop/2laba/build/_deps/gtest-build
 
 //Value Computed by CMake
 googletest-distribution_IS_TOP_LEVEL:STATIC=OFF
 
 //Value Computed by CMake
-googletest-distribution_SOURCE_DIR:STATIC=C:/Users/user/Desktop/2laba/build/_deps/googletest-src
+googletest-distribution_SOURCE_DIR:STATIC=C:/Users/user/Desktop/2laba/build/_deps/gtest-src
 
 //Value Computed by CMake
-gtest_BINARY_DIR:STATIC=C:/Users/user/Desktop/2laba/build/_deps/googletest-build/googletest
+gtest_BINARY_DIR:STATIC=C:/Users/user/Desktop/2laba/build/_deps/gtest-build/googletest
 
 //Value Computed by CMake
 gtest_IS_TOP_LEVEL:STATIC=OFF
 
 //Value Computed by CMake
-gtest_SOURCE_DIR:STATIC=C:/Users/user/Desktop/2laba/build/_deps/googletest-src/googletest
+gtest_SOURCE_DIR:STATIC=C:/Users/user/Desktop/2laba/build/_deps/gtest-src/googletest
 
 //Build gtest's sample programs.
 gtest_build_samples:BOOL=OFF
@@ -411,7 +439,7 @@ gtest_disable_pthreads:BOOL=OFF
 
 //Use shared (DLL) run-time lib even when Google Test is built
 // as static lib.
-gtest_force_shared_crt:BOOL=ON
+gtest_force_shared_crt:BOOL=OFF
 
 //Build gtest with internal symbols hidden in shared libraries.
 gtest_hide_internal_symbols:BOOL=OFF
@@ -427,6 +455,15 @@ ip_check_IS_TOP_LEVEL:STATIC=ON
 
 //Value Computed by CMake
 ip_check_SOURCE_DIR:STATIC=C:/Users/user/Desktop/2laba
+
+//Value Computed by CMake
+ip_filter_tests_BINARY_DIR:STATIC=C:/Users/user/Desktop/2laba/build/gtests
+
+//Value Computed by CMake
+ip_filter_tests_IS_TOP_LEVEL:STATIC=OFF
+
+//Value Computed by CMake
+ip_filter_tests_SOURCE_DIR:STATIC=C:/Users/user/Desktop/2laba/gtests
 
 
 ########################
@@ -449,6 +486,8 @@ CMAKE_CACHE_PATCH_VERSION:INTERNAL=1
 CMAKE_COMMAND:INTERNAL=C:/msys64/mingw64/bin/cmake.exe
 //Path to cpack program executable.
 CMAKE_CPACK_COMMAND:INTERNAL=C:/msys64/mingw64/bin/cpack.exe
+//ADVANCED property for variable: CMAKE_CTEST_COMMAND
+CMAKE_CTEST_COMMAND-ADVANCED:INTERNAL=1
 //Path to ctest program executable.
 CMAKE_CTEST_COMMAND:INTERNAL=C:/msys64/mingw64/bin/ctest.exe
 //ADVANCED property for variable: CMAKE_CXX_COMPILER
@@ -619,6 +658,10 @@ CMAKE_STRIP-ADVANCED:INTERNAL=1
 CMAKE_TAPI-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_VERBOSE_MAKEFILE
 CMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: COVERAGE_COMMAND
+COVERAGE_COMMAND-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: COVERAGE_EXTRA_FLAGS
+COVERAGE_EXTRA_FLAGS-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CPACK_BINARY_7Z
 CPACK_BINARY_7Z-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CPACK_BINARY_IFW
@@ -637,10 +680,26 @@ CPACK_BINARY_ZIP-ADVANCED:INTERNAL=1
 CPACK_SOURCE_7Z-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CPACK_SOURCE_ZIP
 CPACK_SOURCE_ZIP-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: CTEST_SUBMIT_RETRY_COUNT
+CTEST_SUBMIT_RETRY_COUNT-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: CTEST_SUBMIT_RETRY_DELAY
+CTEST_SUBMIT_RETRY_DELAY-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: DART_TESTING_TIMEOUT
+DART_TESTING_TIMEOUT-ADVANCED:INTERNAL=1
 //Details about finding Python
 FIND_PACKAGE_MESSAGE_DETAILS_Python:INTERNAL=[C:/Users/user/AppData/Local/Programs/Python/Python312/python.exe][cfound components: Interpreter ][v3.12.3()]
-//Patch version
-PATCH_VERSION:INTERNAL=1
+//ADVANCED property for variable: GITCOMMAND
+GITCOMMAND-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: GIT_EXECUTABLE
+GIT_EXECUTABLE-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: MAKECOMMAND
+MAKECOMMAND-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: MEMORYCHECK_COMMAND
+MEMORYCHECK_COMMAND-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: MEMORYCHECK_SUPPRESSIONS_FILE
+MEMORYCHECK_SUPPRESSIONS_FILE-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: SITE
+SITE-ADVANCED:INTERNAL=1
 //linker supports push/pop state
 _CMAKE_LINKER_PUSHPOP_STATE_SUPPORTED:INTERNAL=TRUE
 //CMAKE_INSTALL_PREFIX during last run
@@ -656,7 +715,8 @@ _Python_INTERPRETER_PROPERTIES:INTERNAL=Python;3;12;3;64;32;;cp312-win_amd64;;C:
 _Python_INTERPRETER_SIGNATURE:INTERNAL=30a55096f7c74accc3929a684bc03016
 //NumPy reason failure
 _Python_NumPy_REASON_FAILURE:INTERNAL=
-generated_dir:INTERNAL=C:/Users/user/Desktop/2laba/build/_deps/googletest-build/googletest/generated
+cmake_package_name:INTERNAL=GTest
+generated_dir:INTERNAL=C:/Users/user/Desktop/2laba/build/_deps/gtest-build/googletest/generated
 //ADVANCED property for variable: gmock_build_tests
 gmock_build_tests-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: gtest_build_samples
