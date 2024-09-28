@@ -10,22 +10,19 @@ on:
 
 jobs:
   build_ubuntu:
-    # Запускаем job на ubuntu-latest
     runs-on: ubuntu-latest
-    # Предоставляем разрешения на запись во все ресурсы
     permissions: write-all
     steps:
-      # Клонируем репозиторий, включая submodules
       - uses: actions/checkout@v3
         with:
           submodules: true
-      # Устанавливаем libboost-test-dev
-      - run: sudo apt-get update && sudo apt-get install libboost-test-dev -y
-      # Конфигурируем проект с помощью CMake, используя номер запуска для PATCH_VERSION
-      - run: cmake . -DPATCH_VERSION=${{ github.run_number }}
-      # Строим проект с помощью CMake
+      - name: Создание каталога сборки
+        run: mkdir build
+      - name: Конфигурация CMake
+        run: |
+          cd build
+          cmake . -DPATCH_VERSION=${{ github.run_number }} 
       - run: cmake --build .
-      # Запускаем тесты
       - name: Run Tests
         run: |
           ctest --output-on-failure || exit 1  # Проверяем наличие тестов и их успешное выполнение
