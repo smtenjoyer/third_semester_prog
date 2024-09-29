@@ -8,68 +8,50 @@ on:
 
 jobs:
   build_and_test:
-  runs-on: ubuntu-latest
-  permissions: write-all
-  steps:
-    - uses: actions/checkout@v3
-      with:
-        submodules: true
+    runs-on: ubuntu-latest
+    permissions: write-all
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+      - name: Install Dependencies
+        run: sudo apt-get update && sudo apt-get install libboost-test-dev -y
 
-    - name: Install Dependencies
-      run: sudo apt-get update && sudo apt-get install libboost-test-dev -y
+      - name: Сборка проекта
+        run: cmake --build .
+     
+      - name: Configure CMake
+        run: cmake . -DPATCH_VERSION=${{ github.run_number }} 
 
-    # Create a build directory
-    - name: Create Build Directory
-      run: mkdir build
+      - name: Запуск тестов
+        run: |
+          cd build
+          ctest --output-on-failure || exit 1  
 
-    # Configure CMake, specifying the source directory
-    - name: Configure CMake
-      run: |
-        cd build
-        cmake .. -DPATCH_VERSION=${{ github.run_number }} 
+      - name: Упаковка проекта
+        run: cmake --build . --target package # Убедитесь, что target package определен в CMakeLists.txt
 
-    # Build the project
-    - name: Build Project
-      run: |
-        cd build
-        cmake --build .
-
-    # Run tests
-    - name: Run Tests
-      run: |
-        cd build
-        ctest --output-on-failure || exit 1  
-
-    # Package the project (ensure that 'package' target is defined in CMakeLists.txt)
-    - name: Package Project
-      run: |
-        cd build
-        cmake --build . --target package
-
-    # Create a release on GitHub
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: v${{ github.run_number }}
-        release_name: Release ${{ github.run_number }} (Ubuntu)
-        draft: false
-        prerelease: false
-
-    # Upload release asset
-    - name: Upload Release Asset
-      id: upload_release_asset
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./ip_check-0.0.${{ github.run_number }}-Linux.deb # Ensure this path is correct
-        asset_name: ip_check-0.0.${{ github.run_number }}-Linux.deb
-        asset_content_type: application/vnd.debian.binary-package
-        allowUpdates: true
+      - name: Создать релиз
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ github.run_number }}
+          release_name: Release ${{ github.run_number }} (Ubuntu)
+          draft: false
+          prerelease: false
+      - name: Загрузить релизный ассет
+        id: upload_release_asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./ip_check-0.0.${{ github.run_number }}-Linux.deb # Укажите правильный путь к .deb-файлу
+          asset_name: ip_check-0.0.${{ github.run_number }}-Linux.deb
+          asset_content_type: application/vnd.debian.binary-package
+          allowUpdates: true
 
   build_macos:
     runs-on: macos-latest
