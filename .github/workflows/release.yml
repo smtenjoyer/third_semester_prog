@@ -16,20 +16,30 @@ jobs:
       - uses: actions/checkout@v3
         with:
           submodules: true
-      - name: Создание каталога сборки
-        run: mkdir build
-      - name: Конфигурация CMake
-        run: |
-          cd build
-          cmake .. -DPATCH_VERSION=${{ github.run_number }} 
+      - name: Install Dependencies
+        run: sudo apt-get update && sudo apt-get install libboost-test-dev -y
+
+      # - name: Создание каталога сборки
+      #   run: mkdir build
+
+      # - name: Конфигурация CMake
+      #   run: |
+      #     cd build
+      #     cmake .. -DPATCH_VERSION=${{ github.run_number }} 
+      - name: Configure CMake
+        run: cmake . -DPATCH_VERSION=${{ github.run_number }} 
+
       - name: Сборка проекта
         run: cmake --build .
+
       - name: Запуск тестов
         run: |
           cd build
           ctest --output-on-failure || exit 1  
+
       - name: Упаковка проекта
         run: cmake --build . --target package # Убедитесь, что target package определен в CMakeLists.txt
+
       - name: Создать релиз
         id: create_release
         uses: actions/create-release@v1
