@@ -26,7 +26,7 @@ jobs:
       # Configure CMake, specifying the source directory explicitly
       - name: Configure CMake
         run: |
-          cmake -S scr -B build -DPATCH_VERSION=${{ github.run_number }}
+          cmake -S . -B build -DPATCH_VERSION=${{ github.run_number }}
 
       # Build the project
       - name: Build Project
