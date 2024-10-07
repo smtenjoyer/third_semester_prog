@@ -43,7 +43,9 @@ jobs:
         run: |
           cd build
           cmake --build . --target package
-
+      - name: List Files in Build Directory
+        run: |
+          ls -R build
       # Create a release on GitHub
       - name: Create Release
         id: create_release
@@ -64,7 +66,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./ip_check-0.0.${{ github.run_number }}-Linux.deb
+          asset_path: ./build/ip_check-0.0.${{ github.run_number }}-Linux.deb
           asset_name: ip_check-0.0.${{ github.run_number }}-Linux.deb
           asset_content_type: application/vnd.debian.binary-package
           allowUpdates: true # Разрешаем обновление уже загруженного ассета
