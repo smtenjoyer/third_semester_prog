@@ -19,5 +19,13 @@ enable_testing()
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
 
-# Specify the package format (optional)
-set(CPACK_GENERATOR "ZIP")  # Specify ZIP for macOS packaging
+# Установка пакета DEB для Linux
+if (CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    set(CPACK_GENERATOR DEB) # Настраивает CPack для создания пакетов DEB (Linux).
+    # Укажите зависимости пакета
+    set(CPACK_DEBIAN_PACKAGE_DEPENDS "libgtk-3-dev libstdc++6-dev")
+endif()
+# Установка пакета ZIP для macOS
+if (CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+    set(CPACK_GENERATOR ZIP) # Настройка CPack для создания пакетов ZIP (macOS)
+endif()
