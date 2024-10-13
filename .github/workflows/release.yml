@@ -66,7 +66,7 @@ jobs:
           asset_content_type: application/vnd.debian.binary-package
           allowUpdates: true # Разрешаем обновление уже загруженного ассета
 
-  build_macos:
+  build_and_package_macos:
     runs-on: macos-latest
     permissions: write-all
     steps:
@@ -74,16 +74,20 @@ jobs:
         with:
           submodules: true
       
-      - run: brew install boost
+      - name: Install Dependencies (MacOS)
+        run: brew install boost
       
       # Configure project for MacOS using CMake 
-      - run: cmake . -DPATCH_VERSION=${{ github.run_number }}
+      - name: Configure CMake (MacOS)
+        run: cmake . -DPATCH_VERSION=${{ github.run_number }}
       
       # Build project 
-      - run: cmake --build .
-
-      # Create package 
-      - run: cmake --build . --target package
+      - name: Build Project (MacOS)
+        run: cmake --build .
+      
+      # Package project 
+      - name: Package Project (MacOS)
+        run: cmake --build . --target package
       
       # Create release for MacOS 
       - name: Create Release (MacOS)
@@ -92,7 +96,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.run_number }}
+          tag_name: v${{ github.run_number }}
           release_name: Release ${{ github.run_number }} (MacOS)
           draft: false 
           prerelease: false 
@@ -105,6 +109,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release_macos.outputs.upload_url }}
-          asset_path: ./ProgLaba3-0.0.${{ github.run_number }}-Darwin.zip 
-          asset_name: ProgLaba3-0.0.${{ github.run_number }}-Darwin.zip 
+          asset_path: ./ProgLaba3-0.1.0-${{ github.run_number }}.zip  # Adjust based on actual output filename.
+          asset_name: ProgLaba3-0.1.0-${{ github.run_number }}.zip  # Adjust based on actual output filename.
           asset_content_type: application/zip 
