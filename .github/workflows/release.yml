@@ -70,12 +70,8 @@ jobs:
     runs-on: macos-latest
     permissions: write-all
     steps:
-      - name: Install Homebrew
-        run: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-     
-      - name: Install Clang
-        run: brew install llvm
-        
+      - name: Install Xcode
+        run: xcode-select --install 
       - uses: actions/checkout@v3
         with:
           submodules: true
