@@ -1,42 +1,102 @@
-name: Build and Test
+name: 'C++ CI'
 
-on:
- push:
-  branches:
-   - laba3
+on: 
+  push:
+    branches:
+      - laba3
+      - feature/github_actions
 
 jobs:
- build:
-  runs-on: [ubuntu-latest, windows-latest]
-  strategy:
-   matrix:
-    os: [ubuntu-latest, windows-latest]
-    compiler: [g++, clang] # Добавьте список компиляторов, если необходимо
+  build_and_package_ubuntu:
+    runs-on: ubuntu-latest
+    permissions: write-all
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
 
-  steps:
-  - uses: actions/checkout@v3
-  - name: Set up ${{ matrix.os }}
-   uses: actions/setup-${{ matrix.os }}@v3
-   with:
-    java-version: 'adopt-openjdk-11' # Добавить, если нужен Java
-  - name: Install dependencies
-   run: |
-    if [[ ${{ matrix.os }} == 'ubuntu-latest' ]]; then
-     sudo apt-get update
-     sudo apt-get install -y cmake g++ clang # Установите зависимости для Linux
-    elif [[ ${{ matrix.os }} == 'windows-latest' ]]; then
-     choco install cmake # Установите зависимости для Windows
-    fi
-  - name: Configure CMake
-   run: cmake . -DCMAKE_BUILD_TYPE=Release
-  - name: Build
-   run: cmake --build . --config Release
-  - name: Run tests
-   run: cmake --build . --target test --config Release
-  - name: CPack
-   run: cpack -G ZIP
-  - name: Upload artifacts
-   uses: actions/upload-artifact@v3
-   with:
-    name: CPack-artifacts-${{ matrix.os }}-${{ matrix.compiler }}
-    path: pack/ProgLaba3-*
+      - name: Install Dependencies
+        run: sudo apt-get update && sudo apt-get install -y libboost-test-dev
+
+      # Configure CMake
+      - name: Configure CMake
+        run: cmake -S . -B build -DPATCH_VERSION=${{ github.run_number }}
+
+      # Build the project
+      - name: Build Project
+        run: cmake --build build
+
+      # Package the project
+      - name: Package Project
+        run: cmake --build build --target package
+
+      # Create a release on GitHub
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ github.run_number }}
+          release_name: Release ${{ github.run_number }} (Ubuntu)
+          draft: false
+          prerelease: false
+
+      # Upload release asset for Ubuntu
+      - name: Upload Release Asset (Ubuntu)
+        id: upload-release-asset-ubuntu
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./build/ProgLaba3-0.1.0-${{ github.run_number }}.zip  # Adjust based on actual output filename.
+          asset_name: ProgLaba3-0.1.0-${{ github.run_number }}.zip  # Adjust based on actual output filename.
+          asset_content_type: application/zip
+
+  build_and_package_macos:
+    runs-on: macos-latest
+    permissions: write-all
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+      
+      - name: Install Dependencies (MacOS)
+        run: brew install boost
+      
+      # Configure project for MacOS using CMake 
+      - name: Configure CMake (MacOS)
+        run: cmake . -DPATCH_VERSION=${{ github.run_number }}
+      
+      # Build project 
+      - name: Build Project (MacOS)
+        run: cmake --build .
+      
+      # Package project 
+      - name: Package Project (MacOS)
+        run: cmake --build . --target package
+      
+      # Create release for MacOS 
+      - name: Create Release (MacOS)
+        id: create_release_macos
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ github.run_number }}
+          release_name: Release ${{ github.run_number }} (MacOS)
+          draft: false 
+          prerelease: false 
+      
+      # Upload release asset for MacOS 
+      - name: Upload Release Asset (MacOS)
+        id: upload-release-asset-macos
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release_macos.outputs.upload_url }}
+          asset_path: ./ProgLaba3-0.1.0-${{ github.run_number }}.zip  # Adjust based on actual output filename.
+          asset_name: ProgLaba3-0.1.0-${{ github.run_number }}.zip  # Adjust based on actual output filename.
+          asset_content_type: application/zip 
