@@ -66,41 +66,53 @@ jobs:
           asset_content_type: application/vnd.debian.binary-package
           allowUpdates: true # Разрешаем обновление уже загруженного ассета
 
-  build_windows:
-    runs-on: windows-latest # Запускается на Windows-latest
-    permissions: write-all # Предоставляет права на запись всем ресурсам
+   build_and_package_windows:
+    runs-on: windows-latest
+    permissions: write-all
     steps:
-      - uses: actions/checkout@v3  # Клонирует репозиторий, включая подмодули
+      - uses: actions/checkout@v3
         with:
           submodules: true
-      - run: cmake . -DPATCH_VERSION=${{ github.run_number }} # Конфигурирует проект с помощью CMake, используя номер запуска для PATCH_VERSION
-       # Сборка проекта с помощью CMake 
-      - run: cmake --build .
-       # Создание пакета
-      - run: cmake --build . --target package
-      # Выводит список файлов в текущей директории
-      - name: List files
-        run: dir
-      # Создает релиз для Windows
-      - name: Create Release (windows)
+
+      - name: Install Dependencies
+        run: choco install boost
+
+      # Configure project with CMake
+      - name: Configure CMake
+        run: cmake . -DPATCH_VERSION=${{ github.run_number }}
+
+      # Build project
+      - name: Build Project
+        run: cmake --build .
+
+      # Create package 
+      - name: Package Project
+        run: cmake --build . --target package
+
+      # List files for debugging purposes
+      - name: List Files in Build Directory
+        run: dir  # For Windows
+
+      # Create release on GitHub
+      - name: Create Release (Windows)
         id: create_release_windows
-        uses: actions/create-release@v1 # Использует действие для создания релиза 
+        uses: actions/create-release@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Использует GITHUB_TOKEN для аутентификации
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          # Устанавливает tag_name, release_name и другие параметры 
           tag_name: windows${{ github.run_number }}
-          release_name: Release ${{ github.run_number }} (windows)
-          draft: false # Не публикует релиз как черновик 
-          prerelease: false # Не публикует как предварительный релиз 
-      # Загружает файл релиза для Windows 
-      - name: Upload Release Asset (windows)
-        id: upload-release-asset
+          release_name: Release ${{ github.run_number }} (Windows)
+          draft: false 
+          prerelease: false 
+
+      # Upload release asset for Windows 
+      - name: Upload Release Asset (Windows)
+        id: upload-release-asset-windows
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release_windows.outputs.upload_url }}
-          asset_path: ./laba3-0.0.${{ github.run_number }}-win64.zip
-          asset_name: laba3-0.0.${{ github.run_number }}-win64.zip
+          asset_path: ./laba3-0.0.${{ github.run_number }}-win64.zip  # Adjust based on actual output filename.
+          asset_name: laba3-0.0.${{ github.run_number }}-win64.zip  # Adjust based on actual output filename.
           asset_content_type: application/zip
