@@ -3,11 +3,13 @@ set(PATCH_VERSION "1" CACHE INTERNAL "Patch version")
 set(PROJECT_VESRION 0.0.${PATCH_VERSION})
 # Создает переменные PATCH_VERSION и PROJECT_VESRION для управления версиями проекта.
 
-project(ProgLaba3 VERSION ${PROJECT_VESRION}) # Определяет имя проекта ProgLaba3 и использует переменную PROJECT_VESRION для указания версии проекта.
+project(ProgLaba3 VERSION ${PROJECT_VESRION} LANGUAGES C CXX) # Определяет имя проекта ProgLaba3 и использует переменную PROJECT_VESRION для указания версии проекта.
 add_executable(ProgLaba3 main.cpp)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CXX_STANDARD_REQUIRED ON)
+
+include(CPack)
 
 set(CPACK_PROJECT_NAME ProgLaba3)
 
@@ -22,10 +24,8 @@ if (CMAKE_SYSTEM_NAME STREQUAL "Darwin")
     set(CPACK_GENERATOR ZIP) # Настройка CPack для создания пакетов ZIP (macOS)
 endif()
 
-set(CPACK_PACKAGE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")
-set(CPACK_PACKAGE_VERSION_MINOR "${PROJECT_VERSION_MINOR}")
-set(CPACK_PACKAGE_VERSION_PATCH "${PROJECT_VERSION_PATCH}")
+set(CPACK_PACKAGE_VERSION_MAJOR ${PROJECT_VERSION_MAJOR})
+set(CPACK_PACKAGE_VERSION_MINOR ${PROJECT_VERSION_MINOR})
+set(CPACK_PACKAGE_VERSION_PATCH ${PROJECT_VERSION_PATCH})
 
 set(CPACK_PACKAGE_CONTACT example@example.com)
-
-include(CPack)
