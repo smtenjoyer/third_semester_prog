@@ -1,23 +1,15 @@
-cmake_minimum_required(VERSION 3.5.0)
-project(ProgLaba3 VERSION 0.1.0 LANGUAGES C CXX)
+cmake_minimum_required(VERSION 3.5.0) # Устанавливает минимальную версию CMake, необходимую для этого проекта.
+set(PATCH_VERSION "1" CACHE INTERNAL "Patch version")
+set(PROJECT_VESRION 0.0.${PATCH_VERSION})
+# Создает переменные PATCH_VERSION и PROJECT_VESRION для управления версиями проекта.
 
-# Set the C++ standard
-set(CMAKE_CXX_STANDARD 17)  # or change to 17 if you're using C++17 features
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-# Add the executable
+project(ProgLaba3 VERSION ${PROJECT_VESRION}) # Определяет имя проекта ProgLaba3 и использует переменную PROJECT_VESRION для указания версии проекта.
 add_executable(ProgLaba3 main.cpp)
 
-# Include CPack for packaging
-include(CPack)
+set(CMAKE_CXX_STANDARD 17)
+set(CXX_STANDARD_REQUIRED ON)
 
-# Optional: If you want to enable testing, keep this section
-include(CTest)
-enable_testing()
-
-# Set up packaging information
-set(CPACK_PROJECT_NAME ${PROJECT_NAME})
-set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
+set(CPACK_PROJECT_NAME ProgLaba3)
 
 # Установка пакета DEB для Linux
 if (CMAKE_SYSTEM_NAME STREQUAL "Linux")
@@ -29,3 +21,11 @@ endif()
 if (CMAKE_SYSTEM_NAME STREQUAL "Darwin")
     set(CPACK_GENERATOR ZIP) # Настройка CPack для создания пакетов ZIP (macOS)
 endif()
+
+set(CPACK_PACKAGE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")
+set(CPACK_PACKAGE_VERSION_MINOR "${PROJECT_VERSION_MINOR}")
+set(CPACK_PACKAGE_VERSION_PATCH "${PROJECT_VERSION_PATCH}")
+
+set(CPACK_PACKAGE_CONTACT example@example.com)
+
+include(CPack)
