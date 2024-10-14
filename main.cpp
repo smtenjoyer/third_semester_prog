@@ -105,5 +105,9 @@ int main() {
     std::cout << "В контейнере после удаления одного элемента: ";
     listone.print(); 
 
+    for (SinglyLinkedList::Iterator it = listone.begin(); it!= listone.end(); ++it) {
+        std::cout << *it << " ";
+    }
+
     return 0;
 }

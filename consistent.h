@@ -94,6 +94,50 @@ public:
         }
         std::cout << std::endl;
     }
+
+    struct Iterator {
+        int* ptr;
+
+        // Конструктор
+        Iterator(int* ptr) : ptr(ptr) {}
+
+        // Оператор разыменования
+        int& operator*() {
+            if (ptr==nullptr) {
+                throw std::out_of_range("Index out of range"); // Исключение для недопустимого индекса
+            }
+            return *ptr;
+        }
+        int& get() {
+            if (ptr == nullptr) {
+                throw std::out_of_range("Index out of range"); // Исключение для недопустимого индекса
+            }
+            return *ptr;
+        }
+
+        // Оператор сравнения (для проверки конца итерации)
+        bool operator!=(const Iterator& other) {
+            return ptr != other.ptr;
+        }
+
+        // Перемещение итератора на следующий элемент
+        Iterator& operator++() {
+            ptr++;
+            return *this;
+        }
+
+    };
+    // Возвращает итератор на начало контейнера
+    Iterator begin() {
+        return Iterator(arr);
+    }
+
+    // Возвращает итератор на конец контейнера
+    Iterator end() {
+        return Iterator(arr + currentsize);
+    }
+
 };
+
 
 #endif

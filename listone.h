@@ -147,6 +147,51 @@ public:
             delete temp;
         }
     }
+
+    class Iterator {
+    public:
+        Iterator(Nodeone* node) : current(node) {}
+
+        Iterator& operator++() {
+            if (current) {
+                current = current->next;
+            }
+            return *this;
+        }
+
+        Iterator operator++(int) {
+            Iterator temp = *this;
+            (*this)++;
+            return temp;
+        }
+
+        int operator*() const {
+            if (current) {
+                return current->data;
+            } else {
+                throw std::out_of_range("Iterator out of range");
+            }
+        }
+
+        bool operator==(const Iterator& other) const {
+            return current == other.current;
+        }
+
+        bool operator!=(const Iterator& other) const {
+            return!(*this == other);
+        }
+
+    private:
+        Nodeone* current;
+    };
+
+    Iterator begin() const {
+        return Iterator(first);
+    }
+
+    Iterator end() const {
+        return Iterator(nullptr);
+    }
 };
 
 
