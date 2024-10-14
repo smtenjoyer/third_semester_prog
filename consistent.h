@@ -10,10 +10,10 @@
 template <typename Type> class my_array{
 private:
     Type* arr;
-    std::size_t capasity;
-    std::size_t currentsize;
+    std::size_t capasity; //"вместимость" данного конкретного массива
+    std::size_t currentsize; //текущее количество элементов данного массива
 
-    void resize(std::size_t newcapasity){
+    void resize(std::size_t newcapasity){ 
         Type* newarr = new Type[newcapasity];
         for (std::size_t i = 0; i < currentsize; i++)
         {
@@ -75,7 +75,7 @@ public:
         }
     }
     
-    std::size_t size() const{
+    std::size_t size(){
         return currentsize;
     }
 

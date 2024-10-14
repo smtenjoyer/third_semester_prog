@@ -5,32 +5,32 @@
 
 #include <iostream>
 
-class list {
+class Node {
 public:
     int data;
-    list* next;
-    list* prev;
+    Node* next; //предыдущий
+    Node* prev; //следующий
 
-    list(int value){  data = value; next = nullptr; prev = nullptr; }
+    Node(int value){  data = value; next = nullptr; prev = nullptr; } //конструктор
 };
 
 class DoublyLinkedList {
 private:
-    list* first;
-    list* last;
+    Node* first;  // "голова"
+    Node* last;   // "хвост"
     int size;
 
 public:
     DoublyLinkedList() { first = nullptr; last = nullptr; size = 0; }
 
     void push_back(int value) {
-        list* newlist = new list(value);
+        Node* newlist = new Node(value);
         if (!first) {  
-            first = last = newlist;
+            first = last = newlist; // до этого момента не существовало ни "головы", ни "хвоста"
         } else {
-            last->next = newlist;
-            newlist->prev = last;
-            last = newlist;
+            last->next = newlist; //сделующий после хвоста - новый созданный элемент
+            newlist->prev = last; //перед созданным элементом - хвост
+            last = newlist; //теперь хвост - это новый элемент
         }
         size++;
     }
@@ -41,14 +41,14 @@ public:
             return;
         }
 
-        list* current = first;
+        Node* current = first;
         for (int i = 0; i < index; i++) {
             current = current->next; 
         }
 
         if (current->prev) {
             current->prev->next = current->next; 
-        } else {
+        } else { //если удаляем первый элемент
             first = current->next; 
         }
 
@@ -72,7 +72,7 @@ public:
                 return;
             }
 
-            list* current = first;
+            Node* current = first;
             for (int i = 0; i < curr_insex; i++) {
                 current = current->next; 
             }
@@ -95,12 +95,12 @@ public:
         
     }
 
-    int getsize() const {
+    int getsize() {
         return size;
     }
 
-    void print() const {
-        list* current = first;
+    void print() {
+        Node* current = first;
         while (current) {
             std::cout << current->data;
             if (current->next) std::cout << ", ";
@@ -110,8 +110,8 @@ public:
     }
 
     void insertAtBeginning(int value) {
-        list* newlist = new list(value);
-        if (!first) { // If the list is empty
+        Node* newlist = new Node(value);
+        if (!first) { // если лист пустой
             first = last = newlist;
         } else {
             newlist->next = first;
@@ -132,8 +132,8 @@ public:
             return;
         }
 
-        list* newlist = new list(value);
-        list* current = first;
+        Node* newlist = new Node(value);
+        Node* current = first;
 
         for (int i = 0; i < index - 1; i++) { 
             current = current->next;
@@ -154,7 +154,7 @@ public:
 
     ~DoublyLinkedList() { 
         while (first) {
-            list* temp = first;
+            Node* temp = first;
             first = first->next;
             delete temp;
         }

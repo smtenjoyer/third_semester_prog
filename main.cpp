@@ -36,7 +36,6 @@ int main() {
     
     DoublyLinkedList list;
 
-    // Step 1: Add elements 0 to 9.
     for (int i = 0; i < 10; ++i) {
         list.push_back(i);
     }
@@ -64,6 +63,10 @@ int main() {
     list.push_back(30);
 
     std::cout << "В контейнере после вставки 30 в конец контейнера: ";
+    list.print(); 
+
+    list.erase(0); 
+    std::cout << "В контейнере после удаления одного элемента: ";
     list.print(); 
 
     return 0;
