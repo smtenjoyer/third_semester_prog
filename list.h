@@ -3,8 +3,6 @@
 
 #include <iostream>
 
-#include <iostream>
-
 class Node {
 public:
     int data;

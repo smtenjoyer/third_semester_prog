@@ -2,7 +2,7 @@
 #include <stdexcept>
 #include "consistent.h"
 #include "list.h"
-
+#include "listone.h"
 int main() {
 
     my_array<int> my_arr;
@@ -68,6 +68,42 @@ int main() {
     list.erase(0); 
     std::cout << "В контейнере после удаления одного элемента: ";
     list.print(); 
+
+
+
+    SinglyLinkedList listone;
+
+    for (int i = 0; i < 10; ++i) {
+        listone.push_back(i);
+    }
+
+    std::cout << "2) В контейнере: ";
+    listone.print(); 
+
+    std::cout << "Размер контейнера: " << listone.getsize() << std::endl; // Expected: 10
+
+    listone.erase(list_indexes); 
+
+    std::cout << "В контейнере после удаления элементов: ";
+    listone.print(); 
+    listone.insertAtBeginning(10);
+
+    std::cout << "В контейнере после вставки 10 в начало контейнера: ";
+    listone.print(); 
+    middle = listone.getsize() / 2;
+    listone.insertAt(middle, 20);
+
+    std::cout << "В контейнере после вставки 20 в середину контейнера: ";
+    listone.print(); 
+
+    listone.push_back(30);
+
+    std::cout << "В контейнере после вставки 30 в конец контейнера: ";
+    listone.print(); 
+
+    listone.erase(3); 
+    std::cout << "В контейнере после удаления одного элемента: ";
+    listone.print(); 
 
     return 0;
 }
