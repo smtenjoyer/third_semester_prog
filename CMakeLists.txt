@@ -6,7 +6,7 @@ set(PROJECT_VESRION 0.0.${PATCH_VERSION})
 project(laba4 VERSION ${PROJECT_VESRION}) # Определяет имя проекта laba4 и использует переменную PROJECT_VESRION для указания версии проекта.
 add_executable(laba4 main.cpp)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 11)
 set(CXX_STANDARD_REQUIRED ON)
 
 install(TARGETS laba4 DESTINATION bin)

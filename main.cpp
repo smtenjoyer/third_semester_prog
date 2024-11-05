@@ -1,26 +1,24 @@
 #include "myalloc.h"
 
+int factorial (int value)
+{
+    if (value == 0) return 1; 
+    else return value*factorial(value - 1);
+}
+
 int main() {
     std::map<int, int> map1;
     for (int i = 0; i < 10; i++)
     {
-        int n = 0;
-        for (int j = 1; j <= i; j++){
-            n+=j;
-        }
-        map1[i] = n;
+        map1[i] = factorial(i);
     }
 
-    std::map<int, int, std::less<int>, std_11_simple_allocator<std::pair<const int, int> > > map2;
+    std::map<int, int, std::less<int>, simple_allocator<std::pair<const int, int> > > map2;
     for (int i = 0; i < 10; i++)
     {
-        int n = 0;
-        for (int j = 1; j <= i; j++){
-            n+=j;
-        }
-        map2[i] = n;
+        map2[i] = factorial(i);
     }
-    my_array<int, std_11_simple_allocator<int>> my_first_arr;
+    my_array<int, simple_allocator<int>> my_first_arr;
 
     // Вывод на экран всех значений map1
     std::cout << "Значения в map1:" << std::endl;
@@ -40,8 +38,8 @@ int main() {
         arr1.push_back(i);
     }
 
-    std_11_simple_allocator<int> myArrayAllocator;
-    my_array<int, std_11_simple_allocator<int>> myArrayWithAllocator(myArrayAllocator);
+    simple_allocator<int> myArrayAllocator;
+    my_array<int, simple_allocator<int>> myArrayWithAllocator(myArrayAllocator);
 
     for (int i = 0; i < 10; ++i) {
         myArrayWithAllocator.push_back(i);

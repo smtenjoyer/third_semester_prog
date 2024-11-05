@@ -10,12 +10,11 @@
 
 
 template <class T>
-struct std_11_simple_allocator {
+struct simple_allocator {
 
     using value_type = T;
-    std_11_simple_allocator () noexcept {}
-    template <class U> std_11_simple_allocator ( std_11_simple_allocator<U>&)
-    noexcept {}
+    simple_allocator () noexcept {} //не вызывает исключений
+    template <class U> simple_allocator ( simple_allocator<U>&) noexcept {} //конструктор копирования который не вызывает исключений
     T* allocate (std::size_t n)
     {
         return static_cast<T*>(::operator new(n*sizeof(T)));
@@ -28,14 +27,14 @@ struct std_11_simple_allocator {
 };
 
 template <class T, class U>
-constexpr bool operator== (const std_11_simple_allocator<T>& a1, const
-std_11_simple_allocator<U>& a2) noexcept
+constexpr bool operator== (const simple_allocator<T>& a1, const
+simple_allocator<U>& a2) noexcept
 {
     return true;
 }
 template <class T, class U>
-constexpr bool operator!= (const std_11_simple_allocator<T>& a1, const
-std_11_simple_allocator<U>& a2) noexcept
+constexpr bool operator!= (const simple_allocator<T>& a1, const
+simple_allocator<U>& a2) noexcept
 {
     return false;
 }
@@ -43,7 +42,7 @@ std_11_simple_allocator<U>& a2) noexcept
 
 
 
-template <typename Type, class Allocator = std_11_simple_allocator<Type>>
+template <typename Type, class Allocator = simple_allocator<Type>>
 class my_array {
 private:
     Type* arr;
