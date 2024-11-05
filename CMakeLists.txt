@@ -1,11 +1,43 @@
-cmake_minimum_required(VERSION 3.5.0)
-project(laba4 VERSION 0.1.0 LANGUAGES C CXX)
-set(CMAKE_CXX_STANDARD 17)
+# cmake_minimum_required(VERSION 3.5.0)
+# project(laba4 VERSION 0.1.0 LANGUAGES C CXX)
+# set(CMAKE_CXX_STANDARD 17)
+# add_executable(laba4 main.cpp)
+
+# include(CTest)
+# enable_testing()
+
+# set(CPACK_PROJECT_NAME ${PROJECT_NAME})
+# set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
+# include(CPack)
+
+
+
+cmake_minimum_required(VERSION 3.5.0) # Устанавливает минимальную версию CMake, необходимую для этого проекта.
+set(PATCH_VERSION "1" CACHE INTERNAL "Patch version")
+set(PROJECT_VESRION 0.0.${PATCH_VERSION})
+# Создает переменные PATCH_VERSION и PROJECT_VESRION для управления версиями проекта.
+
+project(laba4 VERSION ${PROJECT_VESRION}) # Определяет имя проекта laba4 и использует переменную PROJECT_VESRION для указания версии проекта.
 add_executable(laba4 main.cpp)
 
-include(CTest)
-enable_testing()
+set(CMAKE_CXX_STANDARD 17)
+set(CXX_STANDARD_REQUIRED ON)
 
+install(TARGETS laba4 DESTINATION bin)
+
+set(CPACK_PROJECT_NAME laba4)
+
+set(CPACK_GENERATOR "ZIP;DEB")
+set(CPACK_PACKAGE_VERSION "${PROJECT_VERSION}")
+
+set(CPACK_PACKAGE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")
+set(CPACK_PACKAGE_VERSION_MINOR "${PROJECT_VERSION_MINOR}")
+set(CPACK_PACKAGE_VERSION_PATCH "${PROJECT_VERSION_PATCH}")
+
+set(CPACK_PACKAGE_CONTACT example@example.com)
+
+include(CPack)
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
-include(CPack)
+
+enable_testing()
