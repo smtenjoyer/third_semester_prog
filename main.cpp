@@ -18,7 +18,8 @@ int main() {
     {
         map2[i] = factorial(i);
     }
-    my_array<int, simple_allocator<int>> my_first_arr;
+
+
 
     // Вывод на экран всех значений map1
     std::cout << "Значения в map1:" << std::endl;
@@ -33,18 +34,18 @@ int main() {
     }
 
     my_array<int> arr1;
+    my_array<int, simple_allocator<int>> my_first_arr;
     for (int i = 0; i < 10; i++)
     {
         arr1.push_back(i);
     }
-
-    simple_allocator<int> myArrayAllocator;
-    my_array<int, simple_allocator<int>> myArrayWithAllocator(myArrayAllocator);
+    std::cout << "Значения в arr1:" << std::endl;
+    arr1.print();
 
     for (int i = 0; i < 10; ++i) {
-        myArrayWithAllocator.push_back(i);
+        my_first_arr.push_back(i);
     }
-
-    myArrayWithAllocator.print();
+    std::cout << "Значения в my_first_arr:" << std::endl;
+    my_first_arr.print();
     return 0;
 }

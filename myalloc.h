@@ -14,7 +14,7 @@ struct simple_allocator {
 
     using value_type = T;
     simple_allocator () noexcept {} //не вызывает исключений
-    template <class U> simple_allocator ( simple_allocator<U>&) noexcept {} //конструктор копирования который не вызывает исключений
+    template <class U> simple_allocator ( simple_allocator<U>&) noexcept {} //конструктор копирования который не вызывает исключенийЯЧС       
     T* allocate (std::size_t n)
     {
         return static_cast<T*>(::operator new(n*sizeof(T)));
