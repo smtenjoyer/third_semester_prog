@@ -77,7 +77,7 @@ jobs:
 
       - name: List Files
         run: |
-          dir /s
+          dir /s /b
 
       - name: Configure CMake
         run: |
