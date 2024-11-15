@@ -91,7 +91,11 @@ jobs:
 
       - name: Move Resources to Build Directory
         run: |
-          mv resources/* build/
+          Move-Item -Path resources\* -Destination build -Force
+
+      - name: List Files in Build Directory
+        run: |
+          Get-ChildItem -Path.\build -Recurse
 
       - name: Create Release
         id: create_release_windows
@@ -111,7 +115,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release_windows.outputs.upload_url }}
-          asset_path: ./build/physics-0.0.${{ github.run_number }}-Windows.exe
+          asset_path:./build/physics-0.0.${{ github.run_number }}-Windows.exe
           asset_name: physics-0.0.${{ github.run_number }}-Windows.exe
           asset_content_type: application/x-msdownload
           allowUpdates: true
