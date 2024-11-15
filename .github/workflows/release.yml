@@ -31,8 +31,7 @@ jobs:
       # Copy resources to build directory
       - name: Copy Resources to Build Directory
         run: |
-          mkdir -p build/resources
-          cp -r resources/* build/resources/
+          cp -r resources/* build/
 
       # Build the project
       - name: Build Project
@@ -88,8 +87,7 @@ jobs:
       # Copy resources to build directory
       - name: Copy Resources to Build Directory
         run: |
-          mkdir build\resources
-          xcopy /s /i resources\* build\resources\
+          xcopy /s /i resources\* build\
 
       # Build project
       - name: Build Project
