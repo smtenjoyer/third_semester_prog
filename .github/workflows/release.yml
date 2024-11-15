@@ -48,9 +48,10 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path:./build/physics  # Replace with your executable path
+          asset_path:./build/physics-0.0.${{ github.run_number }}-Linux.deb  # Replace with your executable path
           asset_name: physics-linux  # Replace with your desired asset name
-          asset_content_type: application/x-executable
+          asset_content_type: application/vnd.debian.binary-package
+          allowUpdates: true # Разрешаем обновление уже загруженного ассета
 
       - name: Upload release asset (zip)
         uses: actions/upload-release-asset@v1
@@ -116,8 +117,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path:./build/physics-windows.zip  # Replace with your zip file path
-          asset_name: physics-windows.zip  # Replace with your desired asset name
+          asset_path:./physics-0.0.${{ github.run_number }}-win64.zip  # Replace with your zip file path
+          asset_name: physics-0.0.${{ github.run_number }}-win64.zip   # Replace with your desired asset name
           asset_content_type: application/zip
         run: |
           powershell Compress-Archive -Path./build/physics.exe -DestinationPath./build/physics-windows.zip -Force
