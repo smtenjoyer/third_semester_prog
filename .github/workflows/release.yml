@@ -3,7 +3,7 @@ name: 'C++ CI'
 on: 
   push:
     branches:
-      - laba4
+      - laba5
       - feature/github_actions
 
 jobs:
@@ -61,8 +61,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./build/laba4-0.0.${{ github.run_number }}-Linux.deb
-          asset_name: laba4-0.0.${{ github.run_number }}-Linux.deb
+          asset_path: ./build/physics-0.0.${{ github.run_number }}-Linux.deb
+          asset_name: physics-0.0.${{ github.run_number }}-Linux.deb
           asset_content_type: application/vnd.debian.binary-package
           allowUpdates: true # Разрешаем обновление уже загруженного ассета
 
@@ -109,6 +109,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release_windows.outputs.upload_url }}
-          asset_path: ./laba4-0.0.${{ github.run_number }}-win64.zip  # Adjust based on actual output filename.
-          asset_name: laba4-0.0.${{ github.run_number }}-win64.zip  # Adjust based on actual output filename.
+          asset_path: ./physics-0.0.${{ github.run_number }}-win64.zip  # Adjust based on actual output filename.
+          asset_name: physics-0.0.${{ github.run_number }}-win64.zip  # Adjust based on actual output filename.
           asset_content_type: application/zip
+          
