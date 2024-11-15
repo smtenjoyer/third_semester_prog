@@ -66,60 +66,53 @@ jobs:
     runs-on: windows-latest
     permissions: write-all
     steps:
-    - uses: actions/checkout@v3
-      with:
-      submodules: true
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
 
-    - name: Install Visual Studio Build Tools
-      uses: microsoft/setup-msbuild@v1
-      with:
-      version: 'latest' # Or specify a version if needed
-      path: C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools # Adjust path if necessary
+      - name: Install Dependencies
+        run: |
+          choco install cmake sfml
+          choco install visualstudio2019buildtools --package-parameters "--add Microsoft.VisualStudio.Component.VC.Tools.x86.x64"
 
-    - name: Install Dependencies
-      run: |
-      choco install cmake -y
-      # Install other Windows dependencies as needed (e.g., SFML)
-      # Consider using vcpkg or a similar package manager if many dependencies are required.
+      - name: List Files
+        run: |
+          dir /s
 
-    - name: List Files
-      run: dir /s /b
+      - name: Configure CMake
+        run: |
+          cmake -S. -B build -DPATCH_VERSION=${{ github.run_number }}
 
-    - name: Configure CMake
-      run: |
-      cmake -S. -B build -G "Visual Studio 17 2022" -A x64 -DPATCH_VERSION=${{ github.run_number }} # Adjust generator and architecture as needed
+      - name: Build Project
+        run: cmake --build build
 
-    - name: Build Project
-      run: cmake --build build --config Release
+      - name: Package Project
+        run: |
+          cmake --build build --target package
 
-    - name: Package Project (Windows Installer) # You'll need a Windows installer tool
-      run: |
-      # Example using Inno Setup (you'll need to create an Inno Setup script)
-      iscc MySetup.iss # Replace MySetup.iss with your Inno Setup script
-      # Or use WiX Toolset or another installer creation tool
+      - name: List Files in Build Directory
+        run: |
+          dir /s build
 
-    - name: List Files in Build Directory
-      run: dir /s /b build
+      - name: Create Release
+        id: create_release_windows
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ github.run_number }}
+          release_name: Release ${{ github.run_number }} (Windows)
+          draft: false
+          prerelease: false
 
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-      tag_name: v${{ github.run_number }}
-      release_name: Release ${{ github.run_number }} (Windows)
-      draft: false
-      prerelease: false
-
-    - name: Upload Release Asset
-      id: upload-release-asset-windows
-      uses: actions/upload-release-asset@v1
-      env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-      upload_url: ${{ steps.create_release.outputs.upload_url }}
-      asset_path: ./build/Release/physics.exe # Adjust path to your installer or executable
-      asset_name: physics-0.0.${{ github.run_number }}-Windows.exe # Or physics-0.0.${{ github.run_number }}-Windows.msi if using an installer
-      asset_content_type: application/octet-stream # Or application/x-msi if using an MSI installer
-      allowUpdates: true
+      - name: Upload Release Asset
+        id: upload-release-asset-windows
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release_windows.outputs.upload_url }}
+          asset_path: ./build/physics-0.0.${{ github.run_number }}-Windows.exe
+          asset_name: physics-0.0.${{ github.run_number }}-Windows.exe
+          asset_content_type: application/x-msdownload
+          allowUpdates: true
