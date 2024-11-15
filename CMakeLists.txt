@@ -45,20 +45,13 @@ target_compile_options(physics PRIVATE
         )
 
 
-install(TARGETS physics DESTINATION bin)
-set(CPACK_PROJECT_NAME physics)
+# Настроить компиляцию и линковку
+target_compile_features(physics PUBLIC cxx_std_17)
+target_compile_definitions(physics PRIVATE SFML_STATIC)
+target_link_libraries(physics PUBLIC ${SFML_LIBRARIES} ${SFML_DEPENDENCIES})
+target_include_directories(physics PRIVATE ${SFML_INCLUDE_DIR})
 
-set(CPACK_GENERATOR "ZIP;DEB")
-set(CPACK_PACKAGE_VERSION "${PROJECT_VERSION}" )
-
-set(CPACK_PACKAGE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")
-set(CPACK_PACKAGE_VERSION_MINOR "${PROJECT_VERSION_MINOR}")
-set(CPACK_PACKAGE_VERSION_PATCH "${PROJECT_VERSION_PATCH}")
-
-set(CPACK_PACKAGE_CONTACT example@example.com)
-
-include(CPack)
-set(CPACK_PROJECT_NAME ${PROJECT_NAME})
-set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
-
-enable_testing()
+# Копировать ресурсы после сборки
+add_custom_command(TARGET physics POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${CMAKE_CURRENT_SOURCE_DIR}/resources $<TARGET_FILE_DIR:physics>)
