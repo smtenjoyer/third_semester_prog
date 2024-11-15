@@ -73,7 +73,9 @@ jobs:
       - name: Install Dependencies
         run: |
           choco install cmake
-          # SFML is not available in the default Chocolatey repository, so download and build from source
+          # Ensure CMake is in the PATH
+          $env:PATH += ";C:\ProgramData\chocolatey\lib\cmake\tools"
+          # Download and build SFML from source
           git clone https://github.com/SFML/SFML.git
           cd SFML
           mkdir build
@@ -84,8 +86,6 @@ jobs:
 
       - name: Configure CMake
         run: |
-          # Ensure CMake is in the PATH
-          $env:PATH += ";C:\Program Files\CMake\bin"
           cmake. -DPATCH_VERSION=${{ github.run_number }} -B build
 
       - name: Build Project
