@@ -1,6 +1,6 @@
 name: 'C++ CI'
 
-on: 
+on:
   push:
     branches:
       - laba5
@@ -37,8 +37,8 @@ jobs:
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          RELEASE_TITLE: ${{ github.event.release.name }}
-          RELEASE_NOTES: ${{ github.event.release.body }}
+          RELEASE_TITLE: ${{ github.event.release.name || 'Automated Release' }}
+          RELEASE_NOTES: ${{ github.event.release.body || 'Automated release notes' }}
           DRAFT: false
           PRERELEASE: false
 
@@ -48,10 +48,10 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path:./build/physics-0.0.${{ github.run_number }}-Linux.deb  # Replace with your executable path
-          asset_name: physics-linux  # Replace with your desired asset name
+          asset_path:./build/physics-0.0.${{ github.run_number }}-Linux.deb
+          asset_name: physics-linux.deb
           asset_content_type: application/vnd.debian.binary-package
-          allowUpdates: true # Разрешаем обновление уже загруженного ассета
+          allowUpdates: true
 
       - name: Upload release asset (zip)
         uses: actions/upload-release-asset@v1
@@ -59,8 +59,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path:./build/physics  # Replace with your executable path
-          asset_name: physics-linux.zip  # Replace with your desired asset name
+          asset_path:./build/physics-linux.zip
+          asset_name: physics-linux.zip
           asset_content_type: application/zip
         run: |
           zip -j./build/physics-linux.zip./build/physics
@@ -96,8 +96,8 @@ jobs:
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          RELEASE_TITLE: ${{ github.event.release.name }}
-          RELEASE_NOTES: ${{ github.event.release.body }}
+          RELEASE_TITLE: ${{ github.event.release.name || 'Automated Release' }}
+          RELEASE_NOTES: ${{ github.event.release.body || 'Automated release notes' }}
           DRAFT: false
           PRERELEASE: false
 
@@ -107,8 +107,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path:./build/physics.exe  # Replace with your executable path
-          asset_name: physics-windows.exe  # Replace with your desired asset name
+          asset_path:./build/physics.exe
+          asset_name: physics-windows.exe
           asset_content_type: application/x-msdownload
 
       - name: Upload release asset (zip)
@@ -117,8 +117,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path:./physics-0.0.${{ github.run_number }}-win64.zip  # Replace with your zip file path
-          asset_name: physics-0.0.${{ github.run_number }}-win64.zip   # Replace with your desired asset name
+          asset_path:./build/physics-windows.zip
+          asset_name: physics-windows.zip
           asset_content_type: application/zip
         run: |
           powershell Compress-Archive -Path./build/physics.exe -DestinationPath./build/physics-windows.zip -Force
