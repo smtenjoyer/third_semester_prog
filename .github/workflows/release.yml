@@ -75,10 +75,6 @@ jobs:
           choco install cmake sfml
           choco install visualstudio2019buildtools --package-parameters "--add Microsoft.VisualStudio.Component.VC.Tools.x86.x64"
 
-      - name: List Files
-        run: |
-          dir /s /b
-
       - name: Configure CMake
         run: |
           cmake -S. -B build -DPATCH_VERSION=${{ github.run_number }}
