@@ -15,31 +15,29 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Fix repository issues
-        run: |
-          sudo sed -i 's|^deb|# deb|' /etc/apt/sources.list.d/*elastic*
-          sudo sed -i 's|^deb|# deb|' /etc/apt/sources.list.d/*hashicorp*
-          rm -rf /var/lib/apt/lists/*
-          apt update
-
       - name: Install dependencies
         run: |
-          apt install -y cmake git
+          apt update
+          apt install -y git
 
-      - name: Set up CMake
-        uses: kitware/cmake@v1
+      - name: Install CMake
+        uses: ssrobins/install-cmake@v1
+        with:
+          version: '3.24.3'
 
       - name: Build on Linux
         run: |
-          cmake -B build -S.
-          cmake --build build
+          mkdir build
+          cd build
+          cmake -DCMAKE_BUILD_TYPE=Release..
+          cmake --build.
           cpack -G ZIP.
 
       - name: Upload Linux artifact
         uses: actions/upload-artifact@v3
         with:
           name: physics-linux
-          path: physics-0.0.1-Linux.zip
+          path: build/physics-0.0.1-Linux.zip
 
       - name: Set up Windows environment
         run: |
@@ -51,7 +49,7 @@ jobs:
         run: |
           mkdir build-win
           cd build-win
-          cmake -G "MinGW Makefiles"../
+          cmake -G "MinGW Makefiles"..
           make
           cpack -G ZIP.
 
@@ -62,7 +60,7 @@ jobs:
           path: build-win/physics-0.0.1-Windows.zip
 
       - name: Create release
-        uses: softprops/create-release@v2
+        uses: softprops/create-release@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           tag_name: v0.0.1
@@ -75,7 +73,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           upload_url: ${{ steps.create-release.outputs.upload_url }}
-          asset_path: physics-0.0.1-Linux.zip
+          asset_path: build/physics-0.0.1-Linux.zip
           asset_name: physics-0.0.1-Linux.zip
 
       - name: Upload Windows release asset
