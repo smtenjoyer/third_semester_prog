@@ -93,9 +93,9 @@ jobs:
         run: |
           Move-Item -Path resources\* -Destination build -Force
 
-      - name: List Files in Build Directory
+      - name: Set Release Tag
         run: |
-          Get-ChildItem -Path.\build -Recurse
+          echo "RELEASE_TAG=v$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
 
       - name: Create Release
         id: create_release_windows
@@ -103,8 +103,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: v${{ github.run_number }}
-          release_name: Release ${{ github.run_number }} (Windows)
+          tag_name: ${{ env.RELEASE_TAG }}
+          release_name: Release ${{ env.RELEASE_TAG }} (Windows)
           draft: false
           prerelease: false
 
@@ -115,7 +115,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release_windows.outputs.upload_url }}
-          asset_path:./build/physics-0.0.${{ github.run_number }}-Windows.exe
+          asset_path: ./build/physics-0.0.${{ github.run_number }}-Windows.exe
           asset_name: physics-0.0.${{ github.run_number }}-Windows.exe
           asset_content_type: application/x-msdownload
           allowUpdates: true
+          #
