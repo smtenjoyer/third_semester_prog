@@ -70,10 +70,13 @@ jobs:
         with:
           submodules: true
 
-      - name: Install Dependencies
-        run: |
-          choco install cmake sfml
-          choco install visualstudio2019buildtools --package-parameters "--add Microsoft.VisualStudio.Component.VC.Tools.x86.x64"
+      # Установка SFML
+      - name: Install SFML
+        id: sfml
+        uses: oprypin/install-sfml@v1
+        with:
+          sfml: 2.6.1  # Укажите нужную версию SFML
+          config: Release
 
       - name: Configure CMake
         run: |
