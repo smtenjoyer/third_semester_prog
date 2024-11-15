@@ -1,65 +1,59 @@
 name: 'C++ CI'
 
 on:
-  push:
-    branches:
-    - laba5
-    - feature/github_actions
+ push:
+  branches:
+   - laba5
+   - feature/github_actions
 
 jobs:
-  build:
-    runs-on: ${{ matrix.os }}
-    strategy:
-    matrix:
-      os: [ubuntu-latest, windows-latest]
-    permissions: write-all
-    steps:
-    - uses: actions/checkout@v3
-      with:
-      submodules: true
+ build:
+  runs-on: ${{ matrix.os }}
+  strategy:
+   matrix:
+    os: [ubuntu-latest, windows-latest]
+    generator: #This allows us to specify different generators for different OS
+     - ubuntu-latest: ["DEB"] #or "TGZ" for a tar.gz archive
+     - windows-latest: ["ZIP"] # Or "NSIS", "MSI", etc. depending on your needs
 
-    - name: Install Dependencies
-      if: matrix.os == 'ubuntu-latest'
-      run: sudo apt-get update && sudo apt-get install libboost-test-dev -y
+  steps:
+   - uses: actions/checkout@v3
+    with:
+     submodules: true
 
-    - name: Configure CMake
-      run: |
-      cmake -S. -B build -DCMAKE_INSTALL_PREFIX=release -DPATCH_VERSION=${{ github.run_number }}
-      
-    - name: Build Project
-      run: cmake --build build --target install
-
-    - name: Build Package
-      run: cmake --build build --target create_package
-
-    - name: List Files in Build Directory (Debugging)
-      run: |
-      if [[ "$GITHUB_OS" == "Linux" ]]; then
-        ls -R build;
-      else
-        dir build;
-      fi
-
-    - name: Upload Release Asset
-      id: upload-release-asset
-      uses: actions/upload-release-asset@v1
-      env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-      upload_url: ${{ steps.create_release.outputs.upload_url }}
-      asset_path: ./release/${{ matrix.os == 'windows-latest' && 'physics-0.0.${{ github.run_number }}-win64.zip' || 'physics-0.0.${{ github.run_number }}-Linux.deb' }}
-      asset_name: ${{ matrix.os == 'windows-latest' && 'physics-0.0.${{ github.run_number }}-win64.zip' || 'physics-0.0.${{ github.run_number }}-Linux.deb' }}
-      asset_content_type: ${{ matrix.os == 'windows-latest' && 'application/zip' || 'application/vnd.debian.binary-package' }}
+   - name: Install Dependencies
+    if: matrix.os == 'ubuntu-latest'
+    run: |
+     sudo apt-get update
+     sudo apt-get install -y libboost-test-dev cmake cpack  
 
 
-    - name: Create Release
-      if: ${{ matrix.os == 'ubuntu-latest' }}
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-      tag_name: v${{ github.run_number }}
-      release_name: Release ${{ github.run_number }} (Linux/Windows) #Combined Release
-      draft: false
-      prerelease: false
+   - name: Configure CMake
+    run: |
+     cmake -S . -B build -DCMAKE_INSTALL_PREFIX=release -DPATCH_VERSION=${{ github.run_number }} -G "${{ matrix.generator }}"
+
+   - name: Build Project
+    run: cmake --build build --target install
+
+   - name: Build Package with CPack
+    run: cpack -C release --config ./CPackConfig.cmake #You may need CPackConfig.cmake if you are using more advanced CPack configurations
+
+   - name: Upload Release Asset
+    uses: actions/upload-release-asset@v1
+    with:
+     upload_url: ${{ steps.create_release.outputs.upload_url }}
+     asset_path: ${{ matrix.os == 'windows-latest' && './build/release/physics-*.zip' || './build/release/physics*.deb' }} #Adjust paths as needed based on cpack output
+     asset_name: physics-${{ github.run_number }}-${{ matrix.os }}.${{ matrix.generator }}
+     asset_content_type: ${{ matrix.os == 'windows-latest' && 'application/zip' || 'application/vnd.debian.binary-package' }}
+
+   - name: Create Release
+    if: always() #Make sure that the release gets created even if one of the builds fails.
+    id: create_release
+    uses: actions/create-release@v1
+    env:
+     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    with:
+     tag_name: v${{ github.run_number }}
+     release_name: Release ${{ github.run_number }} (Linux/Windows)
+     draft: false
+     prerelease: false
