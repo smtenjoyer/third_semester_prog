@@ -1,69 +1,64 @@
-cmake_minimum_required(VERSION 3.10)
-project(physics)
+cmake_minimum_required(VERSION 3.7.2)
+set(PATCH_VERSION "1" CACHE INTERNAL "Patch version")
+set(PROJECT_VESRION 0.0.${PATCH_VERSION})
+project(physics VERSION ${PROJECT_VESRION})
 
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CXX_STANDARD_REQUIRED ON)
 
-# Find SFML (prefer system installation)
-find_package(SFML 2.5.1 COMPONENTS graphics REQUIRED)
+# Пытаемся найти предустановленный SFML
+find_package(SFML COMPONENTS graphics)
 
-if (NOT SFML_FOUND)
-    message(STATUS "SFML not found, building from source...")
+if (SFML_FOUND)
+    message(STATUS "The SFML installed in the system will be used")
+else ()
+    # Если SFML не найден - выкачиваем и собираем из исходников
+    message(STATUS "Get SFML from the source code")
     include(FetchContent)
-    FetchContent_Declare(
-        SFML
-        GIT_REPOSITORY https://github.com/SFML/SFML.git
-        GIT_TAG 2.6.x
-    )
+    FetchContent_Declare(SFML
+            GIT_REPOSITORY https://github.com/SFML/SFML.git
+            GIT_TAG 2.6.x)
     set(SFML_BUILD_AUDIO OFF CACHE BOOL "" FORCE)
     set(SFML_BUILD_NETWORK OFF CACHE BOOL "" FORCE)
     set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
+    # Обход потенциальных проблем при сборке sfml-graphics
+    # (stb_image.h: 'argument': conversion from 'int' to 'short')
     set(WARNINGS_AS_ERRORS FALSE CACHE BOOL "" FORCE)
     FetchContent_MakeAvailable(SFML)
-endif()
+endif ()
+
+# К сожалению, вплоть до C++20 https://en.cppreference.com/w/cpp/numeric/constants
+# нет удобного кроссплатформенного способа получить число pi.
+# define ниже нужен для включения M_PI
+if (MSVC)
+    add_definitions(-D_USE_MATH_DEFINES)
+endif ()
 
 add_executable(physics
-        main.cpp World.cpp Ball.cpp Physics.cpp Color.cpp Painter.cpp Dust.cpp
-        black_box/Application.cpp black_box/View.cpp black_box/PainterImpl.cpp
-)
-
+        main.cpp World.cpp Ball.cpp Physics.cpp Color.cpp Painter.cpp
+        black_box/Application.cpp black_box/View.cpp black_box/PainterImpl.cpp)
 target_link_libraries(physics PRIVATE sfml-graphics)
 
 target_compile_options(physics PRIVATE
-    $<$<CXX_COMPILER_ID:MSVC>:/W4>
-    $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -Wpedantic>
-)
-
-target_include_directories(physics PRIVATE ${SFML_INCLUDE_DIR})
+        $<$<CXX_COMPILER_ID:MSVC>:/W4>
+        $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -Wpedantic>
+        )
 
 
-# Install resources
-install(FILES resources/* DESTINATION .)  # Install resources to the installation directory
+install(TARGETS physics DESTINATION bin)
+set(CPACK_PROJECT_NAME physics)
 
-# Create a package (this needs further definition based on your packaging method)
-add_custom_target(create_package ALL
-    COMMAND ${CMAKE_COMMAND} -E create_symlink resources ${CMAKE_INSTALL_PREFIX}/resources
-    COMMAND <your_packaging_commands_here>  #Replace with actual commands
-    COMMENT "Creating package"
-    DEPENDS physics
-)
+set(CPACK_GENERATOR "ZIP;DEB")
+set(CPACK_PACKAGE_VERSION "${PROJECT_VERSION}")
 
-#This section needs more detail based on your packaging strategy
-if(MSVC)
-    add_custom_command(TARGET physics POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_BINARY_DIR} "release"
-        COMMAND zip -r "release/physics-0.0.${{ github.run_number }}-win64.zip" "release/*"
-        COMMENT "Creating Windows Package"
-    )
-    
-    set(PACKAGE_FILE "release/physics-0.0.${{ github.run_number }}-win64.zip")
-elseif(UNIX)
-    #Add linux packaging commands here - using a tool like cpack would be highly recommended.
-    add_custom_target(package ALL
-        COMMAND ${CMAKE_COMMAND} -E create_symlink resources ${CMAKE_INSTALL_PREFIX}/resources
-        COMMAND make install
-        COMMENT "Creating Linux Package"
-    )
-    set(PACKAGE_FILE "release/physics-0.0.${{ github.run_number }}-Linux.deb")
+set(CPACK_PACKAGE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")
+set(CPACK_PACKAGE_VERSION_MINOR "${PROJECT_VERSION_MINOR}")
+set(CPACK_PACKAGE_VERSION_PATCH "${PROJECT_VERSION_PATCH}")
 
-endif()
+set(CPACK_PACKAGE_CONTACT example@example.com)
+
+include(CPack)
+set(CPACK_PROJECT_NAME ${PROJECT_NAME})
+set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
+
+enable_testing()
