@@ -15,13 +15,19 @@ jobs:
         with:
           submodules: true
 
-      - name: Set up CMake
-        uses: kitware/cmake@v1
+      - name: Setup CMake
+        uses: jwlawson/actions-setup-cmake@v2
+        with:
+          cmake-version: '3.22.x' # или любая другая необходимая версия
 
       - name: Build on Linux
+        uses: threeal/cmake-action@v2.0.0
+        with:
+          build-dir: build
+          args: '--build build'
+
+      - name: Copy resources
         run: |
-          cmake -B build -S.
-          cmake --build build
           cp -r resources build/
 
       - name: Create Debian package on Linux
@@ -42,15 +48,24 @@ jobs:
         with:
           submodules: true
 
+      - name: Setup CMake
+        uses: jwlawson/actions-setup-cmake@v2
+        with:
+          cmake-version: '3.22.x' # или любая другая необходимая версия
+
       - name: Set up Windows environment
         uses: actions/setup-msvc@v1
         with:
           msvc: '2022'
 
       - name: Build on Windows
+        uses: threeal/cmake-action@v2.0.0
+        with:
+          build-dir: build
+          args: '--build build'
+
+      - name: Copy resources
         run: |
-          cmake -B build -S.
-          cmake --build build
           xcopy /s /i resources build\
 
       - name: Create ZIP package on Windows
