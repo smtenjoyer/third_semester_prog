@@ -70,7 +70,7 @@ void Physics::collideWithBox(std::vector<Ball>& balls, std::vector<Dust>& dusts)
             Point vector = ball.getVelocity().vector();
             vector.y = -vector.y;
             ball.setVelocity(vector);
-            if (ball.ifCollidable())
+            if (ball.ifCollidable()) 
             {
                 for (int i = 0; i < 10; i++) {
                     double angle = (i * 2 * M_PI / 10); 
