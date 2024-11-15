@@ -1,87 +1,112 @@
-name: Build and Release
+name: CI
 
 on:
-  push:
-    branches:
-      - laba5
-  pull_request:
-    branches:
-      - laba5
+push:
+  branches:
+  - laba5
+pull_request:
+  branches:
+  - laba5
 
 jobs:
-  build-and-release:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+build:
+  runs-on: ubuntu-latest
+  steps:
+  - name: Checkout code
+    uses: actions/checkout@v3
 
-      - name: Fix repository issues
-        run: |
-          sudo sed -i 's|^deb|# deb|' /etc/apt/sources.list.d/*elastic*
-          sudo sed -i 's|^deb|# deb|' /etc/apt/sources.list.d/*hashicorp*
-          rm -rf /var/lib/apt/lists/*
-          apt update
+  - name: Set up C++ environment
+    uses: actions/setup-java@v3
+    with:
+    java-version: '17'
+    distribution: 'temurin' # or 'adopt'
 
-      - name: Install dependencies
-        run: |
-          apt install -y cmake git
+  - name: Install CMake
+    run: sudo apt-get update && sudo apt-get install -y cmake
 
-      - name: Set up CMake
-        uses: kitware/cmake@v1
+  - name: Install dependencies
+    run: sudo apt-get update && sudo apt-get install -y build-essential libsfml-graphics-dev # Add other Linux dependencies if needed.
 
-      - name: Build on Linux
-        run: |
-          cmake -B build -S.
-          cmake --build build
-          cpack -G ZIP.
+  - name: Copy resources
+    run: cp -r resources build/
 
-      - name: Upload Linux artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: physics-linux
-          path: physics-0.0.1-Linux.zip
-
-      - name: Set up Windows environment
-        run: |
-          curl -o /usr/bin/wine https://raw.githubusercontent.com/KrumpetPirate/wine-install/master/install-wine.sh
-          chmod +x /usr/bin/wine
-          /usr/bin/wine --version
-
-      - name: Build on Windows
-        run: |
-          mkdir build-win
-          cd build-win
-          cmake -G "MinGW Makefiles"../
+  - name: Build Linux
+    run: |
+          cd build
+          cmake ..
           make
-          cpack -G ZIP.
+          make test # Run tests if you have them
 
-      - name: Upload Windows artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: physics-windows
-          path: build-win/physics-0.0.1-Windows.zip
+  - name: Create Linux Artifact
+    uses: actions/upload-artifact@v3
+    with:
+    name: linux-artifact
+    path: build/physics
 
-      - name: Create release
-        uses: softprops/create-release@v2
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          tag_name: v0.0.1
-          release_name: Release v0.0.1
-          draft: false
-          prerelease: false
+  steps:
+  - name: Checkout code
+    uses: actions/checkout@v3
 
-      - name: Upload release assets
-        uses: softprops/upload-release-asset@v1
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          upload_url: ${{ steps.create-release.outputs.upload_url }}
-          asset_path: physics-0.0.1-Linux.zip
-          asset_name: physics-0.0.1-Linux.zip
+  - name: Setup MSVC environment
+    uses: microsoft/setup-msbuild@v1
+    with:
+    version: 'latest'
 
-      - name: Upload Windows release asset
-        uses: softprops/upload-release-asset@v1
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          upload_url: ${{ steps.create-release.outputs.upload_url }}
-          asset_path: build-win/physics-0.0.1-Windows.zip
-          asset_name: physics-0.0.1-Windows.zip
+  - name: Copy resources
+    run: copy resources build
+
+  - name: Build Windows
+    run: |
+          mkdir build
+          cd build
+          cmake -G "Visual Studio 17 2022" ..
+          cmake --build . --config Release
+
+
+  - name: Create Windows Artifact
+    uses: actions/upload-artifact@v3
+    with:
+    name: windows-artifact
+    path: build/Release/physics.exe
+
+
+release: # This job runs only on pushes to the main branch
+  needs: build
+  runs-on: ubuntu-latest # Could be changed to a Windows runner if needed for release artifact packaging.
+  steps:
+  - name: Download artifacts
+    uses: actions/download-artifact@v3
+    with:
+    name: linux-artifact
+    path: linux-artifacts
+    name: windows-artifact
+    path: windows-artifacts
+
+  - name: Create Release
+    uses: actions/github-script@v6
+    with:
+    github-token: ${{ secrets.GITHUB_TOKEN }}
+    script: |
+      const releaseName = `v${process.env.GITHUB_REF.replace('refs/heads/', '')}`;
+      const assets = [
+      { name: "physics-linux", path: "linux-artifacts/physics" },
+      { name: "physics-windows.exe", path: "windows-artifacts/physics.exe"}
+      ];
+      const releaseResponse = await github.rest.repos.createRelease({
+      owner: context.repo.owner,
+      repo: context.repo.repo,
+      tag_name: releaseName,
+      name: releaseName,
+      body: "Release description here",
+      draft: false,
+      prerelease: false,
+      });
+      for (const asset of assets) {
+      await github.rest.repos.uploadReleaseAsset({
+        owner: context.repo.owner,
+        repo: context.repo.repo,
+        release_id: releaseResponse.data.id,
+        name: asset.name,
+        data: fs.readFileSync(asset.path)
+      });
+      }
