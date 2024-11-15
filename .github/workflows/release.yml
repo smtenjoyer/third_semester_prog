@@ -89,9 +89,9 @@ jobs:
         run: |
           cmake --build build --target package
 
-      - name: List Files in Build Directory
+      - name: Move Resources to Build Directory
         run: |
-          dir /s build
+          mv resources/* build/
 
       - name: Create Release
         id: create_release_windows
