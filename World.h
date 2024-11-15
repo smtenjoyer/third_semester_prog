@@ -3,6 +3,7 @@
 #include "Dust.hpp"
 #include "Physics.h"
 #include <vector>
+#include <string>
 
 class Painter;
 
