@@ -60,26 +60,34 @@ jobs:
           path: build-win/physics-0.0.1-Windows.zip
 
       - name: Create release
-        uses: softprops/create-release@v1
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
           tag_name: v0.0.1
           release_name: Release v0.0.1
           draft: false
           prerelease: false
 
       - name: Upload release assets
-        uses: softprops/upload-release-asset@v1
+        id: upload-release-asset-linux
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          upload_url: ${{ steps.create-release.outputs.upload_url }}
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: build/physics-0.0.1-Linux.zip
           asset_name: physics-0.0.1-Linux.zip
+          asset_content_type: application/zip
 
       - name: Upload Windows release asset
-        uses: softprops/upload-release-asset@v1
+        id: upload-release-asset-windows
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          upload_url: ${{ steps.create-release.outputs.upload_url }}
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: build-win/physics-0.0.1-Windows.zip
           asset_name: physics-0.0.1-Windows.zip
+          asset_content_type: application/zip
