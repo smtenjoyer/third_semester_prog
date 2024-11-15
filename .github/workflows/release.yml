@@ -7,45 +7,37 @@ on:
       - feature/github_actions
 
 jobs:
-build-ubuntu:
-  runs-on: ubuntu-latest
-  permissions: write-all
-  steps:
-    - uses: actions/checkout@v3
-      with:
-        submodules: true
+  build-ubuntu:
+    runs-on: ubuntu-latest
+    permissions: write-all
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
 
-    - name: Install dependencies
-      run: |
-        sudo apt update
-        sudo apt install -y libsfml-dev libxrandr-dev libxcursor-dev libudev-dev libopenal-dev libflac-dev libvorbis-dev libgl1-mesa-dev libegl1-mesa-dev libdrm-dev libgbm-dev
+      - name: Setup CMake
+        uses: jwlawson/actions-setup-cmake@v2
+        with:
+          cmake-version: '3.22.x'
 
-    - name: Setup CMake
-      uses: jwlawson/actions-setup-cmake@v2
-      with:
-        cmake-version: '3.22.x'
+      - name: Configure CMake
+        run: |
+          cmake -B build -S.
 
-    - name: Configure CMake
-      run: |
-        cmake -B build -S.
+      - name: Build on Linux
+        run: |
+          cmake --build build
+          cp -r resources build/
 
-    - name: Build on Linux
-      run: |
-        cmake --build build
+      - name: Create Debian package on Linux
+        run: |
+          cpack -B build --config CPackConfig.cmake
 
-    - name: Copy resources
-      run: |
-        cp -r resources build/
-
-    - name: Create Debian package on Linux
-      run: |
-        cpack -B build --config CPackConfig.cmake
-
-    - name: Upload Debian package
-      uses: actions/upload-artifact@v3
-      with:
-        name: physics.deb
-        path: build/physics-0.0.1-Linux.deb
+      - name: Upload Debian package
+        uses: actions/upload-artifact@v3
+        with:
+          name: physics.deb
+          path: build/physics-0.0.1-Linux.deb
 
 
 build-windows:
