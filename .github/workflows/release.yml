@@ -51,12 +51,11 @@ jobs:
       - name: Setup CMake
         uses: jwlawson/actions-setup-cmake@v2
         with:
-          cmake-version: '3.22.x' # или любая другая необходимая версия
+          cmake-version: '3.22.x'
 
       - name: Set up Windows environment
-        uses: actions/setup-msvc@v1
-        with:
-          msvc: '2022'
+        run: |
+          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvars64.bat"
 
       - name: Build on Windows
         uses: threeal/cmake-action@v2.0.0
