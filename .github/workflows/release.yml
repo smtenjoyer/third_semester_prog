@@ -32,6 +32,26 @@ jobs:
       - name: Build Project
         run: cmake --build build
 
+      - name: Copy resources
+        run: |
+          cp -r../resources build/
+
+      - name: Execute Project
+        working-directory: build
+        run: |
+         ./physics # Убедитесь, что исполняемый файл называется так же, как в вашем CMakeLists.txt
+
+      - name: Upload output files
+        uses: actions/upload-artifact@v2
+        with:
+          name: project_output
+          path: build/
+
+      - name: Upload resources
+        uses: actions/upload-artifact@v2
+        with:
+          name: project_resources
+          path: build/resources/
 
       # Package the project (ensure that 'package' target is defined in CMakeLists.txt)
       - name: Package Project
