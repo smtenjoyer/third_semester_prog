@@ -11,114 +11,118 @@ jobs:
     runs-on: ubuntu-latest
     permissions: write-all
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
         with:
           submodules: true
 
-      - name: Install dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libsfml-dev cmake g++ make
+      - name: Install Dependencies
+        run: sudo apt-get update && sudo apt-get install libboost-test-dev -y
 
-      - name: Configure and build
+      # List files for debugging purposes
+      - name: List Files
         run: |
-          mkdir build
+          ls -R
+
+      # Configure CMake, specifying the source directory explicitly
+      - name: Configure CMake
+        run: |
+          cmake -S. -B build -DPATCH_VERSION=${{ github.run_number }}
+
+      # Copy resources to build directory
+      - name: Copy Resources to Build Directory
+        run: |
+          mkdir -p build/resources
+          cp -r resources/* build/resources/
+
+      # Build the project
+      - name: Build Project
+        run: cmake --build build
+
+      # Package the project (ensure that 'package' target is defined in CMakeLists.txt)
+      - name: Package Project
+        run: |
           cd build
-          cmake..
-          cmake --build.
+          cmake --build. --target package
 
-      - name: Run tests
+      - name: List Files in Build Directory
         run: |
-         ./physics  # Replace with your executable name if different
+          ls -R build
 
-      - name: Create release
+      # Create a release on GitHub
+      - name: Create Release
         id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          RELEASE_TITLE: ${{ github.event.release.name || 'Automated Release' }}
-          RELEASE_NOTES: ${{ github.event.release.body || 'Automated release notes' }}
-          DRAFT: false
-          PRERELEASE: false
+        with:
+          tag_name: v${{ github.run_number }}
+          release_name: Release ${{ github.run_number }} (Ubuntu)
+          draft: false
+          prerelease: false
 
-      - name: Upload release asset
+      # Upload release asset
+      - name: Upload Release Asset
+        id: upload-release-asset-ubuntu
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path:./build/physics-0.0.${{ github.run_number }}-Linux.deb
-          asset_name: physics-linux.deb
+          asset_name: physics-0.0.${{ github.run_number }}-Linux.deb
           asset_content_type: application/vnd.debian.binary-package
-          allowUpdates: true
-
-      - name: Upload release asset (zip)
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path:./build/physics-linux.zip
-          asset_name: physics-linux.zip
-          asset_content_type: application/zip
-        run: |
-          zip -j./build/physics-linux.zip./build/physics
+          allowUpdates: true # Разрешаем обновление уже загруженного ассета
 
   build_windows:
     runs-on: windows-latest
     permissions: write-all
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
         with:
           submodules: true
 
-      - name: Install dependencies
-        run: |
-          choco install sfml
-          choco install cmake
-          choco install mingw
+      # Configure project with CMake
+      - name: Configure CMake
+        run: cmake. -DPATCH_VERSION=${{ github.run_number }}
 
-      - name: Configure and build
+      # Copy resources to build directory
+      - name: Copy Resources to Build Directory
         run: |
-          mkdir build
-          cd build
-          cmake..
-          cmake --build.
+          mkdir build\resources
+          xcopy /s /i resources\* build\resources\
 
-      - name: Run tests
-        run: |
-         .\physics.exe  # Replace with your executable name if different
+      # Build project
+      - name: Build Project
+        run: cmake --build.
 
-      - name: Create release
-        id: create_release
+      # Create package 
+      - name: Package Project
+        run: cmake --build. --target package
+
+      # List files for debugging purposes
+      - name: List Files in Build Directory
+        run: dir  # For Windows
+
+      # Create release on GitHub
+      - name: Create Release (Windows)
+        id: create_release_windows
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          RELEASE_TITLE: ${{ github.event.release.name || 'Automated Release' }}
-          RELEASE_NOTES: ${{ github.event.release.body || 'Automated release notes' }}
-          DRAFT: false
-          PRERELEASE: false
+        with:
+          tag_name: windows${{ github.run_number }}
+          release_name: Release ${{ github.run_number }} (Windows)
+          draft: false 
+          prerelease: false 
 
-      - name: Upload release asset
+      # Upload release asset for Windows 
+      - name: Upload Release Asset (windows)
+        id: upload-release-asset
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path:./build/physics.exe
-          asset_name: physics-windows.exe
-          asset_content_type: application/x-msdownload
-
-      - name: Upload release asset (zip)
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path:./build/physics-windows.zip
-          asset_name: physics-windows.zip
+          upload_url: ${{ steps.create_release_windows.outputs.upload_url }}
+          asset_path:./physics-0.0.${{ github.run_number }}-win64.zip  # Adjust based on actual output filename.
+          asset_name: physics-0.0.${{ github.run_number }}-win64.zip  # Adjust based on actual output filename.
           asset_content_type: application/zip
-        run: |
-          powershell Compress-Archive -Path./build/physics.exe -DestinationPath./build/physics-windows.zip -Force
