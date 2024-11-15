@@ -66,59 +66,60 @@ jobs:
     runs-on: windows-latest
     permissions: write-all
     steps:
-      - uses: actions/checkout@v3
-        with:
-          submodules: true
+    - uses: actions/checkout@v3
+      with:
+      submodules: true
 
-      - name: Install Dependencies
-        run: |
-          choco install cmake
-          # Ensure CMake is in the PATH
-          $env:PATH += ";C:\ProgramData\chocolatey\lib\cmake\tools"
-          # Download and build SFML from source
-          git clone https://github.com/SFML/SFML.git
-          cd SFML
-          mkdir build
-          cd build
-          cmake.. -G "Visual Studio 16 2019" -A x64
-          cmake --build. --config Release
-          cmake --install. --config Release
+    - name: Install Visual Studio Build Tools
+      uses: microsoft/setup-msbuild@v1
+      with:
+      version: 'latest' # Or specify a version if needed
+      path: C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools # Adjust path if necessary
 
-      - name: Configure CMake
-        run: |
-          cd..
-          cmake. -DPATCH_VERSION=${{ github.run_number }} -B build
+    - name: Install Dependencies
+      run: |
+      choco install cmake -y
+      # Install other Windows dependencies as needed (e.g., SFML)
+      # Consider using vcpkg or a similar package manager if many dependencies are required.
 
-      - name: Build Project
-        run: |
-          cmake --build build
+    - name: List Files
+      run: dir /s /b
 
-      - name: Package Project
-        run: |
-          cmake --build build --target package
+    - name: Configure CMake
+      run: |
+      cmake -S. -B build -G "Visual Studio 17 2022" -A x64 -DPATCH_VERSION=${{ github.run_number }} # Adjust generator and architecture as needed
 
-      - name: List Files in Build Directory
-        run: dir
+    - name: Build Project
+      run: cmake --build build --config Release
 
-      - name: Create Release (Windows)
-        id: create_release_windows
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: windows${{ github.run_number }}
-          release_name: Release ${{ github.run_number }} (Windows)
-          draft: false
-          prerelease: false
+    - name: Package Project (Windows Installer) # You'll need a Windows installer tool
+      run: |
+      # Example using Inno Setup (you'll need to create an Inno Setup script)
+      iscc MySetup.iss # Replace MySetup.iss with your Inno Setup script
+      # Or use WiX Toolset or another installer creation tool
 
-      - name: Upload Release Asset (Windows)
-        id: upload-release-asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release_windows.outputs.upload_url }}
-          asset_path: ./build/physics-0.0.${{ github.run_number }}-win64.zip
-          asset_name: physics-0.0.${{ github.run_number }}-win64.zip
-          asset_content_type: application/zip
-          allowUpdates: true
+    - name: List Files in Build Directory
+      run: dir /s /b build
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+      tag_name: v${{ github.run_number }}
+      release_name: Release ${{ github.run_number }} (Windows)
+      draft: false
+      prerelease: false
+
+    - name: Upload Release Asset
+      id: upload-release-asset-windows
+      uses: actions/upload-release-asset@v1
+      env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+      asset_path: ./build/Release/physics.exe # Adjust path to your installer or executable
+      asset_name: physics-0.0.${{ github.run_number }}-Windows.exe # Or physics-0.0.${{ github.run_number }}-Windows.msi if using an installer
+      asset_content_type: application/octet-stream # Or application/x-msi if using an MSI installer
+      allowUpdates: true
