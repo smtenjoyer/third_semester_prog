@@ -1,10 +1,13 @@
-cmake_minimum_required(VERSION 3.7.2)
+cmake_minimum_required(VERSION 3.10)
 project(physics)
 
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Пытаемся найти предустановленный SFML
-find_package(SFML COMPONENTS graphics)
+set(CMAKE_PREFIX_PATH "${CMAKE_PREFIX_PATH} /path/to/SFML") # Укажите путь к SFML, если он не находится в стандартных местах
+
+find_package(SFML 2.5.1 COMPONENTS graphics REQUIRED)
 
 if (SFML_FOUND)
     message(STATUS "The SFML installed in the system will be used")
@@ -18,46 +21,23 @@ else ()
     set(SFML_BUILD_AUDIO OFF CACHE BOOL "" FORCE)
     set(SFML_BUILD_NETWORK OFF CACHE BOOL "" FORCE)
     set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
-    # Обход потенциальных проблем при сборке sfml-graphics
-    # (stb_image.h: 'argument': conversion from 'int' to 'short')
     set(WARNINGS_AS_ERRORS FALSE CACHE BOOL "" FORCE)
     FetchContent_MakeAvailable(SFML)
 endif ()
 
-# К сожалению, вплоть до C++20 https://en.cppreference.com/w/cpp/numeric/constants
-# нет удобного кроссплатформенного способа получить число pi.
-# define ниже нужен для включения M_PI
-if (MSVC)
-    add_definitions(-D_USE_MATH_DEFINES)
-endif ()
-
+# Добавляем исполняемый файл
 add_executable(physics
         main.cpp World.cpp Ball.cpp Physics.cpp Color.cpp Painter.cpp Dust.cpp
         black_box/Application.cpp black_box/View.cpp black_box/PainterImpl.cpp)
+
+#_LINKING SFML LIBRARIES
 target_link_libraries(physics PRIVATE sfml-graphics)
 
+# Compile options
 target_compile_options(physics PRIVATE
         $<$<CXX_COMPILER_ID:MSVC>:/W4>
         $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -Wpedantic>
-        )
+)
 
-
-
-install(TARGETS physics DESTINATION bin)
-
-set(CPACK_PROJECT_NAME physics)
-
-set(CPACK_GENERATOR "ZIP;DEB")
-set(CPACK_PACKAGE_VERSION "${PROJECT_VERSION}")
-
-set(CPACK_PACKAGE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")
-set(CPACK_PACKAGE_VERSION_MINOR "${PROJECT_VERSION_MINOR}")
-set(CPACK_PACKAGE_VERSION_PATCH "${PROJECT_VERSION_PATCH}")
-
-set(CPACK_PACKAGE_CONTACT example@example.com)
-
-include(CPack)
-set(CPACK_PROJECT_NAME ${PROJECT_NAME})
-set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
-
-enable_testing()
+# Include directories
+target_include_directories(physics PRIVATE ${SFML_INCLUDE_DIR})
