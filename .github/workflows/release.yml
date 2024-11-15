@@ -82,7 +82,7 @@ jobs:
 
       # Configure project with CMake
       - name: Configure CMake
-        run: cmake. -DPATCH_VERSION=${{ github.run_number }}
+        run: cmake . -DPATCH_VERSION=${{ github.run_number }}
 
       # Copy resources to build directory
       - name: Copy Resources to Build Directory
