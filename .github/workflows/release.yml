@@ -111,6 +111,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release_windows.outputs.upload_url }}
-          asset_path: ./build/physics-0.0.${{ github.run_number }}-Windows.exe
-          asset_name: physics-0.0.${{ github.run_number }}-Windows.exe
+          asset_path: ./build/myexecutable.exe
+          asset_name: myexecutable.exe
           asset_content_type: application/x-msdownload
