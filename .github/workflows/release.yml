@@ -104,14 +104,13 @@ jobs:
           draft: false
           prerelease: false
 
-      - name: Upload Release Asset (Windows)
+      - name: Upload Release Asset
         id: upload-release-asset-windows
         uses: actions/upload-release-asset@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release_windows.outputs.upload_url }}
-          asset_path: ./build/Release/physics.exe
-          asset_name: physics-0.0.${{ github.run_number }}-Windows.exe
-          asset_content_type: application/octet-stream
-          allowUpdates: true
+        upload_url: ${{ steps.create_release_windows.outputs.upload_url }}
+        asset_path: ./build/Release/physics-${{ github.run_number }}-win64.zip # Adjust filename to match your zip file
+        asset_name: physics-${{ github.run_number }}-win64.zip
+        asset_content_type: application/zip
