@@ -88,9 +88,9 @@ jobs:
       - name: Move Resources to Build Directory
         run: |
           if not exist build mkdir build
-          move /y resources\* build\
+          xcopy /s /y resources build\
         shell: cmd
-        
+
       - name: Build project
         run: cmake --build .
 
