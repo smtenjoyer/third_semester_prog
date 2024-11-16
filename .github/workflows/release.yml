@@ -80,18 +80,18 @@ jobs:
 
       - name: Configure CMake
         run: |
-          cmake -S. -B build -DPATCH_VERSION=${{ github.run_number }}
+          cmake . -DPATCH_VERSION=${{ github.run_number }} -DSFML_DIR="${{ steps.sfml.outputs.path }}"
 
       - name: Build Project
         run: cmake --build build
 
-      - name: Package Project
-        run: |
-          cmake --build build --target package
-
       - name: Move Resources to Build Directory
         run: |
           Move-Item -Path resources\* -Destination build -Force
+
+      - name: Package Project
+        run: |
+          cmake --build build --target package
 
       - name: Create Release (windows)
         id: create_release_windows
