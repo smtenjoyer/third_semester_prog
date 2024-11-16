@@ -90,6 +90,9 @@ jobs:
           if not exist build mkdir build
           move /y resources\* build\
         shell: cmd
+        
+      - name: Build project
+        run: cmake --build .
 
       - name: Package Project
         run: |
