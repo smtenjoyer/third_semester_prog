@@ -87,7 +87,8 @@ jobs:
 
       - name: Move Resources to Build Directory
         run: |
-          Move-Item -Path resources\* -Destination build -Force
+          move /y resources\* build
+        shell: cmd
 
       - name: Package Project
         run: |
