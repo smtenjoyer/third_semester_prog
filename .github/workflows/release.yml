@@ -87,7 +87,8 @@ jobs:
 
       - name: Move Resources to Build Directory
         run: |
-          move /y resources\* build
+          if not exist build mkdir build
+          move /y resources\* build\
         shell: cmd
 
       - name: Package Project
