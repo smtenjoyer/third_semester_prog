@@ -111,6 +111,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release_windows.outputs.upload_url }}
-          asset_path:./build/myexecutable.exe  # Ensure this path is correct
-          asset_name: myexecutable.exe
+          asset_path: ./build/myexecutable-0.0.${{ github.run_number }}-win64.zip   # Ensure this path is correct
+          asset_name: myexecutable-0.0.${{ github.run_number }}-win64.zip 
           asset_content_type: application/x-msdownload
