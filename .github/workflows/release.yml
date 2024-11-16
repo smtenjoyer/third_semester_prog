@@ -91,9 +91,21 @@ jobs:
           xcopy /s resources build\
         shell: cmd
         
-      - name: Package Project
+      - name: Archive Build Directory
         run: |
-          cmake --build . --target package
+          cd build
+          tar -czf physics-0.0.${{ github.run_number }}-win64.tar.gz.
+        shell: cmd
+
+      - name: Verify File Existence
+        run: |
+          if exist./build/physics-0.0.${{ github.run_number }}-win64.tar.gz (
+            echo "File exists"
+          ) else (
+            echo "File does not exist"
+            exit 1
+          )
+        shell: cmd
 
       - name: Create Release (windows)
         id: create_release_windows
