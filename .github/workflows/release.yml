@@ -91,21 +91,9 @@ jobs:
           xcopy /s resources build\
         shell: cmd
         
-      - name: Archive Build Directory
+      - name: Package Project
         run: |
-          cd build
-          tar -czf physics-0.0.${{ github.run_number }}-win64.tar.gz.
-        shell: cmd
-
-      - name: Verify File Existence
-        run: |
-          if exist./build/physics-0.0.${{ github.run_number }}-win64.tar.gz (
-            echo "File exists"
-          ) else (
-            echo "File does not exist"
-            exit 1
-          )
-        shell: cmd
+          cmake --build . --target package
 
       - name: Create Release (windows)
         id: create_release_windows
@@ -125,6 +113,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release_windows.outputs.upload_url }}
-          asset_path: ./build/physics-0.0.${{ github.run_number }}-win64.tar.gz
-          asset_name: physics-0.0.${{ github.run_number }}-win64.tar.gz
-          asset_content_type: application/gzip
+          asset_path: ./physics-0.0.${{ github.run_number }}-win64.zip  # Убедитесь, что этот путь правильный
+          asset_name: physics-0.0.${{ github.run_number }}-win64.zip
+          asset_content_type: application/zip
