@@ -90,10 +90,7 @@ jobs:
           if not exist build mkdir build
           xcopy /s /y resources build\
         shell: cmd
-
-      - name: Build project
-        run: cmake --build .
-
+        
       - name: Package Project
         run: |
           cmake --build . --target package
