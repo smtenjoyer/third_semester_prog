@@ -1,7 +1,7 @@
-cmake_minimum_required(VERSION 3.5.0)
+cmake_minimum_required(VERSION 3.7.2)
 project(projecting VERSION 0.1.0 LANGUAGES C CXX)
-
-add_executable(projecting main.cpp)
+set(CMAKE_CXX_STANDARD 17)
+add_executable(projecting main.cpp document.h)
 
 include(CTest)
 enable_testing()
