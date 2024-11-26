@@ -1,11 +1,28 @@
 cmake_minimum_required(VERSION 3.7.2)
-project(projecting VERSION 0.1.0 LANGUAGES C CXX)
+set(PATCH_VERSION "1" CACHE INTERNAL "Patch version")
+set(PROJECT_VESRION 0.0.${PATCH_VERSION})
+
+project(projecting VERSION ${PROJECT_VESRION})
 set(CMAKE_CXX_STANDARD 17)
 add_executable(projecting main.cpp document.h)
 
-include(CTest)
-enable_testing()
+set(CXX_STANDARD_REQUIRED ON)
 
+install(TARGETS projecting DESTINATION bin)
+
+set(CPACK_PROJECT_NAME laba4)
+
+set(CPACK_GENERATOR "ZIP;DEB")
+set(CPACK_PACKAGE_VERSION "${PROJECT_VERSION}")
+
+set(CPACK_PACKAGE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")
+set(CPACK_PACKAGE_VERSION_MINOR "${PROJECT_VERSION_MINOR}")
+set(CPACK_PACKAGE_VERSION_PATCH "${PROJECT_VERSION_PATCH}")
+
+set(CPACK_PACKAGE_CONTACT example@example.com)
+
+include(CPack)
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
-include(CPack)
+
+enable_testing()
