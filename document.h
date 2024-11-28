@@ -1,8 +1,9 @@
 #pragma once
-#include <memory>
-#include <string>
 #include <iostream>
 #include <map>
+#include <memory>
+#include <string>
+#include <ctype.h>
 #include "primitive.h"
 
 class Document {
