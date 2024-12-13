@@ -3,69 +3,99 @@ name: C++ CI
 on:
   push:
     branches:
-      - laba7  # Use 'main' or your default branch
-      - feature/* # Matches all feature branches
+      - laba7
+      - feature/github_actions
 
 jobs:
-  build:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest]
-        build_type: [Release] # Add Debug if needed
+  build_ubuntu:
+    runs-on: ubuntu-latest
+    permissions: write-all
 
     steps:
-    - uses: actions/checkout@v3
-      with:
-        submodules: true
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          submodules: true
 
-    - name: Set up Boost
-      uses: conda-incubator/setup-miniconda@v2
-      with:
-        activate-environment: true
-        auto-update-conda: false
-        environment-file: environment.yml # Create this file (see below)
-        python-version: 3.x # Specify a Python version
+      - name: Install Dependencies
+        run: sudo apt-get update && sudo apt-get install libboost-test-dev -y
 
-    - name: Configure CMake
-      run: |
-        cmake -S . -B build -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DPATCH_VERSION=${{ github.run_number }}
+      - name: List Files for debugging purposes
+        run: ls -R
 
-    - name: Build Project
-      run: cmake --build build --config ${{ matrix.build_type }}
+      - name: Configure CMake
+        run: cmake -S . -B build -DPATCH_VERSION=${{ github.run_number }}
 
-    - name: Test Project (Optional)
-      if: matrix.build_type == 'Release' && runner.os == 'Linux' #Example conditional testing
-      run: |
-        ctest -C ${{ matrix.build_type }} # Requires adding tests to your CMakeLists.txt
+      - name: Build Project
+        run: cmake --build build
 
-    - name: Create Release
-      if: ${{ matrix.build_type == 'Release' }}
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: v${{ github.run_number }}-${{ matrix.os }}
-        release_name: Release ${{ github.run_number }} (${{ matrix.os }})
-        draft: false
-        prerelease: false
+      - name: Package Project
+        run: cmake --build build --target package
 
-    - name: Upload Artifact
-      if: ${{ matrix.build_type == 'Release' }}
-      uses: actions/upload-artifact@v3
-      with:
-        name: boboost-${{ matrix.os }}
-        path: build/${{ matrix.build_type }} #Upload the build directory
-        if-no-files-found: error
+      - name: List Files in Build Directory
+        run: ls -R build
 
-    - name: Upload Release Asset (Conditional)
-      if: ${{ matrix.build_type == 'Release' }}
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ${{ steps.build.outputs.artifact_path }}/boboost #Path to the executable
-        asset_name: boboost-${{ matrix.os }}.${{ matrix.build_type }}.zip #Adjust extension as needed
-        asset_content_type: application/zip
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ github.run_number }}
+          release_name: Release ${{ github.run_number }} (Ubuntu)
+          draft: false
+          prerelease: false
+
+      - name: Upload Release Asset
+        id: upload-release-asset-ubuntu
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./build/boboost-0.0.${{ github.run_number }}-Linux.deb
+          asset_name: boboost-0.0.${{ github.run_number }}-Linux.deb
+          asset_content_type: application/vnd.debian.binary-package
+
+  build_windows:
+    runs-on: windows-latest
+    permissions: write-all
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - name: Configure Project with CMake
+        run: cmake . -DPATCH_VERSION=${{ github.run_number }}
+
+      - name: Build Project
+        run: cmake --build .
+
+      - name: Package Project
+        run: cmake --build . --target package
+
+      - name: List Files in Build Directory
+        run: dir
+
+      - name: Create Release (Windows)
+        id: create_release_windows
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: windows${{ github.run_number }}
+          release_name: Release ${{ github.run_number }} (Windows)
+          draft: false
+          prerelease: false
+
+      - name: Upload Release Asset (Windows)
+        id: upload-release-asset-windows
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release_windows.outputs.upload_url }}
+          asset_path: ./boboost-0.0.${{ github.run_number }}-win64.zip # Adjust based on actual output filename.
+          asset_name: boboost-0.0.${{ github.run_number }}-win64.zip # Adjust based on actual output filename.
