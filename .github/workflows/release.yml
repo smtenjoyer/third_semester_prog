@@ -3,7 +3,7 @@ name: C++ CI
 on:
   push:
     branches:
-      - main  # Use 'main' or your default branch
+      - laba7  # Use 'main' or your default branch
       - feature/* # Matches all feature branches
 
 jobs:
