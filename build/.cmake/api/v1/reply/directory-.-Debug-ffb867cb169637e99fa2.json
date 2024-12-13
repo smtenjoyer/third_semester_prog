@@ -19,6 +19,12 @@
 				"file" : 0,
 				"line" : 13,
 				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 30,
+				"parent" : 0
 			}
 		]
 	},
@@ -38,6 +44,29 @@
 		},
 		{
 			"backtrace" : 1,
+			"component" : "Unspecified",
+			"cxxModuleBmiTarget" : 
+			{
+				"id" : "boboost::@6890427a1f51a3e7e1df",
+				"index" : 0
+			},
+			"destination" : "bin",
+			"type" : "cxxModuleBmi"
+		},
+		{
+			"backtrace" : 2,
+			"component" : "Unspecified",
+			"destination" : "bin",
+			"paths" : 
+			[
+				"boboost.exe"
+			],
+			"targetId" : "boboost::@6890427a1f51a3e7e1df",
+			"targetIndex" : 0,
+			"type" : "target"
+		},
+		{
+			"backtrace" : 2,
 			"component" : "Unspecified",
 			"cxxModuleBmiTarget" : 
 			{

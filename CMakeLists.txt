@@ -27,4 +27,5 @@ include(CPack)
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
 
+install(TARGETS boboost DESTINATION bin) # Installs the boboost executable to the bin directory
 enable_testing()
