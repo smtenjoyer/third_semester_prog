@@ -29,9 +29,9 @@ jobs:
 
       - name: Download Boost
         run: |
-          wget https://boostorg.jfrog.io/artifactory/main/release/1.86.0/source/boost_1_86_0.tar.bz2
-          tar -xvjf boost_1_86_0.tar.bz2
-          mv boost_1_86_0 boost
+          wget https://boostorg.jfrog.io/artifactory/main/release/1.87.0/source/boost_1_87_0.tar.bz2
+          tar -xvjf boost_1_87_0.tar.bz2
+          mv boost_1_87_0 boost
 
       - name: Configure CMake to use Local Boost
         run: |
