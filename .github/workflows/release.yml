@@ -27,15 +27,15 @@ jobs:
       - name: Clean Build Directory
         run: rm -rf build
 
-      - name: Download Boost
+      - name: Download Boost 1.86.0
         run: |
-          wget https://boostorg.jfrog.io/artifactory/main/release/1.87.0/source/boost_1_87_0.tar.bz2
-          tar -xvjf boost_1_87_0.tar.bz2
-          mv boost_1_87_0 boost
+          wget https://boostorg.jfrog.io/artifactory/main/release/1.86.0/source/boost_1_86_0.tar.bz2
+          tar -xvjf boost_1_86_0.tar.bz2
+          mv boost_1_86_0 boost
 
-      - name: Configure CMake to use Local Boost
+      - name: Configure CMake with Local Boost
         run: |
-          cmake -S . -B build -DPATCH_VERSION=${{ github.run_number }} -DBOOST_ROOT=./boost --no-warn-unused-cli
+          cmake -S . -B build -DPATCH_VERSION=${{ github.run_number }} -DBOOST_ROOT=./boost -DCMAKE_CXX_FLAGS="-std=c++17" --no-warn-unused-cli
 
       - name: Build Project
         run: cmake --build build
