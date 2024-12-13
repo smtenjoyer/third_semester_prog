@@ -17,10 +17,15 @@ jobs:
         with:
           submodules: true
 
-      - name: Checkout code
-        uses: actions/checkout@v3
-        with:
-          submodules: true
+      - name: Install Dependencies
+        run: sudo apt-get update && sudo apt-get install libboost-test-dev -y
+
+      - name: List Files for debugging purposes
+        run: |
+          ls -R
+
+      - name: Clean Build Directory
+        run: rm -rf build
 
       - name: Download Boost 1.86.0
         run: |
