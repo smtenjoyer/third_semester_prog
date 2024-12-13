@@ -21,10 +21,12 @@ jobs:
         run: sudo apt-get update && sudo apt-get install libboost-test-dev -y
 
       - name: List Files for debugging purposes
-        run: ls -R
+        run: |
+          ls -R
 
       - name: Configure CMake
-        run: cmake -S . -B build -DPATCH_VERSION=${{ github.run_number }}
+        run: |
+          cmake -S . -B build -DPATCH_VERSION=${{ github.run_number }}
 
       - name: Build Project
         run: cmake --build build
