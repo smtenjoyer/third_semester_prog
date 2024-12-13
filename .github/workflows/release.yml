@@ -24,6 +24,9 @@ jobs:
         run: |
           ls -R
 
+      - name: Clean Build Directory
+        run: rm -rf build
+
       - name: Configure CMake
         run: |
           cmake -S . -B build -DPATCH_VERSION=${{ github.run_number }} --no-warn-unused-cli
