@@ -85,17 +85,31 @@ jobs:
         with:
           submodules: true
 
-      - name: Configure Project with CMake
-        run: cmake . -DPATCH_VERSION=${{ github.run_number }}
+      - name: Download Boost 1.86.0 (Windows)
+        run: |
+          Invoke-WebRequest -Uri "https://boostorg.jfrog.io/artifactory/main/release/1.86.0/source/boost_1_86_0.tar.bz2" -OutFile "boost_1_86_0.tar.bz2"
+          tar -xvjf boost_1_86_0.tar.bz2
+          mv boost_1_86_0 boost
 
-      - name: Build Project
-        run: cmake --build .
+      - name: Build Boost (Windows)
+        run: |
+          cd boost
+          .\bootstrap.bat --with-libraries=program_options,system,filesystem
+          .\b2 install --prefix=$(pwd)/install --toolset=msvc-14.42
+          cd ..
 
-      - name: Package Project
-        run: cmake --build . --target package
+      - name: Configure CMake with Local Boost (Windows)
+        run: |
+          cmake -S . -B build -DPATCH_VERSION=${{ github.run_number }} -DBOOST_ROOT=./boost/install -DCMAKE_CXX_FLAGS="-std=c++17" --no-warn-unused-cli -G "Visual Studio 17 2022"
+
+      - name: Build Project (Windows)
+        run: cmake --build build --config Release --verbose
+
+      - name: Package Project (Windows)
+        run: cmake --build build --target package --config Release --verbose
 
       - name: List Files in Build Directory
-        run: dir
+        run: dir build
 
       - name: Create Release (Windows)
         id: create_release_windows
@@ -115,5 +129,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release_windows.outputs.upload_url }}
-          asset_path: ./boboost-0.0.${{ github.run_number }}-win64.zip # Adjust based on actual output filename.
-          asset_name: boboost-0.0.${{ github.run_number }}-win64.zip # Adjust based on actual output filename.
+          asset_path: ./build/Release/boboost-0.0.${{ github.run_number }}-win64.zip # Adjust path if needed
+          asset_name: boboost-0.0.${{ github.run_number }}-win64.zip # Adjust name if needed
