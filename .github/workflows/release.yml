@@ -17,15 +17,10 @@ jobs:
         with:
           submodules: true
 
-      - name: Install Dependencies
-        run: sudo apt-get update && sudo apt-get install libboost-test-dev -y
-
-      - name: List Files for debugging purposes
-        run: |
-          ls -R
-
-      - name: Clean Build Directory
-        run: rm -rf build
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          submodules: true
 
       - name: Download Boost 1.86.0
         run: |
@@ -33,15 +28,22 @@ jobs:
           tar -xvjf boost_1_86_0.tar.bz2
           mv boost_1_86_0 boost
 
+      - name: Build Boost
+        run: |
+          cd boost
+          ./bootstrap.sh --with-libraries=program_options,system,filesystem # Specify needed libraries
+          ./b2 install --prefix=$(pwd)/install # Install to a subdirectory of boost
+          cd ..
+
       - name: Configure CMake with Local Boost
         run: |
-          cmake -S . -B build -DPATCH_VERSION=${{ github.run_number }} -DBOOST_ROOT=./boost -DCMAKE_CXX_FLAGS="-std=c++17" --no-warn-unused-cli
+          cmake -S . -B build -DPATCH_VERSION=${{ github.run_number }} -DBOOST_ROOT=./boost/install -DCMAKE_CXX_FLAGS="-std=c++17" --no-warn-unused-cli
 
       - name: Build Project
-        run: cmake --build build
+        run: cmake --build build --verbose
 
       - name: Package Project
-        run: cmake --build build --target package
+        run: cmake --build build --target package --verbose
 
       - name: List Files in Build Directory
         run: ls -R build
