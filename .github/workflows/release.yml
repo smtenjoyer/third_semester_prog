@@ -85,17 +85,42 @@ jobs:
         with:
           submodules: true
 
-      - name: Configure Project with CMake
-        run: cmake . -DPATCH_VERSION=${{ github.run_number }}
+      - name: Install Dependencies
+        run: |
+          choco install boost-msvc-x64 --version=1.86.0 # Install Boost via Chocolatey (adjust if needed)
+
+      - name: List Files for debugging purposes
+        run: |
+          dir
+
+      - name: Clean Build Directory
+        run: rmdir /s /q build || exit 0 # Remove build directory if it exists
+
+      - name: Download Boost 1.86.0
+        run: |
+          Invoke-WebRequest -Uri https://boostorg.jfrog.io/artifactory/main/release/1.86.0/source/boost_1_86_0.tar.bz2 -OutFile boost_1_86_0.tar.bz2
+          tar -xvjf boost_1_86_0.tar.bz2
+          Move-Item -Path boost_1_86_0 -Destination boost
+
+      - name: Build Boost
+        run: |
+          cd boost
+          .\bootstrap.bat --with-libraries=program_options,system,filesystem # Specify needed libraries
+          .\b2 install --prefix=$(pwd)\install # Install to a subdirectory of boost
+          cd ..
+
+      - name: Configure CMake with Local Boost
+        run: |
+          cmake -S . -B build -DPATCH_VERSION=${{ github.run_number }} -DBOOST_ROOT=./boost/install -DCMAKE_CXX_FLAGS="/std:c++17" --no-warn-unused-cli
 
       - name: Build Project
-        run: cmake --build .
+        run: cmake --build build --verbose
 
       - name: Package Project
-        run: cmake --build . --target package
+        run: cmake --build build --target package --verbose
 
       - name: List Files in Build Directory
-        run: dir
+        run: dir build
 
       - name: Create Release (Windows)
         id: create_release_windows
@@ -115,5 +140,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release_windows.outputs.upload_url }}
-          asset_path: ./boboost-0.0.${{ github.run_number }}-win64.zip # Adjust based on actual output filename.
+          asset_path: ./build/boboost-0.0.${{ github.run_number }}-win64.zip # Adjust based on actual output filename.
           asset_name: boboost-0.0.${{ github.run_number }}-win64.zip # Adjust based on actual output filename.
