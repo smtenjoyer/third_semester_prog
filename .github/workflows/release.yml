@@ -85,9 +85,8 @@ jobs:
         with:
           submodules: true
 
+      
       - name: Download Necessary Boost Libraries
-        run: |
-          - name: Download Necessary Boost Libraries
         run: |
           Invoke-WebRequest -Uri "https://some-boost-mirror.com/boost_program_options-vc143-mt-x64-1_86_0.zip" -OutFile "program_options.zip"
           Invoke-WebRequest -Uri "https://some-boost-mirror.com/boost_system-vc143-mt-x64-1_86_0.zip" -OutFile "system.zip"
