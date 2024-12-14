@@ -95,11 +95,11 @@ jobs:
         run: |
           cd ./boost/boost_1_86_0
           .\bootstrap.bat
-          .\b2 install --prefix=./install
+          .\b2 install --prefix=./install --build-dir=./build
 
       - name: Configure CMake with Local Boost (Windows)
         run: |
-          cmake -S . -B build -DPATCH_VERSION=${{ github.run_number }} -DBOOST_ROOT=./boost/install -DCMAKE_CXX_FLAGS="-std=c++17" --no-warn-unused-cli -G "Visual Studio 17 2022"
+          cmake -S . -B build -DPATCH_VERSION=${{ github.run_number }} -DBOOST_ROOT=./install -DCMAKE_CXX_FLAGS="-std=c++17" --no-warn-unused-cli -G "Visual Studio 17 2022"
 
       - name: Build Project (Windows)
         run: cmake --build build --config Release --verbose
@@ -130,4 +130,3 @@ jobs:
           upload_url: ${{ steps.create_release_windows.outputs.upload_url }}
           asset_path: ./build/Release/boboost-0.0.${{ github.run_number }}-win64.zip # Adjust path if needed
           asset_name: boboost-0.0.${{ github.run_number }}-win64.zip # Adjust name if needed
-
