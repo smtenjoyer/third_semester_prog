@@ -87,7 +87,7 @@ jobs:
 
       - name: Download Boost 1.86.0 (Windows)
         run: |
-          Invoke-WebRequest -Uri "https://boostorg.jfrog.io/artifactory/main/release/1.86.0/source/boost_1_86_0.tar.bz2" -OutFile "boost_1_86_0.tar.bz2" -TimeoutSec 600
+          Invoke-WebRequest -Uri "https://boostorg.jfrog.io/artifactory/main/release/1.86.0/source/boost_1_86_0.tar.bz2" -OutFile "boost_1_86_0.tar.bz2" -TimeoutSec 250
           if (Test-Path "boost_1_86_0.tar.bz2") {
               Write-Host "File downloaded successfully. Size: $(Get-Item boost_1_86_0.tar.bz2).Length bytes"
           } else {
