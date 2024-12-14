@@ -85,22 +85,24 @@ jobs:
         with:
           submodules: true
 
+      - name: Install 7-Zip
+        uses: EnixCoding/setup-7zip@v1.0.1
+
       - name: Download Boost 1.86.0 (Windows)
         run: |
-          Invoke-WebRequest -Uri "https://boostorg.jfrog.io/artifactory/main/release/1.86.0/source/boost_1_86_0.tar.bz2" -OutFile "boost_1_86_0.tar.bz2" 
-          if (Test-Path "boost_1_86_0.tar.bz2") {
-              Write-Host "File downloaded successfully. Size: $(Get-Item boost_1_86_0.tar.bz2).Length bytes"
-          } else {
+          Invoke-WebRequest -Uri "https://boostorg.jfrog.io/artifactory/main/release/1.86.0/source/boost_1_86_0.tar.bz2" -OutFile "boost_1_86_0.tar.bz2" -TimeoutSec 600
+          if (!(Test-Path "boost_1_86_0.tar.bz2")) {
               Write-Host "Error: File download failed."
+              exit 1
           }
-          tar -xvjf boost_1_86_0.tar.bz2
+          7z x boost_1_86_0.tar.bz2 -y # -y for automatic "yes" to prompts
           mv boost_1_86_0 boost
 
       - name: Build Boost (Windows)
         run: |
           cd boost
-          .\bootstrap.bat --with-libraries=program_options,system,filesystem
-          .\b2 install --prefix=$(pwd)/install --toolset=msvc-14.42
+          .\bootstrap.bat --with-libraries=program_options,system,filesystem --loglevel=all
+          .\b2 install --prefix=$(pwd)/install --toolset=msvc-14.42 -d2
           cd ..
 
       - name: Configure CMake with Local Boost (Windows)
