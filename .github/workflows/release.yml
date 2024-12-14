@@ -98,21 +98,30 @@ jobs:
           # List contents of the temporary directory for debugging
           Get-ChildItem -Recurse -Path $tempDir.FullName
 
+          # Define target paths
+          $targetDir = "./boost"
+          $programOptionsPath = "$tempDir/boost_1_86_0/boost/program_options"
+          $systemPath = "$tempDir/boost_1_86_0/boost/system"
+          $filesystemPath = "$tempDir/boost_1_86_0/boost/filesystem"
+
           # Move only the needed directories to the final destination if they exist
-          if (Test-Path "$tempDir/boost_1_86_0/boost/program_options") {
-              Move-Item "$tempDir/boost_1_86_0/boost/program_options" "./boost/program_options" -Force
+          if (Test-Path $programOptionsPath) {
+              Move-Item -Path $programOptionsPath -Destination "$targetDir/program_options" -Force
+              Write-Host "Moved program_options successfully."
           } else {
               Write-Host "Directory program_options does not exist."
           }
 
-          if (Test-Path "$tempDir/boost_1_86_0/boost/system") {
-              Move-Item "$tempDir/boost_1_86_0/boost/system" "./boost/system" -Force
+          if (Test-Path $systemPath) {
+              Move-Item -Path $systemPath -Destination "$targetDir/system" -Force
+              Write-Host "Moved system successfully."
           } else {
               Write-Host "Directory system does not exist."
           }
 
-          if (Test-Path "$tempDir/boost_1_86_0/boost/filesystem") {
-              Move-Item "$tempDir/boost_1_86_0/boost/filesystem" "./boost/filesystem" -Force
+          if (Test-Path $filesystemPath) {
+              Move-Item -Path $filesystemPath -Destination "$targetDir/filesystem" -Force
+              Write-Host "Moved filesystem successfully."
           } else {
               Write-Host "Directory filesystem does not exist."
           }
