@@ -85,16 +85,16 @@ jobs:
         with:
           submodules: true
 
-      - name: Download Boost 1.86.0 (Windows)
+      - name: Clone Boost Repository
         run: |
-          # Example of downloading from an alternative source
-          Invoke-WebRequest -Uri "https://boostorg.jfrog.io/artifactory/main/release/1.86.0/binaries/boost_1_86_0-msvc-14.2-win64.zip" -OutFile "boost.zip" -ErrorAction Stop
-          Expand-Archive -Path "boost.zip" -DestinationPath "./boost"
-          Remove-Item "boost.zip"
+          git clone --branch boost-1.86.0 --recursive https://github.com/boostorg/boost.git
+          cd boost
+          bootstrap.bat
+          .\b2 install --prefix=./install
 
       - name: Configure CMake with Local Boost (Windows)
         run: |
-          cmake -S . -B build -DPATCH_VERSION=${{ github.run_number }} -DBOOST_ROOT=./boost/boost_1_86_0-msvc-14.2-win64 -DCMAKE_CXX_FLAGS="-std=c++17" --no-warn-unused-cli -G "Visual Studio 17 2022"
+          cmake -S . -B build -DPATCH_VERSION=${{ github.run_number }} -DBOOST_ROOT=./boost/install -DCMAKE_CXX_FLAGS="-std=c++17" --no-warn-unused-cli -G "Visual Studio 17 2022"
 
       - name: Build Project (Windows)
         run: cmake --build build --config Release --verbose
