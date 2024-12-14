@@ -87,10 +87,11 @@ jobs:
 
       - name: Download Necessary Boost Libraries
         run: |
-          # Download individual library zip files (replace with actual URLs)
-          Invoke-WebRequest -Uri "http://example.com/boost_program_options-vc142-mt-x64-1_86_0.zip" -OutFile "program_options.zip"
-          Invoke-WebRequest -Uri "http://example.com/boost_system-vc142-mt-x64-1_86_0.zip" -OutFile "system.zip"
-          Invoke-WebRequest -Uri "http://example.com/boost_filesystem-vc142-mt-x64-1_86_0.zip" -OutFile "filesystem.zip"
+          - name: Download Necessary Boost Libraries
+        run: |
+          Invoke-WebRequest -Uri "https://some-boost-mirror.com/boost_program_options-vc143-mt-x64-1_86_0.zip" -OutFile "program_options.zip"
+          Invoke-WebRequest -Uri "https://some-boost-mirror.com/boost_system-vc143-mt-x64-1_86_0.zip" -OutFile "system.zip"
+          Invoke-WebRequest -Uri "https://some-boost-mirror.com/boost_filesystem-vc143-mt-x64-1_86_0.zip" -OutFile "filesystem.zip"
 
           # Extract libraries to a specific directory
           Expand-Archive -Path "program_options.zip" -DestinationPath "./boost_libs"
