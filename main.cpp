@@ -70,12 +70,7 @@ void process_file(const directory_entry& entry, const std::vector<path>& exclusi
         if (std::find(exclusions.begin(), exclusions.end(), entry.path().parent_path()) != exclusions.end()) {
             return;
         }
-
-        // Проверка минимального размера файла
-        // if (file_size(entry) < minSize) {
-        //     std::cout << "less than minsize" << std::endl;
-        //     return;
-        // }
+        
         if (file_size(entry) < minSize) {
        std::cout << "File: " << entry.path() << ", Size: " << file_size(entry) << ", MinSize: " << minSize << std::endl;
        return;

@@ -85,21 +85,24 @@ jobs:
         with:
           submodules: true
 
-      - name: Download Boost 1.86.0 Source (Windows)
+      - name: Download Necessary Boost Libraries
         run: |
-          Invoke-WebRequest -Uri "https://boostorg.jfrog.io/artifactory/main/release/1.86.0/source/boost_1_86_0.zip" -OutFile "boost.zip"
-          Expand-Archive -Path "boost.zip" -DestinationPath "./boost"
-          Remove-Item "boost.zip"
+          # Download individual library zip files (replace with actual URLs)
+          Invoke-WebRequest -Uri "http://example.com/boost_program_options-vc142-mt-x64-1_86_0.zip" -OutFile "program_options.zip"
+          Invoke-WebRequest -Uri "http://example.com/boost_system-vc142-mt-x64-1_86_0.zip" -OutFile "system.zip"
+          Invoke-WebRequest -Uri "http://example.com/boost_filesystem-vc142-mt-x64-1_86_0.zip" -OutFile "filesystem.zip"
 
-      - name: Build Boost (Windows)
-        run: |
-          cd ./boost/boost_1_86_0
-          .\bootstrap.bat
-          .\b2 install --prefix=./install --build-dir=./build
+          # Extract libraries to a specific directory
+          Expand-Archive -Path "program_options.zip" -DestinationPath "./boost_libs"
+          Expand-Archive -Path "system.zip" -DestinationPath "./boost_libs"
+          Expand-Archive -Path "filesystem.zip" -DestinationPath "./boost_libs"
+
+          # Remove downloaded zip files
+          Remove-Item "*.zip"
 
       - name: Configure CMake with Local Boost (Windows)
         run: |
-          cmake -S . -B build -DPATCH_VERSION=${{ github.run_number }} -DBOOST_ROOT=./install -DCMAKE_CXX_FLAGS="-std=c++17" --no-warn-unused-cli -G "Visual Studio 17 2022"
+          cmake -S . -B build -DPATCH_VERSION=${{ github.run_number }} -DBOOST_ROOT=./boost_libs -DCMAKE_CXX_FLAGS="-std=c++17" --no-warn-unused-cli -G "Visual Studio 17 2022"
 
       - name: Build Project (Windows)
         run: cmake --build build --config Release --verbose
@@ -128,5 +131,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release_windows.outputs.upload_url }}
-          asset_path: ./build/Release/boboost-0.0.${{ github.run_number }}-win64.zip # Adjust path if needed
-          asset_name: boboost-0.0.${{ github.run_number }}-win64.zip # Adjust name if needed
+          asset_path: ./build/Release/boboost-0.0.${{ github.run_number }}-win64.zip
+          asset_name: boboost-0.0.${{ github.run_number }}-win64.zip
