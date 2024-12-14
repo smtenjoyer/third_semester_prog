@@ -87,7 +87,8 @@ jobs:
 
       - name: Download Boost 1.86.0 (Windows)
         run: |
-          Invoke-WebRequest -Uri "https://boostorg.jfrog.io/artifactory/main/release/1.86.0/binaries/boost_1_86_0-msvc-14.2-win64.zip" -OutFile "boost.zip"
+          # Example of downloading from an alternative source
+          Invoke-WebRequest -Uri "https://boostorg.jfrog.io/artifactory/main/release/1.86.0/binaries/boost_1_86_0-msvc-14.2-win64.zip" -OutFile "boost.zip" -ErrorAction Stop
           Expand-Archive -Path "boost.zip" -DestinationPath "./boost"
           Remove-Item "boost.zip"
 
