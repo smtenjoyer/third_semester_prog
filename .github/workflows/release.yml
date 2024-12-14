@@ -85,10 +85,15 @@ jobs:
         with:
           submodules: true
 
-      - name: Clone Boost Repository
+      - name: Download Boost 1.86.0 Source (Windows)
         run: |
-          git clone --branch boost-1.86.0 --recursive https://github.com/boostorg/boost.git
-          cd boost
+          Invoke-WebRequest -Uri "https://boostorg.jfrog.io/artifactory/main/release/1.86.0/source/boost_1_86_0.zip" -OutFile "boost.zip"
+          Expand-Archive -Path "boost.zip" -DestinationPath "./boost"
+          Remove-Item "boost.zip"
+
+      - name: Build Boost (Windows)
+        run: |
+          cd boost/boost_1_86_0
           bootstrap.bat
           .\b2 install --prefix=./install
 
@@ -125,3 +130,4 @@ jobs:
           upload_url: ${{ steps.create_release_windows.outputs.upload_url }}
           asset_path: ./build/Release/boboost-0.0.${{ github.run_number }}-win64.zip # Adjust path if needed
           asset_name: boboost-0.0.${{ github.run_number }}-win64.zip # Adjust name if needed
+
