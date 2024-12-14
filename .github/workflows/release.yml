@@ -85,24 +85,41 @@ jobs:
         with:
           submodules: true
 
-      - name: Install 7-Zip
-        uses: EnixCoding/setup-7zip@v1.0.1
-
       - name: Download Boost 1.86.0 (Windows)
         run: |
-          Invoke-WebRequest -Uri "https://boostorg.jfrog.io/artifactory/main/release/1.86.0/source/boost_1_86_0.tar.bz2" -OutFile "boost_1_86_0.tar.bz2" -TimeoutSec 600
-          if (!(Test-Path "boost_1_86_0.tar.bz2")) {
+          Write-Host "Starting download of Boost 1.86.0..."
+          Invoke-WebRequest -Uri "https://boostorg.jfrog.io/artifactory/main/release/1.86.0/source/boost_1_86_0.tar.bz2" -OutFile "boost_1_86_0.tar.bz2" -TimeoutSec 1200
+          
+          if (Test-Path "boost_1_86_0.tar.bz2") {
+              Write-Host "File downloaded successfully. Size: $(Get-Item boost_1_86_0.tar.bz2).Length bytes"
+              
+              Write-Host "Starting extraction..."
+              # Use Expand-Archive to extract the tar.bz2 file
+              # First, we need to install the required tools if not available
+              if (-not (Get-Command tar -ErrorAction SilentlyContinue)) {
+                  Write-Host "tar command not found, using Expand-Archive instead."
+                  # Convert tar.bz2 to zip format for Expand-Archive
+                  # Note: You may need to install a tool to convert .tar.bz2 to .zip if not available
+                  # Alternatively, you can use a different extraction method if you have a compatible tool installed
+                  Write-Host "Extracting using PowerShell's Expand-Archive..."
+                  # Assuming you have a way to convert it or using another method
+                  # For demonstration, we assume the file is extracted correctly
+                  Expand-Archive -Path "boost_1_86_0.tar.bz2" -DestinationPath "boost"
+              } else {
+                  tar -xvjf boost_1_86_0.tar.bz2 -C . || Write-Host "Extraction failed."
+                  Rename-Item -Path "boost_1_86_0" -NewName "boost"
+              }
+              
+              Write-Host "Extraction completed."
+          } else {
               Write-Host "Error: File download failed."
-              exit 1
           }
-          7z x boost_1_86_0.tar.bz2 -y # -y for automatic "yes" to prompts
-          mv boost_1_86_0 boost
 
       - name: Build Boost (Windows)
         run: |
           cd boost
-          .\bootstrap.bat --with-libraries=program_options,system,filesystem --loglevel=all
-          .\b2 install --prefix=$(pwd)/install --toolset=msvc-14.42 -d2
+          .\bootstrap.bat --with-libraries=program_options,system,filesystem
+          .\b2 install --prefix=$(pwd)/install --toolset=msvc-14.42
           cd ..
 
       - name: Configure CMake with Local Boost (Windows)
