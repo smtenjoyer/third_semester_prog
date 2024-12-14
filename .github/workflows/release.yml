@@ -75,98 +75,40 @@ jobs:
           asset_name: boboost-0.0.${{ github.run_number }}-Linux.deb
           asset_content_type: application/vnd.debian.binary-package
 
-  build_windows:
-    runs-on: windows-latest
+  build_macos:
+    runs-on: macos-latest
     permissions: write-all
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-        with:
-          submodules: true
-
-      - name: Download Boost 1.86.0 Source (Windows)
-        run: |
-          Invoke-WebRequest -Uri "https://boostorg.jfrog.io/artifactory/main/release/1.86.0/source/boost_1_86_0.zip" -OutFile "boost.zip"
-          # Load the .NET assembly for zip handling
-          Add-Type -AssemblyName System.IO.Compression.FileSystem
-          # Create a temporary directory for extraction
-          $tempDir = New-Item -ItemType Directory -Path "./temp_boost"
-          # Extract all contents
-          [System.IO.Compression.ZipFile]::ExtractToDirectory("boost.zip", $tempDir.FullName)
-          
-          # List contents of the temporary directory for debugging
-          Get-ChildItem -Recurse -Path $tempDir.FullName
-
-          # Define target paths
-          $targetDir = "./boost"
-          $programOptionsPath = "$tempDir/boost_1_86_0/boost/program_options"
-          $systemPath = "$tempDir/boost_1_86_0/boost/system"
-          $filesystemPath = "$tempDir/boost_1_86_0/boost/filesystem"
-
-          # Move only the needed directories to the final destination if they exist
-          if (Test-Path $programOptionsPath) {
-              Move-Item -Path $programOptionsPath -Destination "$targetDir/program_options" -Force
-              Write-Host "Moved program_options successfully."
-          } else {
-              Write-Host "Directory program_options does not exist."
-          }
-
-          if (Test-Path $systemPath) {
-              Move-Item -Path $systemPath -Destination "$targetDir/system" -Force
-              Write-Host "Moved system successfully."
-          } else {
-              Write-Host "Directory system does not exist."
-          }
-
-          if (Test-Path $filesystemPath) {
-              Move-Item -Path $filesystemPath -Destination "$targetDir/filesystem" -Force
-              Write-Host "Moved filesystem successfully."
-          } else {
-              Write-Host "Directory filesystem does not exist."
-          }
-
-          # Clean up temporary files
-          Remove-Item "boost.zip"
-          Remove-Item -Recurse -Force $tempDir.FullName
-
-      - name: Build Boost (Windows)
-        run: |
-          cd ./boost/boost_1_86_0
-          .\bootstrap.bat
-          .\b2 install --prefix=./install --build-dir=./build
-
-      - name: Configure CMake with Local Boost (Windows)
-        run: |
-          cmake -S . -B build -DPATCH_VERSION=${{ github.run_number }} -DBOOST_ROOT=./install -DCMAKE_CXX_FLAGS="-std=c++17" --no-warn-unused-cli -G "Visual Studio 17 2022"
-
-      - name: Build Project (Windows)
-        run: cmake --build build --config Release --verbose
-
-      - name: Package Project (Windows)
-        run: cmake --build build --target package --config Release --verbose
-
-      - name: List Files in Build Directory
-        run: dir build
-
-      - name: Create Release (Windows)
-        id: create_release_windows
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: windows${{ github.run_number }}
-          release_name: Release ${{ github.run_number }} (Windows)
-          draft: false
-          prerelease: false
-
-      - name: Upload Release Asset (Windows)
-        id: upload-release-asset-windows
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release_windows.outputs.upload_url }}
-          asset_path: ./build/Release/boboost-0.0.${{ github.run_number }}-win64.zip # Adjust path if needed
-          asset_name: boboost-0.0.${{ github.run_number }}-win64.zip # Adjust name if needed
-
+    - uses: actions/checkout@v3
+      with:
+        submodules: true
+    # Устанавливаем boost с помощью Homebrew
+    - run: brew install boost
+    - run: cmake . -DPATCH_VERSION=${{ github.run_number }} -DCMAKE_INSTALL_PREFIX=`pwd`/install
+    - run: cmake --build . --target install # Install first
+    # Создаем пакет
+    - run: cmake --build . --target package
+    - run: cpack -G ZIP # Explicitly specify ZIP generator
+    - name: Run Tests
+      run: |
+        ctest --output-on-failure || exit 1
+    - name: Create Release (MacOS)
+      id: create_release_macos
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.run_number }}
+        release_name: Release ${{ github.run_number }} (MacOS)
+        draft: false
+        prerelease: false
+    - name: Upload Release Asset (MacOS)
+      id: upload-release-asset-macos
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release_macos.outputs.upload_url }}
+        asset_path: ./boboost-0.0.${{ github.run_number }}-Darwin.zip #Path changed
+        asset_name: boboost-0.0.${{ github.run_number }}-Darwin.zip
+        asset_content_type: application/zip
