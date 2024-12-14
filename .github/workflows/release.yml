@@ -92,12 +92,31 @@ jobs:
           Add-Type -AssemblyName System.IO.Compression.FileSystem
           # Create a temporary directory for extraction
           $tempDir = New-Item -ItemType Directory -Path "./temp_boost"
-          # Extract only the necessary directories
+          # Extract all contents
           [System.IO.Compression.ZipFile]::ExtractToDirectory("boost.zip", $tempDir.FullName)
-          # Move only the needed directories to the final destination
-          Move-Item "$tempDir/boost_1_86_0/boost/program_options" "./boost/program_options" -Force
-          Move-Item "$tempDir/boost_1_86_0/boost/system" "./boost/system" -Force
-          Move-Item "$tempDir/boost_1_86_0/boost/filesystem" "./boost/filesystem" -Force
+          
+          # List contents of the temporary directory for debugging
+          Get-ChildItem -Recurse -Path $tempDir.FullName
+
+          # Move only the needed directories to the final destination if they exist
+          if (Test-Path "$tempDir/boost_1_86_0/boost/program_options") {
+              Move-Item "$tempDir/boost_1_86_0/boost/program_options" "./boost/program_options" -Force
+          } else {
+              Write-Host "Directory program_options does not exist."
+          }
+
+          if (Test-Path "$tempDir/boost_1_86_0/boost/system") {
+              Move-Item "$tempDir/boost_1_86_0/boost/system" "./boost/system" -Force
+          } else {
+              Write-Host "Directory system does not exist."
+          }
+
+          if (Test-Path "$tempDir/boost_1_86_0/boost/filesystem") {
+              Move-Item "$tempDir/boost_1_86_0/boost/filesystem" "./boost/filesystem" -Force
+          } else {
+              Write-Host "Directory filesystem does not exist."
+          }
+
           # Clean up temporary files
           Remove-Item "boost.zip"
           Remove-Item -Recurse -Force $tempDir.FullName
