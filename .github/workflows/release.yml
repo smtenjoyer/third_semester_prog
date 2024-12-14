@@ -93,8 +93,8 @@ jobs:
 
       - name: Build Boost (Windows)
         run: |
-          cd boost/boost_1_86_0
-          bootstrap.bat
+          cd ./boost/boost_1_86_0
+          .\bootstrap.bat
           .\b2 install --prefix=./install
 
       - name: Configure CMake with Local Boost (Windows)
