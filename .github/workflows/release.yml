@@ -75,8 +75,8 @@ jobs:
           asset_name: boboost-0.0.${{ github.run_number }}-Linux.deb
           asset_content_type: application/vnd.debian.binary-package
 
-  build_ubuntu:
-    runs-on: ubuntu-latest
+  build_macos:
+    runs-on: macos-latest
     permissions: write-all
 
     steps:
@@ -86,7 +86,7 @@ jobs:
           submodules: true
 
       - name: Install Dependencies
-        run: sudo apt-get update && sudo apt-get install libboost-test-dev -y
+        run: brew install boost
 
       - name: List Files for debugging purposes
         run: |
@@ -128,17 +128,17 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: v${{ github.run_number }}
-          release_name: Release ${{ github.run_number }} (Ubuntu)
+          release_name: Release ${{ github.run_number }} (macOS)
           draft: false
           prerelease: false
 
       - name: Upload Release Asset
-        id: upload-release-asset-ubuntu
+        id: upload-release-asset-macos
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./build/boboost-0.0.${{ github.run_number }}-Linux.deb
-          asset_name: boboost-0.0.${{ github.run_number }}-Linux.deb
-          asset_content_type: application/vnd.debian.binary-package
+          asset_path: ./build/boboost-0.0.${{ github.run_number }}-macos.deb # Adjust the asset path if necessary
+          asset_name: boboost-0.0.${{ github.run_number }}-macos.deb # Adjust the asset name if necessary
+          asset_content_type: application/vnd.debian.binary-package # Change this to the appropriate content type for macOS, e.g., application/octet-stream if necessary.
