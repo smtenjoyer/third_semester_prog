@@ -101,12 +101,16 @@ jobs:
         run: |
           cd boost
           ./bootstrap.sh --with-libraries=program_options,system,filesystem
-          ./b2 install --prefix=$(pwd)/boost/install  # Install to a subdirectory within boost
+          ./b2 install --prefix=$(pwd)/boost/install
           cd ..
+
+      - name: Get Absolute Path to Boost Install
+        id: get-boost-path
+        run: echo "::set-output name=boost_path::$(pwd)/boost/install"
 
       - name: Configure CMake with Local Boost
         run: |
-          cmake -S . -B build -DPATCH_VERSION=${{ github.run_number }} -DCMAKE_PREFIX_PATH=$(pwd)/boost/install -DCMAKE_CXX_FLAGS="-std=c++17" --no-warn-unused-cli
+          cmake -S . -B build -DPATCH_VERSION=${{ github.run_number }} -DCMAKE_PREFIX_PATH=${{ steps.get-boost-path.outputs.boost_path }} -DCMAKE_CXX_FLAGS="-std=c++17" --no-warn-unused-cli
 
       - name: Build Project
         run: cmake --build build --verbose
@@ -116,6 +120,7 @@ jobs:
 
       - name: List Files in Build Directory
         run: ls -R build
+        
       - name: Create Release (MacOS)
         id: create_release_macos
         uses: actions/create-release@v1
