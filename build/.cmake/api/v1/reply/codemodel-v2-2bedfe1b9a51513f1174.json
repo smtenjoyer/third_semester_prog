@@ -7,7 +7,7 @@
 				{
 					"build" : ".",
 					"hasInstallRule" : true,
-					"jsonFile" : "directory-.-Debug-fda9b749d221d2117480.json",
+					"jsonFile" : "directory-.-Debug-060c01688f38abb7e1d9.json",
 					"minimumCMakeVersion" : 
 					{
 						"string" : "3.28"
@@ -40,7 +40,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "boboost::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-boboost-Debug-1c3703b7829a9e2eaeae.json",
+					"jsonFile" : "target-boboost-Debug-ae2ce60c07640cbc96d9.json",
 					"name" : "boboost",
 					"projectIndex" : 0
 				}

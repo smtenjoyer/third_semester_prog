@@ -39,25 +39,19 @@
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 11,
+				"line" : 14,
 				"parent" : 0
 			},
 			{
 				"command" : 1,
 				"file" : 0,
-				"line" : 16,
-				"parent" : 0
-			},
-			{
-				"command" : 1,
-				"file" : 0,
-				"line" : 33,
+				"line" : 17,
 				"parent" : 0
 			},
 			{
 				"command" : 2,
 				"file" : 0,
-				"line" : 12,
+				"line" : 15,
 				"parent" : 0
 			},
 			{
@@ -68,55 +62,55 @@
 			},
 			{
 				"file" : 5,
-				"parent" : 5
+				"parent" : 4
 			},
 			{
 				"command" : 7,
 				"file" : 5,
 				"line" : 128,
-				"parent" : 6
+				"parent" : 5
 			},
 			{
 				"command" : 5,
 				"file" : 5,
 				"line" : 67,
-				"parent" : 7
+				"parent" : 6
 			},
 			{
 				"file" : 4,
-				"parent" : 8
+				"parent" : 7
 			},
 			{
 				"command" : 6,
 				"file" : 4,
 				"line" : 28,
-				"parent" : 9
+				"parent" : 8
 			},
 			{
 				"command" : 5,
 				"file" : 3,
 				"line" : 76,
-				"parent" : 10
+				"parent" : 9
 			},
 			{
 				"file" : 2,
-				"parent" : 11
+				"parent" : 10
 			},
 			{
 				"command" : 4,
 				"file" : 2,
 				"line" : 28,
-				"parent" : 12
+				"parent" : 11
 			},
 			{
 				"file" : 1,
-				"parent" : 13
+				"parent" : 12
 			},
 			{
 				"command" : 3,
 				"file" : 1,
 				"line" : 61,
-				"parent" : 14
+				"parent" : 13
 			}
 		]
 	},
@@ -126,33 +120,33 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "-g"
+					"fragment" : "-g -std=gnu++17"
 				}
 			],
 			"defines" : 
 			[
 				{
-					"backtrace" : 4,
+					"backtrace" : 3,
 					"define" : "BOOST_CONTAINER_DYN_LINK"
 				},
 				{
-					"backtrace" : 4,
+					"backtrace" : 3,
 					"define" : "BOOST_CONTAINER_NO_LIB"
 				},
 				{
-					"backtrace" : 4,
+					"backtrace" : 3,
 					"define" : "BOOST_FILESYSTEM_DYN_LINK=1"
 				},
 				{
-					"backtrace" : 4,
+					"backtrace" : 3,
 					"define" : "BOOST_FILESYSTEM_NO_LIB"
 				},
 				{
-					"backtrace" : 4,
+					"backtrace" : 3,
 					"define" : "BOOST_PROGRAM_OPTIONS_DYN_LINK"
 				},
 				{
-					"backtrace" : 4,
+					"backtrace" : 3,
 					"define" : "BOOST_PROGRAM_OPTIONS_NO_LIB"
 				}
 			],
@@ -161,20 +155,20 @@
 			{
 				"backtraces" : 
 				[
-					4,
-					4,
-					4,
-					4,
-					4,
-					4,
-					4,
-					4,
-					4,
-					4,
-					4,
-					4,
-					4,
-					4
+					3,
+					3,
+					3,
+					3,
+					3,
+					3,
+					3,
+					3,
+					3,
+					3,
+					3,
+					3,
+					3,
+					3
 				],
 				"standard" : "17"
 			},
@@ -191,10 +185,6 @@
 		[
 			{
 				"backtrace" : 2,
-				"path" : "bin"
-			},
-			{
-				"backtrace" : 3,
 				"path" : "bin"
 			}
 		],
@@ -216,17 +206,17 @@
 				"role" : "flags"
 			},
 			{
-				"backtrace" : 4,
+				"backtrace" : 3,
 				"fragment" : "C:\\msys64\\mingw64\\lib\\libboost_program_options-mt.dll.a",
 				"role" : "libraries"
 			},
 			{
-				"backtrace" : 4,
+				"backtrace" : 3,
 				"fragment" : "C:\\msys64\\mingw64\\lib\\libboost_filesystem-mt.dll.a",
 				"role" : "libraries"
 			},
 			{
-				"backtrace" : 15,
+				"backtrace" : 14,
 				"fragment" : "C:\\msys64\\mingw64\\lib\\libboost_container-mt.dll.a",
 				"role" : "libraries"
 			},
