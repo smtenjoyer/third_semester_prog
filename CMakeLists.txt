@@ -3,7 +3,13 @@ set(PATCH_VERSION "1" CACHE INTERNAL "Patch version")
 set(PROJECT_VESRION 0.0.${PATCH_VERSION})
 project(boboost VERSION ${PROJECT_VESRION})
 
+
+
 find_package(Boost 1.86.0 REQUIRED COMPONENTS program_options system filesystem)
+set(BOOST_ROOT "${CMAKE_CURRENT_BINARY_DIR}/boost/install") 
+set(BOOST_ROOT "${CMAKE_CURRENT_BINARY_DIR}/boost/install") #Note: this is relative to the build folder.
+set(Boost_INCLUDE_DIRS "${BOOST_ROOT}/include")
+set(Boost_LIBRARY_DIRS "${BOOST_ROOT}/lib") #Adjust path if necessary
 set(CMAKE_CXX_STANDARD 17)
 add_executable(boboost main.cpp)
 target_link_libraries(boboost Boost::program_options Boost::system Boost::filesystem)

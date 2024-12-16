@@ -100,8 +100,8 @@ jobs:
       - name: Build Boost
         run: |
           cd boost
-          ./bootstrap.sh --with-libraries=program_options,system,filesystem
-          ./b2 install --prefix=$(pwd)/boost/install
+          ./bootstrap.sh --with-libraries=program_options,system,filesystem --with-toolset=clang
+    ./b2 install --prefix=$(pwd)/boost/install --layout=system --with-cmake
           cd ..
 
       - name: Get Absolute Path to Boost Install
@@ -120,7 +120,6 @@ jobs:
 
       - name: List Files in Build Directory
         run: ls -R build
-        
       - name: Create Release (MacOS)
         id: create_release_macos
         uses: actions/create-release@v1
