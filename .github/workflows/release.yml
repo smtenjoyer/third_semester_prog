@@ -106,7 +106,7 @@ jobs:
 
       - name: Configure CMake with Local Boost
         run: |
-          cmake -S . -B build -DPATCH_VERSION=${{ github.run_number }} -DBOOST_ROOT=$(pwd)/boost/install -DCMAKE_CXX_FLAGS="-std=c++17" --no-warn-unused-cli
+          cmake -S . -B build -DPATCH_VERSION=${{ github.run_number }} -DCMAKE_PREFIX_PATH=$(pwd)/boost/install -DCMAKE_CXX_FLAGS="-std=c++17" --no-warn-unused-cli
 
       - name: Build Project
         run: cmake --build build --verbose
