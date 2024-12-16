@@ -20,7 +20,8 @@
 			"include",
 			"find_package",
 			"find_dependency",
-			"boostcfg_find_component"
+			"boostcfg_find_component",
+			"target_compile_options"
 		],
 		"files" : 
 		[
@@ -46,13 +47,13 @@
 			{
 				"command" : 1,
 				"file" : 0,
-				"line" : 13,
+				"line" : 16,
 				"parent" : 0
 			},
 			{
 				"command" : 1,
 				"file" : 0,
-				"line" : 30,
+				"line" : 33,
 				"parent" : 0
 			},
 			{
@@ -128,6 +129,12 @@
 				"file" : 1,
 				"line" : 61,
 				"parent" : 16
+			},
+			{
+				"command" : 8,
+				"file" : 0,
+				"line" : 10,
+				"parent" : 0
 			}
 		]
 	},
@@ -138,6 +145,14 @@
 			[
 				{
 					"fragment" : "-g"
+				},
+				{
+					"backtrace" : 18,
+					"fragment" : "-march=native"
+				},
+				{
+					"backtrace" : 18,
+					"fragment" : "-O3"
 				}
 			],
 			"defines" : 
