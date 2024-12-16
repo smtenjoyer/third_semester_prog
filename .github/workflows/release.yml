@@ -87,27 +87,11 @@ jobs:
       - name: Install Dependencies
         run: brew update && brew install boost
 
-      - name: Cache CMake Build
-        uses: actions/cache@v3
-        with:
-          path: build
-          key: ${{ runner.os }}-cmake-${{ hashFiles('**/CMakeLists.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-cmake-
-
-      - name: Make build directory
-        run: mkdir -p build
-
       - name: Clean Build Directory
-        run: |
-          rm -rf build  # This is better than rm -rf build because it's a more careful way of cleaning the directory.
+        run: rm -rf build || true # Ensure clean build directory
 
-      - name: Make build directory
-        run: mkdir -p build
-
-      - name: Configure CMake (with manually built Boost)
+      - name: Configure CMake
         run: |
-          export CMAKE_PREFIX_PATH="./boost/install"
           cmake -S . -B build -DPATCH_VERSION=${{ github.run_number }} -DCMAKE_CXX_STANDARD=17 -DCMAKE_CXX_STANDARD_REQUIRED=ON
 
       - name: Build Project
