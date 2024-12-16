@@ -90,6 +90,9 @@ jobs:
       - name: Clean Build Directory
         run: rm -rf build
 
+      - name: Install CMake
+        run: brew install cmake
+
       - name: Download Boost 1.86.0
         run: |
           wget https://boostorg.jfrog.io/artifactory/main/release/1.86.0/source/boost_1_86_0.tar.bz2
@@ -100,7 +103,7 @@ jobs:
         run: |
           cd boost
           ./bootstrap.sh --with-libraries=program_options,system,filesystem --with-toolset=clang
-          ./b2 install --prefix=$(pwd)/boost/install --layout=system --with-cmake # Added --with-cmake
+          ./b2 install --prefix=$(pwd)/boost/install --layout=system # Removed --with-cmake
           cd ..
 
       - name: Configure CMake
