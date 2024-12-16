@@ -78,7 +78,6 @@ jobs:
   build_macos:
     runs-on: macos-latest
     permissions: write-all
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -97,20 +96,16 @@ jobs:
           tar -xvjf boost_1_86_0.tar.bz2
           mv boost_1_86_0 boost
 
-      - name: Build Boost
+      - name: Build Boost with CMake Support
         run: |
           cd boost
           ./bootstrap.sh --with-libraries=program_options,system,filesystem --with-toolset=clang
-          ./b2 install --prefix=$(pwd)/boost/install --layout=system --with-cmake
+          ./b2 install --prefix=$(pwd)/boost/install --layout=system --with-cmake # Added --with-cmake
           cd ..
 
-      - name: Get Absolute Path to Boost Install
-        id: get-boost-path
-        run: echo "::set-output name=boost_path::$(pwd)/boost/install"
-
-      - name: Configure CMake with Local Boost
+      - name: Configure CMake
         run: |
-          cmake -S . -B build -DPATCH_VERSION=${{ github.run_number }} -DCMAKE_PREFIX_PATH=${{ steps.get-boost-path.outputs.boost_path }} -DCMAKE_CXX_FLAGS="-std=c++17" --no-warn-unused-cli
+          cmake -S . -B build -DPATCH_VERSION=${{ github.run_number }} -DCMAKE_CXX_FLAGS="-std=c++17" --no-warn-unused-cli
 
       - name: Build Project
         run: cmake --build build --verbose
@@ -120,8 +115,10 @@ jobs:
 
       - name: List Files in Build Directory
         run: ls -R build
+
       - name: Create Release (MacOS)
         id: create_release_macos
+
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -130,6 +127,7 @@ jobs:
           release_name: Release ${{ github.run_number }} (MacOS)
           draft: false
           prerelease: false
+
       - name: Upload Release Asset (MacOS)
         id: upload-release-asset-macos
         uses: actions/upload-release-asset@v1
