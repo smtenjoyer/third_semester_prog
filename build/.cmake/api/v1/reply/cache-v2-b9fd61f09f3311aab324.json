@@ -1426,6 +1426,18 @@
 			"value" : "[C:/msys64/mingw64/lib/cmake/Boost-1.86.0/BoostConfig.cmake][cfound components: program_options system filesystem ][v1.86.0(1.86.0)]"
 		},
 		{
+			"name" : "FIND_PACKAGE_MESSAGE_DETAILS_Threads",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "Details about finding Threads"
+				}
+			],
+			"type" : "INTERNAL",
+			"value" : "[TRUE][v()]"
+		},
+		{
 			"name" : "PATCH_VERSION",
 			"properties" : 
 			[

@@ -29,8 +29,7 @@
 			"C:/msys64/mingw64/lib/cmake/boost_lexical_cast-1.86.0/boost_lexical_cast-config.cmake",
 			"C:/msys64/mingw64/share/cmake/Modules/CMakeFindDependencyMacro.cmake",
 			"C:/msys64/mingw64/lib/cmake/boost_program_options-1.86.0-shared/boost_program_options-config.cmake",
-			"C:/msys64/mingw64/lib/cmake/Boost-1.86.0/BoostConfig.cmake",
-			"C:/msys64/mingw64/share/cmake/Modules/FindBoost.cmake"
+			"C:/msys64/mingw64/lib/cmake/Boost-1.86.0/BoostConfig.cmake"
 		],
 		"nodes" : 
 		[
@@ -40,94 +39,84 @@
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 8,
+				"line" : 11,
 				"parent" : 0
 			},
 			{
 				"command" : 1,
 				"file" : 0,
-				"line" : 13,
+				"line" : 16,
 				"parent" : 0
 			},
 			{
 				"command" : 1,
 				"file" : 0,
-				"line" : 31,
+				"line" : 33,
 				"parent" : 0
 			},
 			{
 				"command" : 2,
 				"file" : 0,
-				"line" : 9,
+				"line" : 12,
 				"parent" : 0
 			},
 			{
 				"command" : 5,
 				"file" : 0,
-				"line" : 6,
+				"line" : 9,
 				"parent" : 0
 			},
 			{
-				"file" : 6,
-				"parent" : 5
-			},
-			{
-				"command" : 5,
-				"file" : 6,
-				"line" : 594,
-				"parent" : 6
-			},
-			{
 				"file" : 5,
-				"parent" : 7
+				"parent" : 5
 			},
 			{
 				"command" : 7,
 				"file" : 5,
 				"line" : 128,
-				"parent" : 8
+				"parent" : 6
 			},
 			{
 				"command" : 5,
 				"file" : 5,
 				"line" : 67,
-				"parent" : 9
+				"parent" : 7
 			},
 			{
 				"file" : 4,
-				"parent" : 10
+				"parent" : 8
 			},
 			{
 				"command" : 6,
 				"file" : 4,
 				"line" : 28,
-				"parent" : 11
+				"parent" : 9
 			},
 			{
 				"command" : 5,
 				"file" : 3,
 				"line" : 76,
-				"parent" : 12
+				"parent" : 10
 			},
 			{
 				"file" : 2,
-				"parent" : 13
+				"parent" : 11
 			},
 			{
 				"command" : 4,
 				"file" : 2,
 				"line" : 28,
-				"parent" : 14
+				"parent" : 12
 			},
 			{
 				"file" : 1,
-				"parent" : 15
+				"parent" : 13
 			},
 			{
 				"command" : 3,
 				"file" : 1,
 				"line" : 61,
-				"parent" : 16
+				"parent" : 14
 			}
 		]
 	},
@@ -237,7 +226,7 @@
 				"role" : "libraries"
 			},
 			{
-				"backtrace" : 17,
+				"backtrace" : 15,
 				"fragment" : "C:\\msys64\\mingw64\\lib\\libboost_container-mt.dll.a",
 				"role" : "libraries"
 			},

@@ -1,9 +1,12 @@
 cmake_minimum_required(VERSION 3.28)
+
 set(PATCH_VERSION "1" CACHE INTERNAL "Patch version")
 set(PROJECT_VESRION 0.0.${PATCH_VERSION})
 project(boboost VERSION ${PROJECT_VESRION})
 
-find_package(Boost 1.86.0 REQUIRED COMPONENTS program_options system filesystem)
+# cmake_policy(SET CMP0167 NEW) # Set policy for Boost finding
+
+find_package(Boost 1.86.0 REQUIRED COMPONENTS program_options system filesystem NO_MODULE)
 set(CMAKE_CXX_STANDARD 17)
 add_executable(boboost main.cpp)
 target_link_libraries(boboost Boost::program_options Boost::system Boost::filesystem)
@@ -12,8 +15,7 @@ set(CXX_STANDARD_REQUIRED ON)
 
 install(TARGETS boboost DESTINATION bin)
 
-set(CPACK_PROJECT_NAME laba4)
-set(CPACK_GENERATOR "ZIP")
+set(CPACK_PROJECT_NAME boboost)
 set(CPACK_GENERATOR "ZIP;DEB")
 set(CPACK_PACKAGE_VERSION "${PROJECT_VERSION}")
 
