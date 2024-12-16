@@ -84,49 +84,39 @@ jobs:
         with:
           submodules: true
 
-      - name: List Files for debugging purposes
-        run: ls -R
+      - name: Install Dependencies
+        run: brew update && brew install boost
 
-      - name: Clean Build Directory
-        run: rm -rf build
+      - name: Cache CMake Build
+        uses: actions/cache@v3
+        with:
+          path: build
+          key: ${{ runner.os }}-cmake-${{ hashFiles('**/CMakeLists.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-cmake-
 
-      - name: Install CMake
-        run: brew install cmake
-
-      - name: Download Boost 1.86.0
-        run: |
-          wget https://boostorg.jfrog.io/artifactory/main/release/1.86.0/source/boost_1_86_0.tar.bz2
-          tar -xvjf boost_1_86_0.tar.bz2
-          mv boost_1_86_0 boost
-
-      - name: Build Boost with CMake Support
-        run: |
-          cd boost
-          ./bootstrap.sh --with-libraries=program_options,system,filesystem --with-toolset=clang
-          ./b2 install --prefix=$(pwd)/boost/install --layout=system # Removed --with-cmake
-          cd ..
+      - name: Make build directory
+        run: mkdir -p build
 
       - name: Configure CMake
-        run: |
-          cmake -S . -B build -DPATCH_VERSION=${{ github.run_number }} -DCMAKE_CXX_FLAGS="-std=c++17" --no-warn-unused-cli
+        run: cmake -S . -B build -DPATCH_VERSION=${{ github.run_number }} -DCMAKE_CXX_STANDARD=17 -DCMAKE_CXX_STANDARD_REQUIRED=ON
 
       - name: Build Project
         run: cmake --build build --verbose
 
       - name: Package Project
-        run: cmake --build build --target package --verbose
+        run: cmake --build build --target package --config Release --verbose
 
       - name: List Files in Build Directory
         run: ls -R build
 
       - name: Create Release (MacOS)
         id: create_release_macos
-
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.run_number }}
+          tag_name: v${{ github.run_number }}
           release_name: Release ${{ github.run_number }} (MacOS)
           draft: false
           prerelease: false
@@ -138,6 +128,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release_macos.outputs.upload_url }}
-          asset_path: ./boboost-0.0.${{ github.run_number }}-Darwin.zip
+          asset_path: ./build/boboost-0.0.${{ github.run_number }}-Darwin.zip # Corrected path
           asset_name: boboost-0.0.${{ github.run_number }}-Darwin.zip
           asset_content_type: application/zip
