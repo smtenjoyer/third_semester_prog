@@ -1,11 +1,9 @@
 
 #include <iostream>
+#include <fstream>
 #include <boost/filesystem.hpp>
 #include <boost/program_options.hpp>
-#include <iostream>
 #include <boost/regex.hpp>
-#include <iostream>
-#include <fstream>
 #include <boost/crc.hpp> 
 
 using namespace boost::filesystem;

@@ -6,52 +6,12 @@
 			"properties" : 
 			[
 				{
-					"name" : "ADVANCED",
-					"value" : "1"
-				},
-				{
 					"name" : "HELPSTRING",
 					"value" : "The directory containing a CMake configuration file for Boost."
 				}
 			],
 			"type" : "PATH",
 			"value" : "C:/msys64/mingw64/lib/cmake/Boost-1.86.0"
-		},
-		{
-			"name" : "Boost_FILESYSTEM_LIBRARY_RELEASE",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : ""
-				}
-			],
-			"type" : "STRING",
-			"value" : "C:/msys64/mingw64/bin/libboost_filesystem-mt.dll"
-		},
-		{
-			"name" : "Boost_INCLUDE_DIR",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "Path to a file."
-				}
-			],
-			"type" : "PATH",
-			"value" : "C:/msys64/mingw64/include"
-		},
-		{
-			"name" : "Boost_PROGRAM_OPTIONS_LIBRARY_RELEASE",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : ""
-				}
-			],
-			"type" : "STRING",
-			"value" : "C:/msys64/mingw64/bin/libboost_program_options-mt.dll"
 		},
 		{
 			"name" : "CMAKE_ADDR2LINE",
@@ -1412,18 +1372,6 @@
 			],
 			"type" : "BOOL",
 			"value" : "ON"
-		},
-		{
-			"name" : "FIND_PACKAGE_MESSAGE_DETAILS_Boost",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "Details about finding Boost"
-				}
-			],
-			"type" : "INTERNAL",
-			"value" : "[C:/msys64/mingw64/lib/cmake/Boost-1.86.0/BoostConfig.cmake][cfound components: program_options system filesystem ][v1.86.0(1.86.0)]"
 		},
 		{
 			"name" : "FIND_PACKAGE_MESSAGE_DETAILS_Threads",

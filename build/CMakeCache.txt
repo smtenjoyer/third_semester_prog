@@ -17,13 +17,6 @@
 //The directory containing a CMake configuration file for Boost.
 Boost_DIR:PATH=C:/msys64/mingw64/lib/cmake/Boost-1.86.0
 
-Boost_FILESYSTEM_LIBRARY_RELEASE:STRING=C:/msys64/mingw64/bin/libboost_filesystem-mt.dll
-
-//Path to a file.
-Boost_INCLUDE_DIR:PATH=C:/msys64/mingw64/include
-
-Boost_PROGRAM_OPTIONS_LIBRARY_RELEASE:STRING=C:/msys64/mingw64/bin/libboost_program_options-mt.dll
-
 //Path to a program.
 CMAKE_ADDR2LINE:FILEPATH=C:/msys64/mingw64/bin/addr2line.exe
 
@@ -412,8 +405,6 @@ boost_winapi_DIR:PATH=C:/msys64/mingw64/lib/cmake/boost_winapi-1.86.0
 # INTERNAL cache entries
 ########################
 
-//ADVANCED property for variable: Boost_DIR
-Boost_DIR-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_ADDR2LINE
 CMAKE_ADDR2LINE-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_AR
@@ -574,8 +565,6 @@ CMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1
 CPACK_SOURCE_7Z-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CPACK_SOURCE_ZIP
 CPACK_SOURCE_ZIP-ADVANCED:INTERNAL=1
-//Details about finding Boost
-FIND_PACKAGE_MESSAGE_DETAILS_Boost:INTERNAL=[C:/msys64/mingw64/lib/cmake/Boost-1.86.0/BoostConfig.cmake][cfound components: program_options system filesystem ][v1.86.0(1.86.0)]
 //Details about finding Threads
 FIND_PACKAGE_MESSAGE_DETAILS_Threads:INTERNAL=[TRUE][v()]
 //Patch version
