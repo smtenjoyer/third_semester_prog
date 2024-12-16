@@ -84,18 +84,12 @@ jobs:
         with:
           submodules: true
 
-      - name: Install Dependencies
-        run: brew update && brew install boost
-
-      - name: Clean Build Directory
-        run: rm -rf build || true # Ensure clean build directory
-
-      - name: Configure CMake
-        run: |
-          cmake -S . -B build -DPATCH_VERSION=${{ github.run_number }} -DCMAKE_CXX_STANDARD=17 -DCMAKE_CXX_STANDARD_REQUIRED=ON
-
-      - name: Build Project
-        run: cmake --build build --verbose
+      - run: brew install boost
+      - run: cmake . -DPATCH_VERSION=${{ github.run_number }} -DCMAKE_INSTALL_PREFIX=`pwd`/install
+      - run: cmake --build . --target install # Install first
+      # Создаем пакет
+      - run: cmake --build . --target package
+      - run: cpack -G ZIP # Explicitly specify ZIP generator
 
       - name: Package Project
         run: cmake --build build --target package --config Release --verbose
