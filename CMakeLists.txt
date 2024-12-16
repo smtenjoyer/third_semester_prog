@@ -7,17 +7,14 @@ find_package(Boost 1.86.0 REQUIRED COMPONENTS program_options system filesystem)
 set(CMAKE_CXX_STANDARD 17)
 add_executable(boboost main.cpp)
 target_link_libraries(boboost Boost::program_options Boost::system Boost::filesystem)
-target_compile_options(boboost PUBLIC -march=native -O3) #example flags, adjust as necessary
 
 set(CXX_STANDARD_REQUIRED ON)
-
-enable_testing() # Moved this line above include(CPack)
 
 install(TARGETS boboost DESTINATION bin)
 
 set(CPACK_PROJECT_NAME laba4)
-
-set(CPACK_GENERATOR "ZIP") # Removed DEB generator
+set(CPACK_GENERATOR "ZIP")
+set(CPACK_GENERATOR "ZIP;DEB")
 set(CPACK_PACKAGE_VERSION "${PROJECT_VERSION}")
 
 set(CPACK_PACKAGE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")
@@ -26,6 +23,7 @@ set(CPACK_PACKAGE_VERSION_PATCH "${PROJECT_VERSION_PATCH}")
 
 set(CPACK_PACKAGE_CONTACT example@example.com)
 
+enable_testing()
 include(CPack)
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
