@@ -101,12 +101,12 @@ jobs:
           tar -xvjf boost_1_86_0.tar.bz2
           mv boost_1_86_0 boost
 
-      - name: Build Boost
+      - name: Build Boost Verbosely
         run: |
           cd boost
-          ./bootstrap.sh --with-libraries=program_options,system,filesystem # Specify needed libraries
-          ./b2 install --prefix=$(pwd)/install # Install to a subdirectory of boost
-          
+          ./bootstrap.sh --with-libraries=program_options,system,filesystem --prefix=$HOME/boost
+          ./b2 install --verbose
+          cd ..
 
       - name: Configure CMake with Local Boost
         run: |
