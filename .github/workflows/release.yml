@@ -84,9 +84,6 @@ jobs:
         uses: actions/checkout@v3
         with:
           submodules: true
-      
-      - name: Create Boost Install Directory
-        run: mkdir -p $HOME/boost
 
       - name: Install Dependencies
         run: brew install boost
@@ -104,11 +101,12 @@ jobs:
           tar -xvjf boost_1_86_0.tar.bz2
           mv boost_1_86_0 boost
 
-      - name: Build Boost Verbosely
+      - name: Build Boost
         run: |
           cd boost
-          ./bootstrap.sh --with-libraries=program_options,system,filesystem --prefix=$HOME/boost
-          ./b2 install --verbose
+          ./bootstrap.sh --with-libraries=program_options,system,filesystem # Specify needed libraries
+          ./b2 install --prefix=$(pwd)/install # Install to a subdirectory of boost
+          
 
       - name: Configure CMake with Local Boost
         run: |
