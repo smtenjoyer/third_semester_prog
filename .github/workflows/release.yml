@@ -101,7 +101,7 @@ jobs:
         run: |
           cd boost
           ./bootstrap.sh --with-libraries=program_options,system,filesystem --with-toolset=clang
-    ./b2 install --prefix=$(pwd)/boost/install --layout=system --with-cmake
+          ./b2 install --prefix=$(pwd)/boost/install --layout=system --with-cmake
           cd ..
 
       - name: Get Absolute Path to Boost Install
