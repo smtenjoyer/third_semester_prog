@@ -1,0 +1,10 @@
+D:/Programming/projects/programmingC/07/build/CMakeFiles/boboost.dir
+D:/Programming/projects/programmingC/07/build/CMakeFiles/package.dir
+D:/Programming/projects/programmingC/07/build/CMakeFiles/package_source.dir
+D:/Programming/projects/programmingC/07/build/CMakeFiles/test.dir
+D:/Programming/projects/programmingC/07/build/CMakeFiles/edit_cache.dir
+D:/Programming/projects/programmingC/07/build/CMakeFiles/rebuild_cache.dir
+D:/Programming/projects/programmingC/07/build/CMakeFiles/list_install_components.dir
+D:/Programming/projects/programmingC/07/build/CMakeFiles/install.dir
+D:/Programming/projects/programmingC/07/build/CMakeFiles/install/local.dir
+D:/Programming/projects/programmingC/07/build/CMakeFiles/install/strip.dir
