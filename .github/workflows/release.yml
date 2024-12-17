@@ -102,18 +102,18 @@ jobs:
           cd boost/
           echo "using boost : 1.86.0, system ;" > user-config.jam
           cd ..
-          cmake -S . -B build -DPATCH_VERSION=${{ github.run_number }} -DBOOST_ROOT=$(pwd)/boost -DCMAKE_OSX_DEPLOYMENT_TARGET=11.0
+          cmake -S . -B build -DPATCH_VERSION=${{ github.run_number }} -DBOOST_ROOT=$(pwd)/boost -DCMAKE_OSX_DEPLOYMENT_TARGET=11.0 -DCMAKE_GENERATOR=ZIP # Changed to ZIP generator
 
       - name: Build Project
         run: cmake --build build
 
       - name: Package Project
-        run: cmake --build build --target package --config Release -DCMAKE_GENERATOR="ZIP"
+        run: cmake --build build --target package --config Release # CPack will use ZIP generator
 
-      - name: Create DMG
-        run: hdiutil create -volname "boboost-0.0.${{ github.run_number }}" -srcfolder build/products/macos -ov -format UDZO boboost-0.0.${{ github.run_number }}.dmg
+      - name: Create DMG (ZIP Generator)
+        run: hdiutil create -volname "boboost-0.0.${{ github.run_number }}" -srcfolder build/CPack/Packages/ZIP/boboost-0.0.${{ github.run_number }}.zip -ov -format UDZO boboost-0.0.${{ github.run_number }}.dmg
 
-      - name: Sign DMG
+      - name: Sign DMG (Optional - if code signing)
         run: codesign --verbose --deep --sign "${JAVA_CERTS}" --timestamp --entitlements entitlements.xml boboost-0.0.${{ github.run_number }}.dmg
 
       - name: Create Release
