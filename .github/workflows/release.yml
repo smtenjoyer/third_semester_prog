@@ -85,63 +85,54 @@ jobs:
         with:
           submodules: true
 
-      - name: Install Dependencies
-        # No direct equivalent to libboost-test-dev on Windows.  Boost will be downloaded separately.
-        #  You may need to install other dependencies based on your project's needs.  This is a placeholder.
+      - name: Download Boost 1.86.0 (Windows)
         run: |
-          choco install vcpkg -y
-
-      - name: List Files for debugging purposes
-        run: dir /s /b
-
-      - name: Clean Build Directory
-        run: rmdir /s /q build
-
-      - name: Download Boost 1.86.0
-        run: |
-          Invoke-WebRequest -Uri "https://boostorg.jfrog.io/artifactory/main/release/1.86.0/source/boost_1_86_0.tar.bz2" -OutFile "boost_1_86_0.tar.bz2"
+          Invoke-WebRequest -Uri "https://boostorg.jfrog.io/artifactory/main/release/1.86.0/source/boost_1_86_0.tar.bz2" -OutFile "boost_1_86_0.tar.bz2" 
+          if (Test-Path "boost_1_86_0.tar.bz2") {
+              Write-Host "File downloaded successfully. Size: $(Get-Item boost_1_86_0.tar.bz2).Length bytes"
+          } else {
+              Write-Host "Error: File download failed."
+          }
           tar -xvjf boost_1_86_0.tar.bz2
           mv boost_1_86_0 boost
 
-      - name: Build Boost (using vcpkg)
+      - name: Build Boost (Windows)
         run: |
-          vcpkg install boost:x64-windows --triplet x64-windows
+          cd boost
+          .\bootstrap.bat --with-libraries=program_options,system,filesystem
+          .\b2 install --prefix=$(pwd)/install --toolset=msvc-14.42
+          cd ..
 
-      - name: Configure CMake with Local Boost (using vcpkg)
+      - name: Configure CMake with Local Boost (Windows)
         run: |
-          cmake -S . -B build -DPATCH_VERSION=${{ github.run_number }} -DCMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake -DCMAKE_CXX_FLAGS="-std:c++17" --no-warn-unused-cli
+          cmake -S . -B build -DPATCH_VERSION=${{ github.run_number }} -DBOOST_ROOT=./boost/install -DCMAKE_CXX_FLAGS="-std=c++17" --no-warn-unused-cli -G "Visual Studio 17 2022"
 
-      - name: Build Project
-        run: cmake --build build --verbose --config Release
+      - name: Build Project (Windows)
+        run: cmake --build build --config Release --verbose
 
-      - name: Package Project (assuming you have a suitable packaging mechanism)
-        # Replace with your actual packaging command.  This is a placeholder.
-        #  This example assumes a simple zip archive.  For more robust installers, consider using tools like Inno Setup or NSIS.
-        run: |
-          mkdir build\release
-          7z a build\release\boboost-0.0.${{ github.run_number }}-Windows.zip build\Release\*
+      - name: Package Project (Windows)
+        run: cmake --build build --target package --config Release --verbose
 
       - name: List Files in Build Directory
-        run: dir /s /b build
+        run: dir build
 
-      - name: Create Release
-        id: create_release
+      - name: Create Release (Windows)
+        id: create_release_windows
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: v${{ github.run_number }}
+          tag_name: windows${{ github.run_number }}
           release_name: Release ${{ github.run_number }} (Windows)
           draft: false
           prerelease: false
 
-      - name: Upload Release Asset
+      - name: Upload Release Asset (Windows)
         id: upload-release-asset-windows
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./build/release/boboost-0.0.${{ github.run_number }}-Windows.zip
-          asset_name: boboost-0.0.${{ github.run_number }}-Windows.zip
-          asset_content_type: application/zip
+          upload_url: ${{ steps.create_release_windows.outputs.upload_url }}
+          asset_path: ./build/Release/boboost-0.0.${{ github.run_number }}-win64.zip # Adjust path if needed
+          asset_name: boboost-0.0.${{ github.run_number }}-win64.zip # Adjust name if needed
