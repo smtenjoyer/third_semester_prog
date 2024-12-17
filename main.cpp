@@ -18,7 +18,7 @@ std::vector<uint32_t> calculate_file_hashes(const fs::path& filePath, size_t blo
       if (is_regular_file(filePath))
       {
         std::vector<uint32_t> hashBlocks; // Вектор для хранения хэшей блоков
-        std::ifstream file(filePath, std::ios::binary); // Открываем файл в бинарном режиме
+        std::ifstream file(filePath.string(), std::ios::binary); // Открываем файл в бинарном режиме
         std::string buffer(blockSize, '\0'); // Буфер для чтения блоков
 
     while (file.read(&buffer[0], blockSize) || file.gcount() > 0) { // чтение данных из файла блоками
