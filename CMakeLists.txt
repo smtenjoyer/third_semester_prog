@@ -18,8 +18,16 @@ install(TARGETS boboost DESTINATION bin) # Installs the boboost executable to th
 
 # CPack configuration
 set(CPACK_PROJECT_NAME boboost)
-set(CPACK_GENERATOR "ZIP;DEB")
 set(CPACK_PACKAGE_VERSION "${PROJECT_VERSION}")
+
+# Conditional generator selection based on the operating system
+if(APPLE)
+    set(CPACK_GENERATOR "Bundle") # Or "DragNDrop" for a more user-friendly installer
+    set(CPACK_MACOSX_BUNDLE_EXECUTABLE "boboost") # Ensure this matches your executable name
+
+elseif(UNIX AND NOT APPLE) # Linux
+    set(CPACK_GENERATOR "DEB")
+endif()
 
 # Extract version components
 string(REPLACE "." ";" VERSION_LIST ${PROJECT_VERSION})

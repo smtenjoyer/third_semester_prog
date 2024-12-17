@@ -10,13 +10,20 @@
 # usually begin with CPACK_<GENNAME>_xxxx.
 
 
+set(CPACK_BINARY_7Z "OFF")
+set(CPACK_BINARY_IFW "OFF")
+set(CPACK_BINARY_INNOSETUP "OFF")
+set(CPACK_BINARY_NSIS "ON")
+set(CPACK_BINARY_NUGET "OFF")
+set(CPACK_BINARY_WIX "OFF")
+set(CPACK_BINARY_ZIP "OFF")
 set(CPACK_BUILD_SOURCE_DIRS "D:/Programming/projects/programmingC/07;D:/Programming/projects/programmingC/07/build")
 set(CPACK_CMAKE_GENERATOR "Ninja")
 set(CPACK_COMPONENT_UNSPECIFIED_HIDDEN "TRUE")
 set(CPACK_COMPONENT_UNSPECIFIED_REQUIRED "TRUE")
 set(CPACK_DEFAULT_PACKAGE_DESCRIPTION_FILE "C:/msys64/mingw64/share/cmake/Templates/CPack.GenericDescription.txt")
 set(CPACK_DEFAULT_PACKAGE_DESCRIPTION_SUMMARY "boboost built using CMake")
-set(CPACK_GENERATOR "ZIP;DEB")
+set(CPACK_GENERATOR "NSIS")
 set(CPACK_INNOSETUP_ARCHITECTURE "x64")
 set(CPACK_INSTALL_CMAKE_PROJECTS "D:/Programming/projects/programmingC/07/build;boboost;ALL;/")
 set(CPACK_INSTALL_PREFIX "C:/Program Files (x86)/boboost")
