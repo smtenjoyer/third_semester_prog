@@ -75,8 +75,8 @@ jobs:
           asset_name: boboost-0.0.${{ github.run_number }}-Linux.deb
           asset_content_type: application/vnd.debian.binary-package
 
-  build_macos:
-    runs-on: macos-latest
+  build_windows:
+    runs-on: windows-latest
     permissions: write-all
 
     steps:
@@ -86,38 +86,43 @@ jobs:
           submodules: true
 
       - name: Install Dependencies
-        run: brew install boost
-
-      - name: Clean Build Directory Thoroughly
+        # No direct equivalent to libboost-test-dev on Windows.  Boost will be downloaded separately.
+        #  You may need to install other dependencies based on your project's needs.  This is a placeholder.
         run: |
-          rm -rf build
-          rm -rf CMakeCache.txt  # Explicitly remove CMakeCache.txt
-          rm -rf CMakeFiles     # Explicitly remove CMakeFiles
+          choco install vcpkg -y
+
+      - name: List Files for debugging purposes
+        run: dir /s /b
+
+      - name: Clean Build Directory
+        run: rmdir /s /q build
 
       - name: Download Boost 1.86.0
         run: |
-          wget https://boostorg.jfrog.io/artifactory/main/release/1.86.0/source/boost_1_86_0.tar.bz2
+          Invoke-WebRequest -Uri "https://boostorg.jfrog.io/artifactory/main/release/1.86.0/source/boost_1_86_0.tar.bz2" -OutFile "boost_1_86_0.tar.bz2"
           tar -xvjf boost_1_86_0.tar.bz2
           mv boost_1_86_0 boost
 
-      - name: Configure CMake with Boost and ZIP Generator
+      - name: Build Boost (using vcpkg)
         run: |
-          cd boost/
-          echo "using boost : 1.86.0, system ;" > user-config.jam
-          cd ..
-          cmake -S . -B build -DPATCH_VERSION=${{ github.run_number }} -DBOOST_ROOT=$(pwd)/boost -DCMAKE_OSX_DEPLOYMENT_TARGET=11.0 -DCMAKE_GENERATOR=ZIP
+          vcpkg install boost:x64-windows --triplet x64-windows
+
+      - name: Configure CMake with Local Boost (using vcpkg)
+        run: |
+          cmake -S . -B build -DPATCH_VERSION=${{ github.run_number }} -DCMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake -DCMAKE_CXX_FLAGS="-std:c++17" --no-warn-unused-cli
 
       - name: Build Project
-        run: cmake --build build
+        run: cmake --build build --verbose --config Release
 
-      - name: Package Project
-        run: cmake --build build --target package --config Release
+      - name: Package Project (assuming you have a suitable packaging mechanism)
+        # Replace with your actual packaging command.  This is a placeholder.
+        #  This example assumes a simple zip archive.  For more robust installers, consider using tools like Inno Setup or NSIS.
+        run: |
+          mkdir build\release
+          7z a build\release\boboost-0.0.${{ github.run_number }}-Windows.zip build\Release\*
 
-      - name: Create DMG (ZIP Generator)
-        run: hdiutil create -volname "boboost-0.0.${{ github.run_number }}" -srcfolder build/CPack/Packages/ZIP/boboost-0.0.${{ github.run_number }}.zip -ov -format UDZO boboost-0.0.${{ github.run_number }}.dmg
-
-      - name: Sign DMG (Optional - if code signing)
-        run: codesign --verbose --deep --sign "${JAVA_CERTS}" --timestamp --entitlements entitlements.xml boboost-0.0.${{ github.run_number }}.dmg
+      - name: List Files in Build Directory
+        run: dir /s /b build
 
       - name: Create Release
         id: create_release
@@ -126,17 +131,17 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: v${{ github.run_number }}
-          release_name: Release ${{ github.run_number }} (macOS)
+          release_name: Release ${{ github.run_number }} (Windows)
           draft: false
           prerelease: false
 
       - name: Upload Release Asset
-        id: upload-release-asset-macos
+        id: upload-release-asset-windows
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./boboost-0.0.${{ github.run_number }}.dmg
-          asset_name: boboost-0.0.${{ github.run_number }}.dmg
-          asset_content_type: application/octet-stream
+          asset_path: ./build/release/boboost-0.0.${{ github.run_number }}-Windows.zip
+          asset_name: boboost-0.0.${{ github.run_number }}-Windows.zip
+          asset_content_type: application/zip
