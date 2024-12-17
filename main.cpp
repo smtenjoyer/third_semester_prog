@@ -6,11 +6,11 @@
 #include <boost/regex.hpp>
 #include <boost/crc.hpp> 
 
-using namespace boost::filesystem;
-using namespace boost::program_options;
+namespace fs = boost::filesystem;
+namespace po = boost::program_options;
 
 
-std::vector<uint32_t> calculate_file_hashes(const path& filePath, size_t blockSize)
+std::vector<uint32_t> calculate_file_hashes(const fs::path& filePath, size_t blockSize)
 {
   // std::cout << "file_processing" << std::endl;
   if (exists(filePath))
@@ -60,8 +60,8 @@ bool are_files_identical(const std::vector<uint32_t>& hash1, const std::vector<u
     return true; // Файлы идентичны
 }
 
-void process_file(const directory_entry& entry, const std::vector<path>& exclusions, size_t minSize, 
-                        const boost::regex& maskRegex, size_t blockSize, std::vector<std::pair<path, 
+void process_file(const fs::directory_entry& entry, const std::vector<fs::path>& exclusions, size_t minSize, 
+                        const boost::regex& maskRegex, size_t blockSize, std::vector<std::pair<fs::path, 
                         std::vector<uint32_t>>>& hashVector) {
     if (entry.is_regular_file()) {  
         // Проверка на исключения. если родительская директория в списке исключений, пропускаем файл
@@ -85,11 +85,11 @@ void process_file(const directory_entry& entry, const std::vector<path>& exclusi
 }
 
 // Функция для поиска дубликатов
-void find_duplicates(const std::vector<path>& directories, const std::vector<path>& exclusions, 
+void find_duplicates(const std::vector<fs::path>& directories, const std::vector<fs::path>& exclusions, 
                       size_t blockSize, size_t minSize, boost::regex& maskRegex, int scanLevel) {
     
-    std::unordered_map<std::string, std::set<path>> hashMap; // Словарь для хранения путей дубликатов
-    std::vector<std::pair<path, std::vector<uint32_t>>> hashVector; // Вектор для хранения всех обработанных файлов и их хэшей
+    std::unordered_map<std::string, std::set<fs::path>> hashMap; // Словарь для хранения путей дубликатов
+    std::vector<std::pair<fs::path, std::vector<uint32_t>>> hashVector; // Вектор для хранения всех обработанных файлов и их хэшей
 
     for (const auto& dir : directories) {
         if (!exists(dir) || !is_directory(dir)) {
@@ -99,12 +99,12 @@ void find_duplicates(const std::vector<path>& directories, const std::vector<pat
 
         
         if (scanLevel == 0) { // Только указанная директория без вложенных
-            for (const auto& entry : directory_iterator(dir)) {
+            for (const auto& entry : fs::directory_iterator(dir)) {
                 process_file(entry, exclusions, minSize, maskRegex, blockSize, hashVector);
                 
             }
         } else { // Рекурсивное сканирование
-            for (const auto& entry : recursive_directory_iterator(dir)) {
+            for (const auto& entry : fs::recursive_directory_iterator(dir)) {
                 process_file(entry, exclusions, minSize, maskRegex, blockSize, hashVector);
                 
             }
@@ -133,7 +133,7 @@ void find_duplicates(const std::vector<path>& directories, const std::vector<pat
 }
 
 
-void start_scanning(const std::vector<path>& dirs, const std::vector<path>& excs, int& level, 
+void start_scanning(const std::vector<fs::path>& dirs, const std::vector<fs::path>& excs, int& level, 
                     size_t& filesize, std::string& Mask, size_t& blocksize) {
     // std::cout << "start_scanning" << std::endl;
     boost::regex star_regex("\\*");
@@ -168,19 +168,19 @@ void on_exceptions(const std::vector<std::string>& excs) {
 
 int main(int argc, const char* argv[]) {
     try {
-        options_description desc("Options");
+        po::options_description desc("Options");
         desc.add_options()
             ("help,h", "Help screen")
-            ("directories,d", value<std::vector<path>>()->multitoken(), "Adding directories (e.g., --directories dir1 dir2)")
-            ("exception,e", value<std::vector<path>>()->multitoken(), "Excluding directories (e.g., --exception dir3 dir4)")
-            ("level,l", value<int>(), "Scanning level")
-            ("min_file_size,f", value<size_t>(), "Minimum file size")
-            ("masks,m", value<std::string>(), "File name masks")
-            ("block_size,s", value<size_t>(), "Block size for hashing")
-            ("hash", value<std::string>(), "Hashing method: crc32, md5")
+            ("directories,d", po::value<std::vector<fs::path>>()->multitoken(), "Adding directories (e.g., --directories dir1 dir2)")
+            ("exception,e", po::value<std::vector<fs::path>>()->multitoken(), "Excluding directories (e.g., --exception dir3 dir4)")
+            ("level,l", po::value<int>(), "Scanning level")
+            ("min_file_size,f", po::value<size_t>(), "Minimum file size")
+            ("masks,m", po::value<std::string>(), "File name masks")
+            ("block_size,s", po::value<size_t>(), "Block size for hashing")
+            ("hash", po::value<std::string>(), "Hashing method: crc32, md5")
             ("start,s", "Start scanning");
 
-        variables_map vm;
+        po::variables_map vm;
         store(parse_command_line(argc, argv, desc), vm);
         notify(vm);
 
@@ -195,8 +195,8 @@ int main(int argc, const char* argv[]) {
             }
 
             // Считывание значений
-            auto dirs = vm["directories"].as<std::vector<path>>();
-            auto excs = vm.count("exception") ? vm["exception"].as<std::vector<path>>() : std::vector<path>{};
+            auto dirs = vm["directories"].as<std::vector<fs::path>>();
+            auto excs = vm.count("exception") ? vm["exception"].as<std::vector<fs::path>>() : std::vector<fs::path>{};
 
             // Использование значения по умолчанию для level
             int level = vm.count("level") ? vm["level"].as<int>() : 1;
@@ -223,7 +223,7 @@ int main(int argc, const char* argv[]) {
             }
         }
     }
-    catch (const error& ex) {
+    catch (const po::error& ex) {
         std::cerr << ex.what() << '\n';
     }
     
