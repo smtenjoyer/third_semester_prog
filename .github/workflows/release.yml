@@ -108,7 +108,7 @@ jobs:
         run: cmake --build build
 
       - name: Package Project
-        run: cpack -G Bundle
+        run: cmake --build build --target package --config Release
 
       - name: Create DMG
         run: hdiutil create -volname "boboost-0.0.${{ github.run_number }}" -srcfolder build/products/macos -ov -format UDZO boboost-0.0.${{ github.run_number }}.dmg
