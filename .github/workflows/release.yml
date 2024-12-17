@@ -88,8 +88,11 @@ jobs:
       - name: Install Dependencies
         run: brew install boost
 
-      - name: Clean Build Directory
-        run: rm -rf build
+      - name: Clean Build Directory Thoroughly
+        run: |
+          rm -rf build
+          rm -rf CMakeCache.txt  # Explicitly remove CMakeCache.txt
+          rm -rf CMakeFiles     # Explicitly remove CMakeFiles
 
       - name: Download Boost 1.86.0
         run: |
@@ -97,18 +100,18 @@ jobs:
           tar -xvjf boost_1_86_0.tar.bz2
           mv boost_1_86_0 boost
 
-      - name: Configure CMake with Boost
+      - name: Configure CMake with Boost and ZIP Generator
         run: |
           cd boost/
           echo "using boost : 1.86.0, system ;" > user-config.jam
           cd ..
-          cmake -S . -B build -DPATCH_VERSION=${{ github.run_number }} -DBOOST_ROOT=$(pwd)/boost -DCMAKE_OSX_DEPLOYMENT_TARGET=11.0 -DCMAKE_GENERATOR=ZIP # Changed to ZIP generator
+          cmake -S . -B build -DPATCH_VERSION=${{ github.run_number }} -DBOOST_ROOT=$(pwd)/boost -DCMAKE_OSX_DEPLOYMENT_TARGET=11.0 -DCMAKE_GENERATOR=ZIP
 
       - name: Build Project
         run: cmake --build build
 
       - name: Package Project
-        run: cmake --build build --target package --config Release # CPack will use ZIP generator
+        run: cmake --build build --target package --config Release
 
       - name: Create DMG (ZIP Generator)
         run: hdiutil create -volname "boboost-0.0.${{ github.run_number }}" -srcfolder build/CPack/Packages/ZIP/boboost-0.0.${{ github.run_number }}.zip -ov -format UDZO boboost-0.0.${{ github.run_number }}.dmg
