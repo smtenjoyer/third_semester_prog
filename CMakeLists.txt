@@ -18,7 +18,8 @@ install(TARGETS boboost DESTINATION bin) # Installs the boboost executable to th
 
 # CPack configuration
 set(CPACK_PROJECT_NAME boboost)
-set(CPACK_GENERATOR "ZIP;DEB")
+set(CPACK_GENERATOR "DEB")
+set(CPACK_GENERATOR "ZIP")
 set(CPACK_PACKAGE_VERSION "${PROJECT_VERSION}")
 
 # Extract version components
