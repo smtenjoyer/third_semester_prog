@@ -75,64 +75,38 @@ jobs:
           asset_name: boboost-0.0.${{ github.run_number }}-Linux.deb
           asset_content_type: application/vnd.debian.binary-package
 
-  build_windows:
-    runs-on: windows-latest
+  build_macos:
+    runs-on: macos-latest
     permissions: write-all
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
         with:
           submodules: true
-
-      - name: Download Boost 1.86.0 (Windows)
+      - run: brew install boost
+      - run: cmake . -DPATCH_VERSION=${{ github.run_number }} -DCMAKE_INSTALL_PREFIX=`pwd`/install
+      - run: cmake --build . --target install
+      - run: cmake --build . --target package
+      - run: cpack -G ZIP
+      - name: Run Tests
         run: |
-          Invoke-WebRequest -Uri "https://boostorg.jfrog.io/artifactory/main/release/1.86.0/source/boost_1_86_0.tar.bz2" -OutFile "boost_1_86_0.tar.bz2"
-          if (!(Test-Path "boost_1_86_0.tar.bz2")) {
-              Write-Host "Error: File download failed."
-              exit 1
-          }
-          tar -xvjf boost_1_86_0.tar.bz2
-          mv boost_1_86_0 boost
-
-      - name: Build Boost (Windows) - Only Necessary Libraries
-        run: |
-          cd boost
-          .\bootstrap.bat --with-libraries=program_options,system,filesystem,regex,crc
-          .\b2 install --prefix=$(pwd)/install --toolset=msvc-14.42 --abbreviate
-          cd ..
-
-      - name: Configure CMake with Local Boost (Windows)
-        run: |
-          cmake -S . -B build -DPATCH_VERSION=${{ github.run_number }} -DBOOST_ROOT=./boost/install -DCMAKE_CXX_FLAGS="-std=c++17" --no-warn-unused-cli -G "Visual Studio 17 2022"
-
-      - name: Build Project (Windows)
-        run: cmake --build build --config Release --verbose
-
-      - name: Package Project (Windows)
-        run: cmake --build build --target package --config Release --verbose
-
-      - name: List Files in Build Directory
-        run: dir build
-
-      - name: Create Release (Windows)
-        id: create_release_windows
+          ctest --output-on-failure || exit 1
+      - name: Create Release (MacOS)
+        id: create_release_macos
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: windows${{ github.run_number }}
-          release_name: Release ${{ github.run_number }} (Windows)
+          tag_name: ${{ github.run_number }}
+          release_name: Release ${{ github.run_number }} (MacOS)
           draft: false
           prerelease: false
-
-      - name: Upload Release Asset (Windows)
-        id: upload-release-asset-windows
+      - name: Upload Release Asset (MacOS)
+        id: upload-release-asset-macos
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release_windows.outputs.upload_url }}
-          asset_path: ./build/Release/boboost-0.0.${{ github.run_number }}-win64.zip # Adjust path if needed
-          asset_name: boboost-0.0.${{ github.run_number }}-win64.zip # Adjust name if needed
-
+          upload_url: ${{ steps.create_release_macos.outputs.upload_url }}
+          asset_path: ./lab07-0.0.${{ github.run_number }}-Darwin.zip #Path changed
+          asset_name: lab07-0.0.${{ github.run_number }}-Darwin.zip
+          asset_content_type: application/zip
