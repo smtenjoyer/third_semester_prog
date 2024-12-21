@@ -50,7 +50,7 @@ jobs:
       - name: Package Project
         run: cmake --build build --target package --verbose
 
-      - name: List Files in Build Directory
+      - name: List Files in Build Directory After Packaging
         run: ls -R build
 
       - name: Create Release
@@ -65,13 +65,14 @@ jobs:
           prerelease: false
 
       - name: Upload Release Asset
+        id: upload-release-asset-ubuntu
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: build/boboost_${PROJECT_VERSION}-Linux.deb 
-          asset_name: boboost_${PROJECT_VERSION}-Linux.deb
+          asset_path: build/boboost-0.0.${{ github.run_number }}-Linux.deb # Ensure this matches exactly with what was generated.
+          asset_name: boboost-0.0.${{ github.run_number }}-Linux.deb # Ensure this matches exactly with what was generated.
           asset_content_type: application/vnd.debian.binary-package
 
 
