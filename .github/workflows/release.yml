@@ -14,44 +14,21 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-        with:
-          submodules: true
 
       - name: Install Dependencies
-        run: sudo apt-get update && sudo apt-get install libboost-test-dev -y
+        run: sudo apt-get update && sudo apt-get install libboost-all-dev -y  # Install all necessary boost packages
 
-      - name: List Files for debugging purposes
-        run: |
-          ls -R
+      - name: Create Build Directory
+        run: mkdir build
 
-      - name: Clean Build Directory
-        run: rm -rf build
-
-      - name: Download Boost 1.86.0
-        run: |
-          wget https://boostorg.jfrog.io/artifactory/main/release/1.86.0/source/boost_1_86_0.tar.bz2
-          tar -xvjf boost_1_86_0.tar.bz2
-          mv boost_1_86_0 boost
-
-      - name: Build Boost
-        run: |
-          cd boost
-          ./bootstrap.sh --with-libraries=program_options,system,filesystem # Specify needed libraries
-          ./b2 install --prefix=$(pwd)/install # Install to a subdirectory of boost
-          cd ..
-
-      - name: Configure CMake with Local Boost
-        run: |
-          cmake -S . -B build -DPATCH_VERSION=${{ github.run_number }} -DBOOST_ROOT=./boost/install -DCMAKE_CXX_FLAGS="-std=c++17" --no-warn-unused-cli
+      - name: Configure CMake
+        run: cmake -S . -B build -DCMAKE_CXX_STANDARD=17 -DCMAKE_CXX_STANDARD_REQUIRED=ON -DPATCH_VERSION=${{ github.run_number }}
 
       - name: Build Project
         run: cmake --build build --verbose
 
       - name: Package Project
-        run: cmake --build build --target package --verbose
-
-      - name: List Files in Build Directory
-        run: ls -R build
+        run: cpack -C Release -G DEB  #Generate the deb package in release mode
 
       - name: Create Release
         id: create_release
@@ -65,14 +42,13 @@ jobs:
           prerelease: false
 
       - name: Upload Release Asset
-        id: upload-release-asset-ubuntu
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./boboost-0.0.${{ github.run_number }}-Linux.deb
-          asset_name: boboost-0.0.${{ github.run_number }}-Linux.deb
+          asset_path: build/boboost_${PROJECT_VERSION}-Linux.deb 
+          asset_name: boboost_${PROJECT_VERSION}-Linux.deb
           asset_content_type: application/vnd.debian.binary-package
 
 
