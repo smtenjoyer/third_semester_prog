@@ -50,7 +50,7 @@ jobs:
       - name: Package Project
         run: cmake --build build --target package --verbose
 
-      - name: List Files in Build Directory After Packaging
+      - name: List Files in Build Directory
         run: ls -R build
 
       - name: Create Release
@@ -71,8 +71,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./build/boboost-0.0.${{ github.run_number }}-Linux.deb # Ensure this matches exactly with what was generated.
-          asset_name: boboost-0.0.${{ github.run_number }}-Linux.deb # Ensure this matches exactly with what was generated.
+          asset_path: ./build/boboost-0.0.${{ github.run_number }}-Linux.deb
+          asset_name: boboost-0.0.${{ github.run_number }}-Linux.deb
           asset_content_type: application/vnd.debian.binary-package
 
 
